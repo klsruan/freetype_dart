@@ -24,19 +24,18 @@ ffigen:
     - 'C:\Program Files\LLVM'
 
   headers:
-    entry-points:   
-      - 'freetype/include/ft2build.h'         
-      - 'freetype/include/freetype/freetype.h' 
+    entry-points:
+      - 'freetype/include/ft2build.h'
+      - 'freetype/include/freetype/freetype.h'
+      - 'freetype/include/freetype/tttables.h'
     include-directives:
       - 'freetype/include/**'
       - 'freetype/include/freetype/**'
       - 'freetype/include/ft2build.h'
-      - 'freetype/include/freetype/fterrdef.h'  
-      - 'freetype/include/freetype/fterrors.h' 
-      - 'freetype/include/freetype/ftimage.h' 
-      - 'freetype/include/freetype/fttypes.h'  
-      - 'freetype/include/freetype/ftglyph.h'
-      - 'freetype/include/freetype/tttables.h'
+      - 'freetype/include/freetype/fterrdef.h'
+      - 'freetype/include/freetype/fterrors.h'
+      - 'freetype/include/freetype/ftimage.h'
+      - 'freetype/include/freetype/fttypes.h'
 
   compiler-opts:
     - '-Ifreetype/include/'
