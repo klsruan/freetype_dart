@@ -29,7 +29,7 @@ void main(List<String> args) {
   }
 
   // Ensure an unicode characater map is loaded
-  err = ft.FT_Select_Charmap(face.value, ft_encoding_unicode);
+  err = ft.FT_Select_Charmap(face.value, ft_encoding_unicode as FT_Encoding_);
   print("FT_Select_Charmap $err");
 
   //Pointer<FT_UInt> gid = calloc<FT_UInt>();

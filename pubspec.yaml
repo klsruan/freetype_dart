@@ -1,40 +1,42 @@
 name: freetype_dart
-version: 1.0.1
+version: 1.0.2
 description: freetype dart bindings
-homepage: https://github.com/insinfo/freetype_dart
-repository: https://github.com/insinfo/freetype_dart
+homepage: https://github.com/klsruan/freetype_dart
+repository: https://github.com/klsruan/freetype_dart
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  path: ^1.9.0  
-  ffi: ^2.1.0  
-  image: ^4.1.4
+  path: ^1.9.1  
+  ffi: ^2.1.4
+  image: ^4.5.4
 
 dev_dependencies:
-  ffigen: ^11.0.0
-  
+  ffigen: ^19.1.0
 
-# ffigen:
-  # output: 'lib/src/generated_bindings.dart'
-  # name: 'FreetypeBinding'
-  # description: 'Freetype binding for dart'
-  # llvm-path:  
-  #   - 'C:\llvm'
-  # headers:
-  #   entry-points:   
-  #     - 'freetype/include/ft2build.h'         
-  #     - 'freetype/include/freetype/freetype.h' 
-  #   include-directives:
-  #     - 'freetype/include/**'
-  #     - 'freetype/include/freetype/**'
-  #     - 'freetype/include/ft2build.h'
-  #     - 'freetype/include/freetype/fterrdef.h'  
-  #     - 'freetype/include/freetype/fterrors.h' 
-  #     - 'freetype/include/freetype/ftimage.h' 
-  #     - 'freetype/include/freetype/fttypes.h'  
+ffigen:
+  output: 'lib/src/generated_bindings.dart'
+  name: 'FreetypeBinding'
+  description: 'Freetype binding for dart'
 
-  # compiler-opts:
-  #   - '-Ifreetype/include/'  
+  llvm-path:
+    - 'C:\Program Files\LLVM'
 
+  headers:
+    entry-points:   
+      - 'freetype/include/ft2build.h'         
+      - 'freetype/include/freetype/freetype.h' 
+    include-directives:
+      - 'freetype/include/**'
+      - 'freetype/include/freetype/**'
+      - 'freetype/include/ft2build.h'
+      - 'freetype/include/freetype/fterrdef.h'  
+      - 'freetype/include/freetype/fterrors.h' 
+      - 'freetype/include/freetype/ftimage.h' 
+      - 'freetype/include/freetype/fttypes.h'  
+      - 'freetype/include/freetype/ftglyph.h'
+      - 'freetype/include/freetype/tttables.h'
+
+  compiler-opts:
+    - '-Ifreetype/include/'

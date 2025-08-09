@@ -244,13 +244,25 @@ class LoadFlag {
 class RenderMode {
   final int value;
   const RenderMode(this.value);
-  static const Normal = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_NORMAL);
-  static const Light = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_LIGHT);
-  static const Mono = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_MONO);
-  static const Lcd = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_LCD);
-  static const LcdV = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_LCD_V);
-  static const Sdf = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_SDF);
-  static const Max = const LoadFlag(FT_Render_Mode_.FT_RENDER_MODE_MAX);
+  static const Normal = FT_Render_Mode_.FT_RENDER_MODE_NORMAL;
+  static const Light = FT_Render_Mode_.FT_RENDER_MODE_LIGHT;
+  static const Mono = FT_Render_Mode_.FT_RENDER_MODE_MONO;
+  static const Lcd = FT_Render_Mode_.FT_RENDER_MODE_LCD;
+  static const LcdV = FT_Render_Mode_.FT_RENDER_MODE_LCD_V;
+  static const Sdf = FT_Render_Mode_.FT_RENDER_MODE_SDF;
+  static const Max = FT_Render_Mode_.FT_RENDER_MODE_MAX;
+  FT_Render_Mode_ get() {
+    return switch (this.value) {
+      0 => Normal,
+      1 => Light,
+      2 => Mono,
+      3 => Lcd,
+      4 => LcdV,
+      5 => Sdf,
+      6 => Max,
+      int() => throw UnimplementedError(),
+    };
+  }
 }
 
 ///  An enumeration type used to describe the format of pixels in a given
@@ -327,7 +339,7 @@ class GlyphSlot {
   /// Convert a given glyph image to a bitmap. It does so by inspecting the glyph image format,
   /// finding the relevant renderer, and invoking it.
   void renderGlyph(RenderMode render_mode) {
-    final err = binding.FT_Render_Glyph(raw, render_mode.value);
+    final err = binding.FT_Render_Glyph(raw, render_mode.get());
     if (err != FT_Err_Ok) {
       throw Exception('Error on render glyph');
     }

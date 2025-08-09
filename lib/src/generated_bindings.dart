@@ -78,10 +78,10 @@ class FreetypeBinding {
   /// @return:
   /// FreeType error code.  0~means success.
   int FT_Done_FreeType(
-    FT_Library library1,
+    FT_Library library$,
   ) {
     return _FT_Done_FreeType(
-      library1,
+      library$,
     );
   }
 
@@ -127,13 +127,13 @@ class FreetypeBinding {
   /// Use @FT_Done_Face to destroy the created @FT_Face object (along with
   /// its slot and sizes).
   int FT_New_Face(
-    FT_Library library1,
+    FT_Library library$,
     ffi.Pointer<ffi.Char> filepathname,
     int face_index,
     ffi.Pointer<FT_Face> aface,
   ) {
     return _FT_New_Face(
-      library1,
+      library$,
       filepathname,
       face_index,
       aface,
@@ -179,14 +179,14 @@ class FreetypeBinding {
   /// @note:
   /// You must not deallocate the memory before calling @FT_Done_Face.
   int FT_New_Memory_Face(
-    FT_Library library1,
+    FT_Library library$,
     ffi.Pointer<FT_Byte> file_base,
     int file_size,
     int face_index,
     ffi.Pointer<FT_Face> aface,
   ) {
     return _FT_New_Memory_Face(
-      library1,
+      library$,
       file_base,
       file_size,
       face_index,
@@ -341,13 +341,13 @@ class FreetypeBinding {
   /// } while ( face_idx < num_faces )
   /// ```
   int FT_Open_Face(
-    FT_Library library1,
+    FT_Library library$,
     ffi.Pointer<FT_Open_Args> args,
     int face_index,
     ffi.Pointer<FT_Face> aface,
   ) {
     return _FT_Open_Face(
-      library1,
+      library$,
       args,
       face_index,
       aface,
@@ -1013,21 +1013,22 @@ class FreetypeBinding {
   /// gray linear blending is that subpixel-rendered linear blending is done
   /// 3~times per pixel: red foreground subpixel to red background subpixel
   /// and so on for green and blue.
-  int FT_Render_Glyph(
-    FT_GlyphSlot slot,
-    int render_mode,
+  DartFT_Error FT_Render_Glyph(
+    FT_GlyphSlot$1 slot,
+    FT_Render_Mode_ render_mode,
   ) {
     return _FT_Render_Glyph(
       slot,
-      render_mode,
+      render_mode.value,
     );
   }
 
-  late final _FT_Render_GlyphPtr =
-      _lookup<ffi.NativeFunction<FT_Error Function(FT_GlyphSlot, ffi.Int32)>>(
-          'FT_Render_Glyph');
+  late final _FT_Render_GlyphPtr = _lookup<
+          ffi
+          .NativeFunction<FT_Error Function(FT_GlyphSlot$1, ffi.UnsignedInt)>>(
+      'FT_Render_Glyph');
   late final _FT_Render_Glyph =
-      _FT_Render_GlyphPtr.asFunction<int Function(FT_GlyphSlot, int)>();
+      _FT_Render_GlyphPtr.asFunction<int Function(FT_GlyphSlot$1, int)>();
 
   /// @function:
   /// FT_Get_Kerning
@@ -1171,18 +1172,18 @@ class FreetypeBinding {
   /// covers Unicode best ('best' in the sense that a UCS-4 cmap is
   /// preferred to a UCS-2 cmap).  It is thus preferable to @FT_Set_Charmap
   /// in this case.
-  int FT_Select_Charmap(
+  DartFT_Error FT_Select_Charmap(
     FT_Face face,
-    int encoding,
+    FT_Encoding_ encoding,
   ) {
     return _FT_Select_Charmap(
       face,
-      encoding,
+      encoding.value,
     );
   }
 
   late final _FT_Select_CharmapPtr =
-      _lookup<ffi.NativeFunction<FT_Error Function(FT_Face, ffi.Int32)>>(
+      _lookup<ffi.NativeFunction<FT_Error Function(FT_Face, ffi.UnsignedInt)>>(
           'FT_Select_Charmap');
   late final _FT_Select_Charmap =
       _FT_Select_CharmapPtr.asFunction<int Function(FT_Face, int)>();
@@ -1704,7 +1705,7 @@ class FreetypeBinding {
   ///
   /// https://docs.microsoft.com/en-us/typography/opentype/spec/glyf#composite-glyph-description
   int FT_Get_SubGlyph_Info(
-    FT_GlyphSlot glyph,
+    FT_GlyphSlot$1 glyph,
     int sub_index,
     ffi.Pointer<FT_Int> p_index,
     ffi.Pointer<FT_UInt> p_flags,
@@ -1726,7 +1727,7 @@ class FreetypeBinding {
   late final _FT_Get_SubGlyph_InfoPtr = _lookup<
       ffi.NativeFunction<
           FT_Error Function(
-              FT_GlyphSlot,
+              FT_GlyphSlot$1,
               FT_UInt,
               ffi.Pointer<FT_Int>,
               ffi.Pointer<FT_UInt>,
@@ -1734,8 +1735,14 @@ class FreetypeBinding {
               ffi.Pointer<FT_Int>,
               ffi.Pointer<FT_Matrix>)>>('FT_Get_SubGlyph_Info');
   late final _FT_Get_SubGlyph_Info = _FT_Get_SubGlyph_InfoPtr.asFunction<
-      int Function(FT_GlyphSlot, int, ffi.Pointer<FT_Int>, ffi.Pointer<FT_UInt>,
-          ffi.Pointer<FT_Int>, ffi.Pointer<FT_Int>, ffi.Pointer<FT_Matrix>)>();
+      int Function(
+          FT_GlyphSlot$1,
+          int,
+          ffi.Pointer<FT_Int>,
+          ffi.Pointer<FT_UInt>,
+          ffi.Pointer<FT_Int>,
+          ffi.Pointer<FT_Int>,
+          ffi.Pointer<FT_Matrix>)>();
 
   /// @function:
   /// FT_Get_FSType_Flags
@@ -2248,13 +2255,13 @@ class FreetypeBinding {
   /// In such cases, the library version might not be available before the
   /// library object has been created.
   void FT_Library_Version(
-    FT_Library library1,
+    FT_Library library$,
     ffi.Pointer<FT_Int> amajor,
     ffi.Pointer<FT_Int> aminor,
     ffi.Pointer<FT_Int> apatch,
   ) {
     return _FT_Library_Version(
-      library1,
+      library$,
       amajor,
       aminor,
       apatch,
@@ -2339,6 +2346,16 @@ class FreetypeBinding {
       _FT_Face_SetUnpatentedHintingPtr.asFunction<int Function(FT_Face, int)>();
 }
 
+/// @type:
+/// FT_Pos
+///
+/// @description:
+/// The type FT_Pos is used to store vectorial coordinates.  Depending on
+/// the context, these can represent distances in integer font units, or
+/// 16.16, or 26.6 fixed-point pixel coordinates.
+typedef FT_Pos = ffi.Long;
+typedef DartFT_Pos = int;
+
 /// @struct:
 /// FT_Glyph_Metrics
 ///
@@ -2413,15 +2430,63 @@ final class FT_Glyph_Metrics_ extends ffi.Struct {
   external int vertAdvance;
 }
 
-/// @type:
-/// FT_Pos
+/// @struct:
+/// FT_Glyph_Metrics
 ///
 /// @description:
-/// The type FT_Pos is used to store vectorial coordinates.  Depending on
-/// the context, these can represent distances in integer font units, or
-/// 16.16, or 26.6 fixed-point pixel coordinates.
-typedef FT_Pos = ffi.Long;
-typedef DartFT_Pos = int;
+/// A structure to model the metrics of a single glyph.  The values are
+/// expressed in 26.6 fractional pixel format; if the flag
+/// @FT_LOAD_NO_SCALE has been used while loading the glyph, values are
+/// expressed in font units instead.
+///
+/// @fields:
+/// width ::
+/// The glyph's width.
+///
+/// height ::
+/// The glyph's height.
+///
+/// horiBearingX ::
+/// Left side bearing for horizontal layout.
+///
+/// horiBearingY ::
+/// Top side bearing for horizontal layout.
+///
+/// horiAdvance ::
+/// Advance width for horizontal layout.
+///
+/// vertBearingX ::
+/// Left side bearing for vertical layout.
+///
+/// vertBearingY ::
+/// Top side bearing for vertical layout.  Larger positive values mean
+/// further below the vertical glyph origin.
+///
+/// vertAdvance ::
+/// Advance height for vertical layout.  Positive values mean the glyph
+/// has a positive advance downward.
+///
+/// @note:
+/// If not disabled with @FT_LOAD_NO_HINTING, the values represent
+/// dimensions of the hinted glyph (in case hinting is applicable).
+///
+/// Stroking a glyph with an outside border does not increase
+/// `horiAdvance` or `vertAdvance`; you have to manually adjust these
+/// values to account for the added width and height.
+///
+/// FreeType doesn't use the 'VORG' table data for CFF fonts because it
+/// doesn't have an interface to quickly retrieve the glyph height.  The
+/// y~coordinate of the vertical origin can be simply computed as
+/// `vertBearingY + height` after loading a glyph.
+typedef FT_Glyph_Metrics = FT_Glyph_Metrics_;
+
+/// @type:
+/// FT_Short
+///
+/// @description:
+/// A typedef for signed short.
+typedef FT_Short = ffi.Short;
+typedef DartFT_Short = int;
 
 /// @struct:
 /// FT_Bitmap_Size
@@ -2476,21 +2541,1937 @@ final class FT_Bitmap_Size_ extends ffi.Struct {
   external int y_ppem;
 }
 
-/// @type:
-/// FT_Short
+/// @struct:
+/// FT_Bitmap_Size
 ///
 /// @description:
-/// A typedef for signed short.
-typedef FT_Short = ffi.Short;
-typedef DartFT_Short = int;
+/// This structure models the metrics of a bitmap strike (i.e., a set of
+/// glyphs for a given point size and resolution) in a bitmap font.  It is
+/// used for the `available_sizes` field of @FT_Face.
+///
+/// @fields:
+/// height ::
+/// The vertical distance, in pixels, between two consecutive baselines.
+/// It is always positive.
+///
+/// width ::
+/// The average width, in pixels, of all glyphs in the strike.
+///
+/// size ::
+/// The nominal size of the strike in 26.6 fractional points.  This
+/// field is not very useful.
+///
+/// x_ppem ::
+/// The horizontal ppem (nominal width) in 26.6 fractional pixels.
+///
+/// y_ppem ::
+/// The vertical ppem (nominal height) in 26.6 fractional pixels.
+///
+/// @note:
+/// Windows FNT:
+/// The nominal size given in a FNT font is not reliable.  If the driver
+/// finds it incorrect, it sets `size` to some calculated values, and
+/// `x_ppem` and `y_ppem` to the pixel width and height given in the
+/// font, respectively.
+///
+/// TrueType embedded bitmaps:
+/// `size`, `width`, and `height` values are not contained in the bitmap
+/// strike itself.  They are computed from the global font parameters.
+typedef FT_Bitmap_Size = FT_Bitmap_Size_;
 
 final class FT_LibraryRec_ extends ffi.Opaque {}
 
+/// @type:
+/// FT_Library
+///
+/// @description:
+/// A handle to a FreeType library instance.  Each 'library' is completely
+/// independent from the others; it is the 'root' of a set of objects like
+/// fonts, faces, sizes, etc.
+///
+/// It also embeds a memory manager (see @FT_Memory), as well as a
+/// scan-line converter object (see @FT_Raster).
+///
+/// [Since 2.5.6] In multi-threaded applications it is easiest to use one
+/// `FT_Library` object per thread.  In case this is too cumbersome, a
+/// single `FT_Library` object across threads is possible also, as long as
+/// a mutex lock is used around @FT_New_Face and @FT_Done_Face.
+///
+/// @note:
+/// Library objects are normally created by @FT_Init_FreeType, and
+/// destroyed with @FT_Done_FreeType.  If you need reference-counting
+/// (cf. @FT_Reference_Library), use @FT_New_Library and @FT_Done_Library.
+typedef FT_Library = ffi.Pointer<FT_LibraryRec_>;
+
 final class FT_ModuleRec_ extends ffi.Opaque {}
+
+/// @type:
+/// FT_Module
+///
+/// @description:
+/// A handle to a given FreeType module object.  A module can be a font
+/// driver, a renderer, or anything else that provides services to the
+/// former.
+typedef FT_Module = ffi.Pointer<FT_ModuleRec_>;
 
 final class FT_DriverRec_ extends ffi.Opaque {}
 
+/// @type:
+/// FT_Driver
+///
+/// @description:
+/// A handle to a given FreeType font driver object.  A font driver is a
+/// module capable of creating faces from font files.
+typedef FT_Driver = ffi.Pointer<FT_DriverRec_>;
+
 final class FT_RendererRec_ extends ffi.Opaque {}
+
+/// @type:
+/// FT_Renderer
+///
+/// @description:
+/// A handle to a given FreeType renderer.  A renderer is a module in
+/// charge of converting a glyph's outline image to a bitmap.  It supports
+/// a single glyph image format, and one or more target surface depths.
+typedef FT_Renderer = ffi.Pointer<FT_RendererRec_>;
+
+/// @type:
+/// FT_Long
+///
+/// @description:
+/// A typedef for signed long.
+typedef FT_Long = ffi.Long;
+typedef DartFT_Long = int;
+
+/// @type:
+/// FT_String
+///
+/// @description:
+/// A simple typedef for the char type, usually used for strings.
+typedef FT_String = ffi.Char;
+typedef DartFT_String = int;
+
+/// @type:
+/// FT_Int
+///
+/// @description:
+/// A typedef for the int type.
+typedef FT_Int = ffi.Int;
+typedef DartFT_Int = int;
+
+/// @type:
+/// FT_Face
+///
+/// @description:
+/// A handle to a typographic face object.  A face object models a given
+/// typeface, in a given style.
+///
+/// @note:
+/// A face object also owns a single @FT_GlyphSlot object, as well as one
+/// or more @FT_Size objects.
+///
+/// Use @FT_New_Face or @FT_Open_Face to create a new face object from a
+/// given filepath or a custom input stream.
+///
+/// Use @FT_Done_Face to destroy it (along with its slot and sizes).
+///
+/// An `FT_Face` object can only be safely used from one thread at a time.
+/// Similarly, creation and destruction of `FT_Face` with the same
+/// @FT_Library object can only be done from one thread at a time.  On the
+/// other hand, functions like @FT_Load_Glyph and its siblings are
+/// thread-safe and do not need the lock to be held as long as the same
+/// `FT_Face` object is not used from multiple threads at the same time.
+///
+/// @also:
+/// See @FT_FaceRec for the publicly accessible fields of a given face
+/// object.
+typedef FT_Face = ffi.Pointer<FT_FaceRec_>;
+
+/// @enum:
+/// FT_Encoding
+///
+/// @description:
+/// An enumeration to specify character sets supported by charmaps.  Used
+/// in the @FT_Select_Charmap API function.
+///
+/// @note:
+/// Despite the name, this enumeration lists specific character
+/// repertoires (i.e., charsets), and not text encoding methods (e.g.,
+/// UTF-8, UTF-16, etc.).
+///
+/// Other encodings might be defined in the future.
+///
+/// @values:
+/// FT_ENCODING_NONE ::
+/// The encoding value~0 is reserved for all formats except BDF, PCF,
+/// and Windows FNT; see below for more information.
+///
+/// FT_ENCODING_UNICODE ::
+/// The Unicode character set.  This value covers all versions of the
+/// Unicode repertoire, including ASCII and Latin-1.  Most fonts include
+/// a Unicode charmap, but not all of them.
+///
+/// For example, if you want to access Unicode value U+1F028 (and the
+/// font contains it), use value 0x1F028 as the input value for
+/// @FT_Get_Char_Index.
+///
+/// FT_ENCODING_MS_SYMBOL ::
+/// Microsoft Symbol encoding, used to encode mathematical symbols and
+/// wingdings.  For more information, see
+/// 'https://www.microsoft.com/typography/otspec/recom.htm#non-standard-symbol-fonts',
+/// 'http://www.kostis.net/charsets/symbol.htm', and
+/// 'http://www.kostis.net/charsets/wingding.htm'.
+///
+/// This encoding uses character codes from the PUA (Private Unicode
+/// Area) in the range U+F020-U+F0FF.
+///
+/// FT_ENCODING_SJIS ::
+/// Shift JIS encoding for Japanese.  More info at
+/// 'https://en.wikipedia.org/wiki/Shift_JIS'.  See note on multi-byte
+/// encodings below.
+///
+/// FT_ENCODING_PRC ::
+/// Corresponds to encoding systems mainly for Simplified Chinese as
+/// used in People's Republic of China (PRC).  The encoding layout is
+/// based on GB~2312 and its supersets GBK and GB~18030.
+///
+/// FT_ENCODING_BIG5 ::
+/// Corresponds to an encoding system for Traditional Chinese as used in
+/// Taiwan and Hong Kong.
+///
+/// FT_ENCODING_WANSUNG ::
+/// Corresponds to the Korean encoding system known as Extended Wansung
+/// (MS Windows code page 949).  For more information see
+/// 'https://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/bestfit949.txt'.
+///
+/// FT_ENCODING_JOHAB ::
+/// The Korean standard character set (KS~C 5601-1992), which
+/// corresponds to MS Windows code page 1361.  This character set
+/// includes all possible Hangul character combinations.
+///
+/// FT_ENCODING_ADOBE_LATIN_1 ::
+/// Corresponds to a Latin-1 encoding as defined in a Type~1 PostScript
+/// font.  It is limited to 256 character codes.
+///
+/// FT_ENCODING_ADOBE_STANDARD ::
+/// Adobe Standard encoding, as found in Type~1, CFF, and OpenType/CFF
+/// fonts.  It is limited to 256 character codes.
+///
+/// FT_ENCODING_ADOBE_EXPERT ::
+/// Adobe Expert encoding, as found in Type~1, CFF, and OpenType/CFF
+/// fonts.  It is limited to 256 character codes.
+///
+/// FT_ENCODING_ADOBE_CUSTOM ::
+/// Corresponds to a custom encoding, as found in Type~1, CFF, and
+/// OpenType/CFF fonts.  It is limited to 256 character codes.
+///
+/// FT_ENCODING_APPLE_ROMAN ::
+/// Apple roman encoding.  Many TrueType and OpenType fonts contain a
+/// charmap for this 8-bit encoding, since older versions of Mac OS are
+/// able to use it.
+///
+/// FT_ENCODING_OLD_LATIN_2 ::
+/// This value is deprecated and was neither used nor reported by
+/// FreeType.  Don't use or test for it.
+///
+/// FT_ENCODING_MS_SJIS ::
+/// Same as FT_ENCODING_SJIS.  Deprecated.
+///
+/// FT_ENCODING_MS_GB2312 ::
+/// Same as FT_ENCODING_PRC.  Deprecated.
+///
+/// FT_ENCODING_MS_BIG5 ::
+/// Same as FT_ENCODING_BIG5.  Deprecated.
+///
+/// FT_ENCODING_MS_WANSUNG ::
+/// Same as FT_ENCODING_WANSUNG.  Deprecated.
+///
+/// FT_ENCODING_MS_JOHAB ::
+/// Same as FT_ENCODING_JOHAB.  Deprecated.
+///
+/// @note:
+/// When loading a font, FreeType makes a Unicode charmap active if
+/// possible (either if the font provides such a charmap, or if FreeType
+/// can synthesize one from PostScript glyph name dictionaries; in either
+/// case, the charmap is tagged with `FT_ENCODING_UNICODE`).  If such a
+/// charmap is synthesized, it is placed at the first position of the
+/// charmap array.
+///
+/// All other encodings are considered legacy and tagged only if
+/// explicitly defined in the font file.  Otherwise, `FT_ENCODING_NONE` is
+/// used.
+///
+/// `FT_ENCODING_NONE` is set by the BDF and PCF drivers if the charmap is
+/// neither Unicode nor ISO-8859-1 (otherwise it is set to
+/// `FT_ENCODING_UNICODE`).  Use @FT_Get_BDF_Charset_ID to find out which
+/// encoding is really present.  If, for example, the `cs_registry` field
+/// is 'KOI8' and the `cs_encoding` field is 'R', the font is encoded in
+/// KOI8-R.
+///
+/// `FT_ENCODING_NONE` is always set (with a single exception) by the
+/// winfonts driver.  Use @FT_Get_WinFNT_Header and examine the `charset`
+/// field of the @FT_WinFNT_HeaderRec structure to find out which encoding
+/// is really present.  For example, @FT_WinFNT_ID_CP1251 (204) means
+/// Windows code page 1251 (for Russian).
+///
+/// `FT_ENCODING_NONE` is set if `platform_id` is @TT_PLATFORM_MACINTOSH
+/// and `encoding_id` is not `TT_MAC_ID_ROMAN` (otherwise it is set to
+/// `FT_ENCODING_APPLE_ROMAN`).
+///
+/// If `platform_id` is @TT_PLATFORM_MACINTOSH, use the function
+/// @FT_Get_CMap_Language_ID to query the Mac language ID that may be
+/// needed to be able to distinguish Apple encoding variants.  See
+///
+/// https://www.unicode.org/Public/MAPPINGS/VENDORS/APPLE/Readme.txt
+///
+/// to get an idea how to do that.  Basically, if the language ID is~0,
+/// don't use it, otherwise subtract 1 from the language ID.  Then examine
+/// `encoding_id`.  If, for example, `encoding_id` is `TT_MAC_ID_ROMAN`
+/// and the language ID (minus~1) is `TT_MAC_LANGID_GREEK`, it is the
+/// Greek encoding, not Roman.  `TT_MAC_ID_ARABIC` with
+/// `TT_MAC_LANGID_FARSI` means the Farsi variant of the Arabic encoding.
+enum FT_Encoding_ {
+  FT_ENCODING_NONE(0),
+  FT_ENCODING_MS_SYMBOL(1937337698),
+  FT_ENCODING_UNICODE(1970170211),
+  FT_ENCODING_SJIS(1936353651),
+  FT_ENCODING_PRC(1734484000),
+  FT_ENCODING_BIG5(1651074869),
+  FT_ENCODING_WANSUNG(2002873971),
+  FT_ENCODING_JOHAB(1785686113),
+  FT_ENCODING_ADOBE_STANDARD(1094995778),
+  FT_ENCODING_ADOBE_EXPERT(1094992453),
+  FT_ENCODING_ADOBE_CUSTOM(1094992451),
+  FT_ENCODING_ADOBE_LATIN_1(1818326065),
+  FT_ENCODING_OLD_LATIN_2(1818326066),
+  FT_ENCODING_APPLE_ROMAN(1634889070);
+
+  static const FT_ENCODING_GB2312 = FT_ENCODING_PRC;
+  static const FT_ENCODING_MS_SJIS = FT_ENCODING_SJIS;
+  static const FT_ENCODING_MS_GB2312 = FT_ENCODING_PRC;
+  static const FT_ENCODING_MS_BIG5 = FT_ENCODING_BIG5;
+  static const FT_ENCODING_MS_WANSUNG = FT_ENCODING_WANSUNG;
+  static const FT_ENCODING_MS_JOHAB = FT_ENCODING_JOHAB;
+
+  final int value;
+  const FT_Encoding_(this.value);
+
+  static FT_Encoding_ fromValue(int value) => switch (value) {
+        0 => FT_ENCODING_NONE,
+        1937337698 => FT_ENCODING_MS_SYMBOL,
+        1970170211 => FT_ENCODING_UNICODE,
+        1936353651 => FT_ENCODING_SJIS,
+        1734484000 => FT_ENCODING_PRC,
+        1651074869 => FT_ENCODING_BIG5,
+        2002873971 => FT_ENCODING_WANSUNG,
+        1785686113 => FT_ENCODING_JOHAB,
+        1094995778 => FT_ENCODING_ADOBE_STANDARD,
+        1094992453 => FT_ENCODING_ADOBE_EXPERT,
+        1094992451 => FT_ENCODING_ADOBE_CUSTOM,
+        1818326065 => FT_ENCODING_ADOBE_LATIN_1,
+        1818326066 => FT_ENCODING_OLD_LATIN_2,
+        1634889070 => FT_ENCODING_APPLE_ROMAN,
+        _ => throw ArgumentError('Unknown value for FT_Encoding_: $value'),
+      };
+
+  @override
+  String toString() {
+    if (this == FT_ENCODING_SJIS)
+      return "FT_Encoding_.FT_ENCODING_SJIS, FT_Encoding_.FT_ENCODING_MS_SJIS";
+    if (this == FT_ENCODING_PRC)
+      return "FT_Encoding_.FT_ENCODING_PRC, FT_Encoding_.FT_ENCODING_GB2312, FT_Encoding_.FT_ENCODING_MS_GB2312";
+    if (this == FT_ENCODING_BIG5)
+      return "FT_Encoding_.FT_ENCODING_BIG5, FT_Encoding_.FT_ENCODING_MS_BIG5";
+    if (this == FT_ENCODING_WANSUNG)
+      return "FT_Encoding_.FT_ENCODING_WANSUNG, FT_Encoding_.FT_ENCODING_MS_WANSUNG";
+    if (this == FT_ENCODING_JOHAB)
+      return "FT_Encoding_.FT_ENCODING_JOHAB, FT_Encoding_.FT_ENCODING_MS_JOHAB";
+    return super.toString();
+  }
+}
+
+/// @type:
+/// FT_UShort
+///
+/// @description:
+/// A typedef for unsigned short.
+typedef FT_UShort = ffi.UnsignedShort;
+typedef DartFT_UShort = int;
+
+/// @struct:
+/// FT_CharMapRec
+///
+/// @description:
+/// The base charmap structure.
+///
+/// @fields:
+/// face ::
+/// A handle to the parent face object.
+///
+/// encoding ::
+/// An @FT_Encoding tag identifying the charmap.  Use this with
+/// @FT_Select_Charmap.
+///
+/// platform_id ::
+/// An ID number describing the platform for the following encoding ID.
+/// This comes directly from the TrueType specification and gets
+/// emulated for other formats.
+///
+/// encoding_id ::
+/// A platform-specific encoding number.  This also comes from the
+/// TrueType specification and gets emulated similarly.
+final class FT_CharMapRec_ extends ffi.Struct {
+  external FT_Face face;
+
+  @ffi.UnsignedInt()
+  external int encodingAsInt;
+
+  FT_Encoding_ get encoding => FT_Encoding_.fromValue(encodingAsInt);
+
+  @FT_UShort()
+  external int platform_id;
+
+  @FT_UShort()
+  external int encoding_id;
+}
+
+/// @type:
+/// FT_CharMap
+///
+/// @description:
+/// A handle to a character map (usually abbreviated to 'charmap').  A
+/// charmap is used to translate character codes in a given encoding into
+/// glyph indexes for its parent's face.  Some font formats may provide
+/// several charmaps per font.
+///
+/// Each face object owns zero or more charmaps, but only one of them can
+/// be 'active', providing the data used by @FT_Get_Char_Index or
+/// @FT_Load_Char.
+///
+/// The list of available charmaps in a face is available through the
+/// `face->num_charmaps` and `face->charmaps` fields of @FT_FaceRec.
+///
+/// The currently active charmap is available as `face->charmap`.  You
+/// should call @FT_Set_Charmap to change it.
+///
+/// @note:
+/// When a new face is created (either through @FT_New_Face or
+/// @FT_Open_Face), the library looks for a Unicode charmap within the
+/// list and automatically activates it.  If there is no Unicode charmap,
+/// FreeType doesn't set an 'active' charmap.
+///
+/// @also:
+/// See @FT_CharMapRec for the publicly accessible fields of a given
+/// character map.
+typedef FT_CharMap = ffi.Pointer<FT_CharMapRec_>;
+typedef FT_Generic_FinalizerFunction = ffi.Void Function(
+    ffi.Pointer<ffi.Void> object);
+typedef DartFT_Generic_FinalizerFunction = void Function(
+    ffi.Pointer<ffi.Void> object);
+
+/// @functype:
+/// FT_Generic_Finalizer
+///
+/// @description:
+/// Describe a function used to destroy the 'client' data of any FreeType
+/// object.  See the description of the @FT_Generic type for details of
+/// usage.
+///
+/// @input:
+/// The address of the FreeType object that is under finalization.  Its
+/// client data is accessed through its `generic` field.
+typedef FT_Generic_Finalizer
+    = ffi.Pointer<ffi.NativeFunction<FT_Generic_FinalizerFunction>>;
+
+/// @struct:
+/// FT_Generic
+///
+/// @description:
+/// Client applications often need to associate their own data to a
+/// variety of FreeType core objects.  For example, a text layout API
+/// might want to associate a glyph cache to a given size object.
+///
+/// Some FreeType object contains a `generic` field, of type `FT_Generic`,
+/// which usage is left to client applications and font servers.
+///
+/// It can be used to store a pointer to client-specific data, as well as
+/// the address of a 'finalizer' function, which will be called by
+/// FreeType when the object is destroyed (for example, the previous
+/// client example would put the address of the glyph cache destructor in
+/// the `finalizer` field).
+///
+/// @fields:
+/// data ::
+/// A typeless pointer to any client-specified data. This field is
+/// completely ignored by the FreeType library.
+///
+/// finalizer ::
+/// A pointer to a 'generic finalizer' function, which will be called
+/// when the object is destroyed.  If this field is set to `NULL`, no
+/// code will be called.
+final class FT_Generic_ extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> data;
+
+  external FT_Generic_Finalizer finalizer;
+}
+
+/// @struct:
+/// FT_Generic
+///
+/// @description:
+/// Client applications often need to associate their own data to a
+/// variety of FreeType core objects.  For example, a text layout API
+/// might want to associate a glyph cache to a given size object.
+///
+/// Some FreeType object contains a `generic` field, of type `FT_Generic`,
+/// which usage is left to client applications and font servers.
+///
+/// It can be used to store a pointer to client-specific data, as well as
+/// the address of a 'finalizer' function, which will be called by
+/// FreeType when the object is destroyed (for example, the previous
+/// client example would put the address of the glyph cache destructor in
+/// the `finalizer` field).
+///
+/// @fields:
+/// data ::
+/// A typeless pointer to any client-specified data. This field is
+/// completely ignored by the FreeType library.
+///
+/// finalizer ::
+/// A pointer to a 'generic finalizer' function, which will be called
+/// when the object is destroyed.  If this field is set to `NULL`, no
+/// code will be called.
+typedef FT_Generic = FT_Generic_;
+
+/// @struct:
+/// FT_BBox
+///
+/// @description:
+/// A structure used to hold an outline's bounding box, i.e., the
+/// coordinates of its extrema in the horizontal and vertical directions.
+///
+/// @fields:
+/// xMin ::
+/// The horizontal minimum (left-most).
+///
+/// yMin ::
+/// The vertical minimum (bottom-most).
+///
+/// xMax ::
+/// The horizontal maximum (right-most).
+///
+/// yMax ::
+/// The vertical maximum (top-most).
+///
+/// @note:
+/// The bounding box is specified with the coordinates of the lower left
+/// and the upper right corner.  In PostScript, those values are often
+/// called (llx,lly) and (urx,ury), respectively.
+///
+/// If `yMin` is negative, this value gives the glyph's descender.
+/// Otherwise, the glyph doesn't descend below the baseline.  Similarly,
+/// if `ymax` is positive, this value gives the glyph's ascender.
+///
+/// `xMin` gives the horizontal distance from the glyph's origin to the
+/// left edge of the glyph's bounding box.  If `xMin` is negative, the
+/// glyph extends to the left of the origin.
+final class FT_BBox_ extends ffi.Struct {
+  @FT_Pos()
+  external int xMin;
+
+  @FT_Pos()
+  external int yMin;
+
+  @FT_Pos()
+  external int xMax;
+
+  @FT_Pos()
+  external int yMax;
+}
+
+/// @struct:
+/// FT_BBox
+///
+/// @description:
+/// A structure used to hold an outline's bounding box, i.e., the
+/// coordinates of its extrema in the horizontal and vertical directions.
+///
+/// @fields:
+/// xMin ::
+/// The horizontal minimum (left-most).
+///
+/// yMin ::
+/// The vertical minimum (bottom-most).
+///
+/// xMax ::
+/// The horizontal maximum (right-most).
+///
+/// yMax ::
+/// The vertical maximum (top-most).
+///
+/// @note:
+/// The bounding box is specified with the coordinates of the lower left
+/// and the upper right corner.  In PostScript, those values are often
+/// called (llx,lly) and (urx,ury), respectively.
+///
+/// If `yMin` is negative, this value gives the glyph's descender.
+/// Otherwise, the glyph doesn't descend below the baseline.  Similarly,
+/// if `ymax` is positive, this value gives the glyph's ascender.
+///
+/// `xMin` gives the horizontal distance from the glyph's origin to the
+/// left edge of the glyph's bounding box.  If `xMin` is negative, the
+/// glyph extends to the left of the origin.
+typedef FT_BBox = FT_BBox_;
+
+/// @type:
+/// FT_GlyphSlot
+///
+/// @description:
+/// A handle to a given 'glyph slot'.  A slot is a container that can hold
+/// any of the glyphs contained in its parent face.
+///
+/// In other words, each time you call @FT_Load_Glyph or @FT_Load_Char,
+/// the slot's content is erased by the new glyph data, i.e., the glyph's
+/// metrics, its image (bitmap or outline), and other control information.
+///
+/// @also:
+/// See @FT_GlyphSlotRec for the publicly accessible glyph fields.
+typedef FT_GlyphSlot = ffi.Pointer<FT_GlyphSlotRec_>;
+
+/// @type:
+/// FT_UInt
+///
+/// @description:
+/// A typedef for the unsigned int type.
+typedef FT_UInt = ffi.UnsignedInt;
+typedef DartFT_UInt = int;
+
+/// @type:
+/// FT_Fixed
+///
+/// @description:
+/// This type is used to store 16.16 fixed-point values, like scaling
+/// values or matrix coefficients.
+typedef FT_Fixed = ffi.Long;
+typedef DartFT_Fixed = int;
+
+/// @struct:
+/// FT_Vector
+///
+/// @description:
+/// A simple structure used to store a 2D vector; coordinates are of the
+/// FT_Pos type.
+///
+/// @fields:
+/// x ::
+/// The horizontal coordinate.
+/// y ::
+/// The vertical coordinate.
+final class FT_Vector_ extends ffi.Struct {
+  @FT_Pos()
+  external int x;
+
+  @FT_Pos()
+  external int y;
+}
+
+/// @struct:
+/// FT_Vector
+///
+/// @description:
+/// A simple structure used to store a 2D vector; coordinates are of the
+/// FT_Pos type.
+///
+/// @fields:
+/// x ::
+/// The horizontal coordinate.
+/// y ::
+/// The vertical coordinate.
+typedef FT_Vector = FT_Vector_;
+
+/// @enum:
+/// FT_Glyph_Format
+///
+/// @description:
+/// An enumeration type used to describe the format of a given glyph
+/// image.  Note that this version of FreeType only supports two image
+/// formats, even though future font drivers will be able to register
+/// their own format.
+///
+/// @values:
+/// FT_GLYPH_FORMAT_NONE ::
+/// The value~0 is reserved.
+///
+/// FT_GLYPH_FORMAT_COMPOSITE ::
+/// The glyph image is a composite of several other images.  This format
+/// is _only_ used with @FT_LOAD_NO_RECURSE, and is used to report
+/// compound glyphs (like accented characters).
+///
+/// FT_GLYPH_FORMAT_BITMAP ::
+/// The glyph image is a bitmap, and can be described as an @FT_Bitmap.
+/// You generally need to access the `bitmap` field of the
+/// @FT_GlyphSlotRec structure to read it.
+///
+/// FT_GLYPH_FORMAT_OUTLINE ::
+/// The glyph image is a vectorial outline made of line segments and
+/// Bezier arcs; it can be described as an @FT_Outline; you generally
+/// want to access the `outline` field of the @FT_GlyphSlotRec structure
+/// to read it.
+///
+/// FT_GLYPH_FORMAT_PLOTTER ::
+/// The glyph image is a vectorial path with no inside and outside
+/// contours.  Some Type~1 fonts, like those in the Hershey family,
+/// contain glyphs in this format.  These are described as @FT_Outline,
+/// but FreeType isn't currently capable of rendering them correctly.
+///
+/// FT_GLYPH_FORMAT_SVG ::
+/// [Since 2.12] The glyph is represented by an SVG document in the
+/// 'SVG~' table.
+enum FT_Glyph_Format_ {
+  FT_GLYPH_FORMAT_NONE(0),
+  FT_GLYPH_FORMAT_COMPOSITE(1668246896),
+  FT_GLYPH_FORMAT_BITMAP(1651078259),
+  FT_GLYPH_FORMAT_OUTLINE(1869968492),
+  FT_GLYPH_FORMAT_PLOTTER(1886154612),
+  FT_GLYPH_FORMAT_SVG(1398163232);
+
+  final int value;
+  const FT_Glyph_Format_(this.value);
+
+  static FT_Glyph_Format_ fromValue(int value) => switch (value) {
+        0 => FT_GLYPH_FORMAT_NONE,
+        1668246896 => FT_GLYPH_FORMAT_COMPOSITE,
+        1651078259 => FT_GLYPH_FORMAT_BITMAP,
+        1869968492 => FT_GLYPH_FORMAT_OUTLINE,
+        1886154612 => FT_GLYPH_FORMAT_PLOTTER,
+        1398163232 => FT_GLYPH_FORMAT_SVG,
+        _ => throw ArgumentError('Unknown value for FT_Glyph_Format_: $value'),
+      };
+}
+
+/// @struct:
+/// FT_Bitmap
+///
+/// @description:
+/// A structure used to describe a bitmap or pixmap to the raster.  Note
+/// that we now manage pixmaps of various depths through the `pixel_mode`
+/// field.
+///
+/// @fields:
+/// rows ::
+/// The number of bitmap rows.
+///
+/// width ::
+/// The number of pixels in bitmap row.
+///
+/// pitch ::
+/// The pitch's absolute value is the number of bytes taken by one
+/// bitmap row, including padding.  However, the pitch is positive when
+/// the bitmap has a 'down' flow, and negative when it has an 'up' flow.
+/// In all cases, the pitch is an offset to add to a bitmap pointer in
+/// order to go down one row.
+///
+/// Note that 'padding' means the alignment of a bitmap to a byte
+/// border, and FreeType functions normally align to the smallest
+/// possible integer value.
+///
+/// For the B/W rasterizer, `pitch` is always an even number.
+///
+/// To change the pitch of a bitmap (say, to make it a multiple of 4),
+/// use @FT_Bitmap_Convert.  Alternatively, you might use callback
+/// functions to directly render to the application's surface; see the
+/// file `example2.cpp` in the tutorial for a demonstration.
+///
+/// buffer ::
+/// A typeless pointer to the bitmap buffer.  This value should be
+/// aligned on 32-bit boundaries in most cases.
+///
+/// num_grays ::
+/// This field is only used with @FT_PIXEL_MODE_GRAY; it gives the
+/// number of gray levels used in the bitmap.
+///
+/// pixel_mode ::
+/// The pixel mode, i.e., how pixel bits are stored.  See @FT_Pixel_Mode
+/// for possible values.
+///
+/// palette_mode ::
+/// This field is intended for paletted pixel modes; it indicates how
+/// the palette is stored.  Not used currently.
+///
+/// palette ::
+/// A typeless pointer to the bitmap palette; this field is intended for
+/// paletted pixel modes.  Not used currently.
+///
+/// @note:
+/// `width` and `rows` refer to the *physical* size of the bitmap, not the
+/// *logical* one.  For example, if @FT_Pixel_Mode is set to
+/// `FT_PIXEL_MODE_LCD`, the logical width is a just a third of the
+/// physical one.
+final class FT_Bitmap_ extends ffi.Struct {
+  @ffi.UnsignedInt()
+  external int rows;
+
+  @ffi.UnsignedInt()
+  external int width;
+
+  @ffi.Int()
+  external int pitch;
+
+  external ffi.Pointer<ffi.UnsignedChar> buffer;
+
+  @ffi.UnsignedShort()
+  external int num_grays;
+
+  @ffi.UnsignedChar()
+  external int pixel_mode;
+
+  @ffi.UnsignedChar()
+  external int palette_mode;
+
+  external ffi.Pointer<ffi.Void> palette;
+}
+
+/// @struct:
+/// FT_Bitmap
+///
+/// @description:
+/// A structure used to describe a bitmap or pixmap to the raster.  Note
+/// that we now manage pixmaps of various depths through the `pixel_mode`
+/// field.
+///
+/// @fields:
+/// rows ::
+/// The number of bitmap rows.
+///
+/// width ::
+/// The number of pixels in bitmap row.
+///
+/// pitch ::
+/// The pitch's absolute value is the number of bytes taken by one
+/// bitmap row, including padding.  However, the pitch is positive when
+/// the bitmap has a 'down' flow, and negative when it has an 'up' flow.
+/// In all cases, the pitch is an offset to add to a bitmap pointer in
+/// order to go down one row.
+///
+/// Note that 'padding' means the alignment of a bitmap to a byte
+/// border, and FreeType functions normally align to the smallest
+/// possible integer value.
+///
+/// For the B/W rasterizer, `pitch` is always an even number.
+///
+/// To change the pitch of a bitmap (say, to make it a multiple of 4),
+/// use @FT_Bitmap_Convert.  Alternatively, you might use callback
+/// functions to directly render to the application's surface; see the
+/// file `example2.cpp` in the tutorial for a demonstration.
+///
+/// buffer ::
+/// A typeless pointer to the bitmap buffer.  This value should be
+/// aligned on 32-bit boundaries in most cases.
+///
+/// num_grays ::
+/// This field is only used with @FT_PIXEL_MODE_GRAY; it gives the
+/// number of gray levels used in the bitmap.
+///
+/// pixel_mode ::
+/// The pixel mode, i.e., how pixel bits are stored.  See @FT_Pixel_Mode
+/// for possible values.
+///
+/// palette_mode ::
+/// This field is intended for paletted pixel modes; it indicates how
+/// the palette is stored.  Not used currently.
+///
+/// palette ::
+/// A typeless pointer to the bitmap palette; this field is intended for
+/// paletted pixel modes.  Not used currently.
+///
+/// @note:
+/// `width` and `rows` refer to the *physical* size of the bitmap, not the
+/// *logical* one.  For example, if @FT_Pixel_Mode is set to
+/// `FT_PIXEL_MODE_LCD`, the logical width is a just a third of the
+/// physical one.
+typedef FT_Bitmap = FT_Bitmap_;
+
+/// @struct:
+/// FT_Outline
+///
+/// @description:
+/// This structure is used to describe an outline to the scan-line
+/// converter.
+///
+/// @fields:
+/// n_contours ::
+/// The number of contours in the outline.
+///
+/// n_points ::
+/// The number of points in the outline.
+///
+/// points ::
+/// A pointer to an array of `n_points` @FT_Vector elements, giving the
+/// outline's point coordinates.
+///
+/// tags ::
+/// A pointer to an array of `n_points` chars, giving each outline
+/// point's type.
+///
+/// If bit~0 is unset, the point is 'off' the curve, i.e., a Bezier
+/// control point, while it is 'on' if set.
+///
+/// Bit~1 is meaningful for 'off' points only.  If set, it indicates a
+/// third-order Bezier arc control point; and a second-order control
+/// point if unset.
+///
+/// If bit~2 is set, bits 5-7 contain the drop-out mode (as defined in
+/// the OpenType specification; the value is the same as the argument to
+/// the 'SCANMODE' instruction).
+///
+/// Bits 3 and~4 are reserved for internal purposes.
+///
+/// contours ::
+/// An array of `n_contours` shorts, giving the end point of each
+/// contour within the outline.  For example, the first contour is
+/// defined by the points '0' to `contours[0]`, the second one is
+/// defined by the points `contours[0]+1` to `contours[1]`, etc.
+///
+/// flags ::
+/// A set of bit flags used to characterize the outline and give hints
+/// to the scan-converter and hinter on how to convert/grid-fit it.  See
+/// @FT_OUTLINE_XXX.
+///
+/// @note:
+/// The B/W rasterizer only checks bit~2 in the `tags` array for the first
+/// point of each contour.  The drop-out mode as given with
+/// @FT_OUTLINE_IGNORE_DROPOUTS, @FT_OUTLINE_SMART_DROPOUTS, and
+/// @FT_OUTLINE_INCLUDE_STUBS in `flags` is then overridden.
+final class FT_Outline_ extends ffi.Struct {
+  @ffi.Short()
+  external int n_contours;
+
+  @ffi.Short()
+  external int n_points;
+
+  external ffi.Pointer<FT_Vector> points;
+
+  external ffi.Pointer<ffi.Char> tags;
+
+  external ffi.Pointer<ffi.Short> contours;
+
+  @ffi.Int()
+  external int flags;
+}
+
+/// @struct:
+/// FT_Outline
+///
+/// @description:
+/// This structure is used to describe an outline to the scan-line
+/// converter.
+///
+/// @fields:
+/// n_contours ::
+/// The number of contours in the outline.
+///
+/// n_points ::
+/// The number of points in the outline.
+///
+/// points ::
+/// A pointer to an array of `n_points` @FT_Vector elements, giving the
+/// outline's point coordinates.
+///
+/// tags ::
+/// A pointer to an array of `n_points` chars, giving each outline
+/// point's type.
+///
+/// If bit~0 is unset, the point is 'off' the curve, i.e., a Bezier
+/// control point, while it is 'on' if set.
+///
+/// Bit~1 is meaningful for 'off' points only.  If set, it indicates a
+/// third-order Bezier arc control point; and a second-order control
+/// point if unset.
+///
+/// If bit~2 is set, bits 5-7 contain the drop-out mode (as defined in
+/// the OpenType specification; the value is the same as the argument to
+/// the 'SCANMODE' instruction).
+///
+/// Bits 3 and~4 are reserved for internal purposes.
+///
+/// contours ::
+/// An array of `n_contours` shorts, giving the end point of each
+/// contour within the outline.  For example, the first contour is
+/// defined by the points '0' to `contours[0]`, the second one is
+/// defined by the points `contours[0]+1` to `contours[1]`, etc.
+///
+/// flags ::
+/// A set of bit flags used to characterize the outline and give hints
+/// to the scan-converter and hinter on how to convert/grid-fit it.  See
+/// @FT_OUTLINE_XXX.
+///
+/// @note:
+/// The B/W rasterizer only checks bit~2 in the `tags` array for the first
+/// point of each contour.  The drop-out mode as given with
+/// @FT_OUTLINE_IGNORE_DROPOUTS, @FT_OUTLINE_SMART_DROPOUTS, and
+/// @FT_OUTLINE_INCLUDE_STUBS in `flags` is then overridden.
+typedef FT_Outline = FT_Outline_;
+
+final class FT_SubGlyphRec_ extends ffi.Opaque {}
+
+/// @struct:
+/// FT_SubGlyph
+///
+/// @description:
+/// The subglyph structure is an internal object used to describe
+/// subglyphs (for example, in the case of composites).
+///
+/// @note:
+/// The subglyph implementation is not part of the high-level API, hence
+/// the forward structure declaration.
+///
+/// You can however retrieve subglyph information with
+/// @FT_Get_SubGlyph_Info.
+typedef FT_SubGlyph = ffi.Pointer<FT_SubGlyphRec_>;
+
+final class FT_Slot_InternalRec_ extends ffi.Opaque {}
+
+/// @type:
+/// FT_Slot_Internal
+///
+/// @description:
+/// An opaque handle to an `FT_Slot_InternalRec` structure, used to model
+/// private data of a given @FT_GlyphSlot object.
+typedef FT_Slot_Internal = ffi.Pointer<FT_Slot_InternalRec_>;
+
+/// @struct:
+/// FT_GlyphSlotRec
+///
+/// @description:
+/// FreeType root glyph slot class structure.  A glyph slot is a container
+/// where individual glyphs can be loaded, be they in outline or bitmap
+/// format.
+///
+/// @fields:
+/// library ::
+/// A handle to the FreeType library instance this slot belongs to.
+///
+/// face ::
+/// A handle to the parent face object.
+///
+/// next ::
+/// In some cases (like some font tools), several glyph slots per face
+/// object can be a good thing.  As this is rare, the glyph slots are
+/// listed through a direct, single-linked list using its `next` field.
+///
+/// glyph_index ::
+/// [Since 2.10] The glyph index passed as an argument to @FT_Load_Glyph
+/// while initializing the glyph slot.
+///
+/// generic ::
+/// A typeless pointer unused by the FreeType library or any of its
+/// drivers.  It can be used by client applications to link their own
+/// data to each glyph slot object.
+///
+/// metrics ::
+/// The metrics of the last loaded glyph in the slot.  The returned
+/// values depend on the last load flags (see the @FT_Load_Glyph API
+/// function) and can be expressed either in 26.6 fractional pixels or
+/// font units.
+///
+/// Note that even when the glyph image is transformed, the metrics are
+/// not.
+///
+/// linearHoriAdvance ::
+/// The advance width of the unhinted glyph.  Its value is expressed in
+/// 16.16 fractional pixels, unless @FT_LOAD_LINEAR_DESIGN is set when
+/// loading the glyph.  This field can be important to perform correct
+/// WYSIWYG layout.  Only relevant for scalable glyphs.
+///
+/// linearVertAdvance ::
+/// The advance height of the unhinted glyph.  Its value is expressed in
+/// 16.16 fractional pixels, unless @FT_LOAD_LINEAR_DESIGN is set when
+/// loading the glyph.  This field can be important to perform correct
+/// WYSIWYG layout.  Only relevant for scalable glyphs.
+///
+/// advance ::
+/// This shorthand is, depending on @FT_LOAD_IGNORE_TRANSFORM, the
+/// transformed (hinted) advance width for the glyph, in 26.6 fractional
+/// pixel format.  As specified with @FT_LOAD_VERTICAL_LAYOUT, it uses
+/// either the `horiAdvance` or the `vertAdvance` value of `metrics`
+/// field.
+///
+/// format ::
+/// This field indicates the format of the image contained in the glyph
+/// slot.  Typically @FT_GLYPH_FORMAT_BITMAP, @FT_GLYPH_FORMAT_OUTLINE,
+/// or @FT_GLYPH_FORMAT_COMPOSITE, but other values are possible.
+///
+/// bitmap ::
+/// This field is used as a bitmap descriptor.  Note that the address
+/// and content of the bitmap buffer can change between calls of
+/// @FT_Load_Glyph and a few other functions.
+///
+/// bitmap_left ::
+/// The bitmap's left bearing expressed in integer pixels.
+///
+/// bitmap_top ::
+/// The bitmap's top bearing expressed in integer pixels.  This is the
+/// distance from the baseline to the top-most glyph scanline, upwards
+/// y~coordinates being **positive**.
+///
+/// outline ::
+/// The outline descriptor for the current glyph image if its format is
+/// @FT_GLYPH_FORMAT_OUTLINE.  Once a glyph is loaded, `outline` can be
+/// transformed, distorted, emboldened, etc.  However, it must not be
+/// freed.
+///
+/// [Since 2.10.1] If @FT_LOAD_NO_SCALE is set, outline coordinates of
+/// OpenType variation fonts for a selected instance are internally
+/// handled as 26.6 fractional font units but returned as (rounded)
+/// integers, as expected.  To get unrounded font units, don't use
+/// @FT_LOAD_NO_SCALE but load the glyph with @FT_LOAD_NO_HINTING and
+/// scale it, using the font's `units_per_EM` value as the ppem.
+///
+/// num_subglyphs ::
+/// The number of subglyphs in a composite glyph.  This field is only
+/// valid for the composite glyph format that should normally only be
+/// loaded with the @FT_LOAD_NO_RECURSE flag.
+///
+/// subglyphs ::
+/// An array of subglyph descriptors for composite glyphs.  There are
+/// `num_subglyphs` elements in there.  Currently internal to FreeType.
+///
+/// control_data ::
+/// Certain font drivers can also return the control data for a given
+/// glyph image (e.g.  TrueType bytecode, Type~1 charstrings, etc.).
+/// This field is a pointer to such data; it is currently internal to
+/// FreeType.
+///
+/// control_len ::
+/// This is the length in bytes of the control data.  Currently internal
+/// to FreeType.
+///
+/// other ::
+/// Reserved.
+///
+/// lsb_delta ::
+/// The difference between hinted and unhinted left side bearing while
+/// auto-hinting is active.  Zero otherwise.
+///
+/// rsb_delta ::
+/// The difference between hinted and unhinted right side bearing while
+/// auto-hinting is active.  Zero otherwise.
+///
+/// @note:
+/// If @FT_Load_Glyph is called with default flags (see @FT_LOAD_DEFAULT)
+/// the glyph image is loaded in the glyph slot in its native format
+/// (e.g., an outline glyph for TrueType and Type~1 formats).  [Since 2.9]
+/// The prospective bitmap metrics are calculated according to
+/// @FT_LOAD_TARGET_XXX and other flags even for the outline glyph, even
+/// if @FT_LOAD_RENDER is not set.
+///
+/// This image can later be converted into a bitmap by calling
+/// @FT_Render_Glyph.  This function searches the current renderer for the
+/// native image's format, then invokes it.
+///
+/// The renderer is in charge of transforming the native image through the
+/// slot's face transformation fields, then converting it into a bitmap
+/// that is returned in `slot->bitmap`.
+///
+/// Note that `slot->bitmap_left` and `slot->bitmap_top` are also used to
+/// specify the position of the bitmap relative to the current pen
+/// position (e.g., coordinates (0,0) on the baseline).  Of course,
+/// `slot->format` is also changed to @FT_GLYPH_FORMAT_BITMAP.
+///
+/// Here is a small pseudo code fragment that shows how to use `lsb_delta`
+/// and `rsb_delta` to do fractional positioning of glyphs:
+///
+/// ```
+/// FT_GlyphSlot  slot     = face->glyph;
+/// FT_Pos        origin_x = 0;
+///
+///
+/// for all glyphs do
+/// <load glyph with `FT_Load_Glyph'>
+///
+/// FT_Outline_Translate( slot->outline, origin_x & 63, 0 );
+///
+/// <save glyph image, or render glyph, or ...>
+///
+/// <compute kern between current and next glyph
+/// and add it to `origin_x'>
+///
+/// origin_x += slot->advance.x;
+/// origin_x += slot->lsb_delta - slot->rsb_delta;
+/// endfor
+/// ```
+///
+/// Here is another small pseudo code fragment that shows how to use
+/// `lsb_delta` and `rsb_delta` to improve integer positioning of glyphs:
+///
+/// ```
+/// FT_GlyphSlot  slot           = face->glyph;
+/// FT_Pos        origin_x       = 0;
+/// FT_Pos        prev_rsb_delta = 0;
+///
+///
+/// for all glyphs do
+/// <compute kern between current and previous glyph
+/// and add it to `origin_x'>
+///
+/// <load glyph with `FT_Load_Glyph'>
+///
+/// if ( prev_rsb_delta - slot->lsb_delta >  32 )
+/// origin_x -= 64;
+/// else if ( prev_rsb_delta - slot->lsb_delta < -31 )
+/// origin_x += 64;
+///
+/// prev_rsb_delta = slot->rsb_delta;
+///
+/// <save glyph image, or render glyph, or ...>
+///
+/// origin_x += slot->advance.x;
+/// endfor
+/// ```
+///
+/// If you use strong auto-hinting, you **must** apply these delta values!
+/// Otherwise you will experience far too large inter-glyph spacing at
+/// small rendering sizes in most cases.  Note that it doesn't harm to use
+/// the above code for other hinting modes also, since the delta values
+/// are zero then.
+final class FT_GlyphSlotRec_ extends ffi.Struct {
+  external FT_Library library$;
+
+  external FT_Face face;
+
+  external FT_GlyphSlot next;
+
+  @FT_UInt()
+  external int glyph_index;
+
+  external FT_Generic generic;
+
+  external FT_Glyph_Metrics metrics;
+
+  @FT_Fixed()
+  external int linearHoriAdvance;
+
+  @FT_Fixed()
+  external int linearVertAdvance;
+
+  external FT_Vector advance;
+
+  @ffi.UnsignedInt()
+  external int formatAsInt;
+
+  FT_Glyph_Format_ get format => FT_Glyph_Format_.fromValue(formatAsInt);
+
+  external FT_Bitmap bitmap;
+
+  @FT_Int()
+  external int bitmap_left;
+
+  @FT_Int()
+  external int bitmap_top;
+
+  external FT_Outline outline;
+
+  @FT_UInt()
+  external int num_subglyphs;
+
+  external FT_SubGlyph subglyphs;
+
+  external ffi.Pointer<ffi.Void> control_data;
+
+  @ffi.Long()
+  external int control_len;
+
+  @FT_Pos()
+  external int lsb_delta;
+
+  @FT_Pos()
+  external int rsb_delta;
+
+  external ffi.Pointer<ffi.Void> other;
+
+  external FT_Slot_Internal internal;
+}
+
+/// @type:
+/// FT_GlyphSlot
+///
+/// @description:
+/// A handle to a given 'glyph slot'.  A slot is a container that can hold
+/// any of the glyphs contained in its parent face.
+///
+/// In other words, each time you call @FT_Load_Glyph or @FT_Load_Char,
+/// the slot's content is erased by the new glyph data, i.e., the glyph's
+/// metrics, its image (bitmap or outline), and other control information.
+///
+/// @also:
+/// See @FT_GlyphSlotRec for the publicly accessible glyph fields.
+typedef FT_GlyphSlot$1 = ffi.Pointer<FT_GlyphSlotRec_>;
+
+/// @struct:
+/// FT_Size_Metrics
+///
+/// @description:
+/// The size metrics structure gives the metrics of a size object.
+///
+/// @fields:
+/// x_ppem ::
+/// The width of the scaled EM square in pixels, hence the term 'ppem'
+/// (pixels per EM).  It is also referred to as 'nominal width'.
+///
+/// y_ppem ::
+/// The height of the scaled EM square in pixels, hence the term 'ppem'
+/// (pixels per EM).  It is also referred to as 'nominal height'.
+///
+/// x_scale ::
+/// A 16.16 fractional scaling value to convert horizontal metrics from
+/// font units to 26.6 fractional pixels.  Only relevant for scalable
+/// font formats.
+///
+/// y_scale ::
+/// A 16.16 fractional scaling value to convert vertical metrics from
+/// font units to 26.6 fractional pixels.  Only relevant for scalable
+/// font formats.
+///
+/// ascender ::
+/// The ascender in 26.6 fractional pixels, rounded up to an integer
+/// value.  See @FT_FaceRec for the details.
+///
+/// descender ::
+/// The descender in 26.6 fractional pixels, rounded down to an integer
+/// value.  See @FT_FaceRec for the details.
+///
+/// height ::
+/// The height in 26.6 fractional pixels, rounded to an integer value.
+/// See @FT_FaceRec for the details.
+///
+/// max_advance ::
+/// The maximum advance width in 26.6 fractional pixels, rounded to an
+/// integer value.  See @FT_FaceRec for the details.
+///
+/// @note:
+/// The scaling values, if relevant, are determined first during a size
+/// changing operation.  The remaining fields are then set by the driver.
+/// For scalable formats, they are usually set to scaled values of the
+/// corresponding fields in @FT_FaceRec.  Some values like ascender or
+/// descender are rounded for historical reasons; more precise values (for
+/// outline fonts) can be derived by scaling the corresponding @FT_FaceRec
+/// values manually, with code similar to the following.
+///
+/// ```
+/// scaled_ascender = FT_MulFix( face->ascender,
+/// size_metrics->y_scale );
+/// ```
+///
+/// Note that due to glyph hinting and the selected rendering mode these
+/// values are usually not exact; consequently, they must be treated as
+/// unreliable with an error margin of at least one pixel!
+///
+/// Indeed, the only way to get the exact metrics is to render _all_
+/// glyphs.  As this would be a definite performance hit, it is up to
+/// client applications to perform such computations.
+///
+/// The `FT_Size_Metrics` structure is valid for bitmap fonts also.
+///
+///
+/// **TrueType fonts with native bytecode hinting**
+///
+/// All applications that handle TrueType fonts with native hinting must
+/// be aware that TTFs expect different rounding of vertical font
+/// dimensions.  The application has to cater for this, especially if it
+/// wants to rely on a TTF's vertical data (for example, to properly align
+/// box characters vertically).
+///
+/// Only the application knows _in advance_ that it is going to use native
+/// hinting for TTFs!  FreeType, on the other hand, selects the hinting
+/// mode not at the time of creating an @FT_Size object but much later,
+/// namely while calling @FT_Load_Glyph.
+///
+/// Here is some pseudo code that illustrates a possible solution.
+///
+/// ```
+/// font_format = FT_Get_Font_Format( face );
+///
+/// if ( !strcmp( font_format, "TrueType" ) &&
+/// do_native_bytecode_hinting         )
+/// {
+/// ascender  = ROUND( FT_MulFix( face->ascender,
+/// size_metrics->y_scale ) );
+/// descender = ROUND( FT_MulFix( face->descender,
+/// size_metrics->y_scale ) );
+/// }
+/// else
+/// {
+/// ascender  = size_metrics->ascender;
+/// descender = size_metrics->descender;
+/// }
+///
+/// height      = size_metrics->height;
+/// max_advance = size_metrics->max_advance;
+/// ```
+final class FT_Size_Metrics_ extends ffi.Struct {
+  @FT_UShort()
+  external int x_ppem;
+
+  @FT_UShort()
+  external int y_ppem;
+
+  @FT_Fixed()
+  external int x_scale;
+
+  @FT_Fixed()
+  external int y_scale;
+
+  @FT_Pos()
+  external int ascender;
+
+  @FT_Pos()
+  external int descender;
+
+  @FT_Pos()
+  external int height;
+
+  @FT_Pos()
+  external int max_advance;
+}
+
+/// @struct:
+/// FT_Size_Metrics
+///
+/// @description:
+/// The size metrics structure gives the metrics of a size object.
+///
+/// @fields:
+/// x_ppem ::
+/// The width of the scaled EM square in pixels, hence the term 'ppem'
+/// (pixels per EM).  It is also referred to as 'nominal width'.
+///
+/// y_ppem ::
+/// The height of the scaled EM square in pixels, hence the term 'ppem'
+/// (pixels per EM).  It is also referred to as 'nominal height'.
+///
+/// x_scale ::
+/// A 16.16 fractional scaling value to convert horizontal metrics from
+/// font units to 26.6 fractional pixels.  Only relevant for scalable
+/// font formats.
+///
+/// y_scale ::
+/// A 16.16 fractional scaling value to convert vertical metrics from
+/// font units to 26.6 fractional pixels.  Only relevant for scalable
+/// font formats.
+///
+/// ascender ::
+/// The ascender in 26.6 fractional pixels, rounded up to an integer
+/// value.  See @FT_FaceRec for the details.
+///
+/// descender ::
+/// The descender in 26.6 fractional pixels, rounded down to an integer
+/// value.  See @FT_FaceRec for the details.
+///
+/// height ::
+/// The height in 26.6 fractional pixels, rounded to an integer value.
+/// See @FT_FaceRec for the details.
+///
+/// max_advance ::
+/// The maximum advance width in 26.6 fractional pixels, rounded to an
+/// integer value.  See @FT_FaceRec for the details.
+///
+/// @note:
+/// The scaling values, if relevant, are determined first during a size
+/// changing operation.  The remaining fields are then set by the driver.
+/// For scalable formats, they are usually set to scaled values of the
+/// corresponding fields in @FT_FaceRec.  Some values like ascender or
+/// descender are rounded for historical reasons; more precise values (for
+/// outline fonts) can be derived by scaling the corresponding @FT_FaceRec
+/// values manually, with code similar to the following.
+///
+/// ```
+/// scaled_ascender = FT_MulFix( face->ascender,
+/// size_metrics->y_scale );
+/// ```
+///
+/// Note that due to glyph hinting and the selected rendering mode these
+/// values are usually not exact; consequently, they must be treated as
+/// unreliable with an error margin of at least one pixel!
+///
+/// Indeed, the only way to get the exact metrics is to render _all_
+/// glyphs.  As this would be a definite performance hit, it is up to
+/// client applications to perform such computations.
+///
+/// The `FT_Size_Metrics` structure is valid for bitmap fonts also.
+///
+///
+/// **TrueType fonts with native bytecode hinting**
+///
+/// All applications that handle TrueType fonts with native hinting must
+/// be aware that TTFs expect different rounding of vertical font
+/// dimensions.  The application has to cater for this, especially if it
+/// wants to rely on a TTF's vertical data (for example, to properly align
+/// box characters vertically).
+///
+/// Only the application knows _in advance_ that it is going to use native
+/// hinting for TTFs!  FreeType, on the other hand, selects the hinting
+/// mode not at the time of creating an @FT_Size object but much later,
+/// namely while calling @FT_Load_Glyph.
+///
+/// Here is some pseudo code that illustrates a possible solution.
+///
+/// ```
+/// font_format = FT_Get_Font_Format( face );
+///
+/// if ( !strcmp( font_format, "TrueType" ) &&
+/// do_native_bytecode_hinting         )
+/// {
+/// ascender  = ROUND( FT_MulFix( face->ascender,
+/// size_metrics->y_scale ) );
+/// descender = ROUND( FT_MulFix( face->descender,
+/// size_metrics->y_scale ) );
+/// }
+/// else
+/// {
+/// ascender  = size_metrics->ascender;
+/// descender = size_metrics->descender;
+/// }
+///
+/// height      = size_metrics->height;
+/// max_advance = size_metrics->max_advance;
+/// ```
+typedef FT_Size_Metrics = FT_Size_Metrics_;
+
+final class FT_Size_InternalRec_ extends ffi.Opaque {}
+
+/// @type:
+/// FT_Size_Internal
+///
+/// @description:
+/// An opaque handle to an `FT_Size_InternalRec` structure, used to model
+/// private data of a given @FT_Size object.
+typedef FT_Size_Internal = ffi.Pointer<FT_Size_InternalRec_>;
+
+/// @struct:
+/// FT_SizeRec
+///
+/// @description:
+/// FreeType root size class structure.  A size object models a face
+/// object at a given size.
+///
+/// @fields:
+/// face ::
+/// Handle to the parent face object.
+///
+/// generic ::
+/// A typeless pointer, unused by the FreeType library or any of its
+/// drivers.  It can be used by client applications to link their own
+/// data to each size object.
+///
+/// metrics ::
+/// Metrics for this size object.  This field is read-only.
+final class FT_SizeRec_ extends ffi.Struct {
+  external FT_Face face;
+
+  external FT_Generic generic;
+
+  external FT_Size_Metrics metrics;
+
+  external FT_Size_Internal internal;
+}
+
+/// @type:
+/// FT_Size
+///
+/// @description:
+/// A handle to an object that models a face scaled to a given character
+/// size.
+///
+/// @note:
+/// An @FT_Face has one _active_ `FT_Size` object that is used by
+/// functions like @FT_Load_Glyph to determine the scaling transformation
+/// that in turn is used to load and hint glyphs and metrics.
+///
+/// A newly created `FT_Size` object contains only meaningless zero values.
+/// You must use @FT_Set_Char_Size, @FT_Set_Pixel_Sizes, @FT_Request_Size
+/// or even @FT_Select_Size to change the content (i.e., the scaling
+/// values) of the active `FT_Size`.  Otherwise, the scaling and hinting
+/// will not be performed.
+///
+/// You can use @FT_New_Size to create additional size objects for a given
+/// @FT_Face, but they won't be used by other functions until you activate
+/// it through @FT_Activate_Size.  Only one size can be activated at any
+/// given time per face.
+///
+/// @also:
+/// See @FT_SizeRec for the publicly accessible fields of a given size
+/// object.
+typedef FT_Size = ffi.Pointer<FT_SizeRec_>;
+
+/// @type:
+/// FT_Memory
+///
+/// @description:
+/// A handle to a given memory manager object, defined with an
+/// @FT_MemoryRec structure.
+typedef FT_Memory = ffi.Pointer<FT_MemoryRec_>;
+typedef FT_Alloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
+    FT_Memory memory, ffi.Long size);
+typedef DartFT_Alloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
+    FT_Memory memory, int size);
+
+/// @functype:
+/// FT_Alloc_Func
+///
+/// @description:
+/// A function used to allocate `size` bytes from `memory`.
+///
+/// @input:
+/// memory ::
+/// A handle to the source memory manager.
+///
+/// size ::
+/// The size in bytes to allocate.
+///
+/// @return:
+/// Address of new memory block.  0~in case of failure.
+typedef FT_Alloc_Func = ffi.Pointer<ffi.NativeFunction<FT_Alloc_FuncFunction>>;
+typedef FT_Free_FuncFunction = ffi.Void Function(
+    FT_Memory memory, ffi.Pointer<ffi.Void> block);
+typedef DartFT_Free_FuncFunction = void Function(
+    FT_Memory memory, ffi.Pointer<ffi.Void> block);
+
+/// @functype:
+/// FT_Free_Func
+///
+/// @description:
+/// A function used to release a given block of memory.
+///
+/// @input:
+/// memory ::
+/// A handle to the source memory manager.
+///
+/// block ::
+/// The address of the target memory block.
+typedef FT_Free_Func = ffi.Pointer<ffi.NativeFunction<FT_Free_FuncFunction>>;
+typedef FT_Realloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
+    FT_Memory memory,
+    ffi.Long cur_size,
+    ffi.Long new_size,
+    ffi.Pointer<ffi.Void> block);
+typedef DartFT_Realloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
+    FT_Memory memory, int cur_size, int new_size, ffi.Pointer<ffi.Void> block);
+
+/// @functype:
+/// FT_Realloc_Func
+///
+/// @description:
+/// A function used to re-allocate a given block of memory.
+///
+/// @input:
+/// memory ::
+/// A handle to the source memory manager.
+///
+/// cur_size ::
+/// The block's current size in bytes.
+///
+/// new_size ::
+/// The block's requested new size.
+///
+/// block ::
+/// The block's current address.
+///
+/// @return:
+/// New block address.  0~in case of memory shortage.
+///
+/// @note:
+/// In case of error, the old block must still be available.
+typedef FT_Realloc_Func
+    = ffi.Pointer<ffi.NativeFunction<FT_Realloc_FuncFunction>>;
+
+/// @struct:
+/// FT_MemoryRec
+///
+/// @description:
+/// A structure used to describe a given memory manager to FreeType~2.
+///
+/// @fields:
+/// user ::
+/// A generic typeless pointer for user data.
+///
+/// alloc ::
+/// A pointer type to an allocation function.
+///
+/// free ::
+/// A pointer type to an memory freeing function.
+///
+/// realloc ::
+/// A pointer type to a reallocation function.
+final class FT_MemoryRec_ extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> user;
+
+  external FT_Alloc_Func alloc;
+
+  external FT_Free_Func free;
+
+  external FT_Realloc_Func realloc;
+}
+
+/// @type:
+/// FT_Memory
+///
+/// @description:
+/// A handle to a given memory manager object, defined with an
+/// @FT_MemoryRec structure.
+typedef FT_Memory$1 = ffi.Pointer<FT_MemoryRec_>;
+
+/// @struct:
+/// FT_StreamDesc
+///
+/// @description:
+/// A union type used to store either a long or a pointer.  This is used
+/// to store a file descriptor or a `FILE*` in an input stream.
+final class FT_StreamDesc_ extends ffi.Union {
+  @ffi.Long()
+  external int value;
+
+  external ffi.Pointer<ffi.Void> pointer;
+}
+
+/// @struct:
+/// FT_StreamDesc
+///
+/// @description:
+/// A union type used to store either a long or a pointer.  This is used
+/// to store a file descriptor or a `FILE*` in an input stream.
+typedef FT_StreamDesc = FT_StreamDesc_;
+
+/// @type:
+/// FT_Stream
+///
+/// @description:
+/// A handle to an input stream.
+///
+/// @also:
+/// See @FT_StreamRec for the publicly accessible fields of a given stream
+/// object.
+typedef FT_Stream = ffi.Pointer<FT_StreamRec_>;
+typedef FT_Stream_IoFuncFunction = ffi.UnsignedLong Function(
+    FT_Stream stream,
+    ffi.UnsignedLong offset,
+    ffi.Pointer<ffi.UnsignedChar> buffer,
+    ffi.UnsignedLong count);
+typedef DartFT_Stream_IoFuncFunction = int Function(FT_Stream stream,
+    int offset, ffi.Pointer<ffi.UnsignedChar> buffer, int count);
+
+/// @functype:
+/// FT_Stream_IoFunc
+///
+/// @description:
+/// A function used to seek and read data from a given input stream.
+///
+/// @input:
+/// stream ::
+/// A handle to the source stream.
+///
+/// offset ::
+/// The offset from the start of the stream to seek to.
+///
+/// buffer ::
+/// The address of the read buffer.
+///
+/// count ::
+/// The number of bytes to read from the stream.
+///
+/// @return:
+/// If count >~0, return the number of bytes effectively read by the
+/// stream (after seeking to `offset`).  If count ==~0, return the status
+/// of the seek operation (non-zero indicates an error).
+typedef FT_Stream_IoFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Stream_IoFuncFunction>>;
+typedef FT_Stream_CloseFuncFunction = ffi.Void Function(FT_Stream stream);
+typedef DartFT_Stream_CloseFuncFunction = void Function(FT_Stream stream);
+
+/// @functype:
+/// FT_Stream_CloseFunc
+///
+/// @description:
+/// A function used to close a given input stream.
+///
+/// @input:
+/// stream ::
+/// A handle to the target stream.
+typedef FT_Stream_CloseFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Stream_CloseFuncFunction>>;
+
+/// @struct:
+/// FT_StreamRec
+///
+/// @description:
+/// A structure used to describe an input stream.
+///
+/// @input:
+/// base ::
+/// For memory-based streams, this is the address of the first stream
+/// byte in memory.  This field should always be set to `NULL` for
+/// disk-based streams.
+///
+/// size ::
+/// The stream size in bytes.
+///
+/// In case of compressed streams where the size is unknown before
+/// actually doing the decompression, the value is set to 0x7FFFFFFF.
+/// (Note that this size value can occur for normal streams also; it is
+/// thus just a hint.)
+///
+/// pos ::
+/// The current position within the stream.
+///
+/// descriptor ::
+/// This field is a union that can hold an integer or a pointer.  It is
+/// used by stream implementations to store file descriptors or `FILE*`
+/// pointers.
+///
+/// pathname ::
+/// This field is completely ignored by FreeType.  However, it is often
+/// useful during debugging to use it to store the stream's filename
+/// (where available).
+///
+/// read ::
+/// The stream's input function.
+///
+/// close ::
+/// The stream's close function.
+///
+/// memory ::
+/// The memory manager to use to preload frames.  This is set internally
+/// by FreeType and shouldn't be touched by stream implementations.
+///
+/// cursor ::
+/// This field is set and used internally by FreeType when parsing
+/// frames.  In particular, the `FT_GET_XXX` macros use this instead of
+/// the `pos` field.
+///
+/// limit ::
+/// This field is set and used internally by FreeType when parsing
+/// frames.
+final class FT_StreamRec_ extends ffi.Struct {
+  external ffi.Pointer<ffi.UnsignedChar> base;
+
+  @ffi.UnsignedLong()
+  external int size;
+
+  @ffi.UnsignedLong()
+  external int pos;
+
+  external FT_StreamDesc descriptor;
+
+  external FT_StreamDesc pathname;
+
+  external FT_Stream_IoFunc read;
+
+  external FT_Stream_CloseFunc close;
+
+  external FT_Memory$1 memory;
+
+  external ffi.Pointer<ffi.UnsignedChar> cursor;
+
+  external ffi.Pointer<ffi.UnsignedChar> limit;
+}
+
+/// @type:
+/// FT_Stream
+///
+/// @description:
+/// A handle to an input stream.
+///
+/// @also:
+/// See @FT_StreamRec for the publicly accessible fields of a given stream
+/// object.
+typedef FT_Stream$1 = ffi.Pointer<FT_StreamRec_>;
+
+/// @type:
+/// FT_ListNode
+///
+/// @description:
+/// Many elements and objects in FreeType are listed through an @FT_List
+/// record (see @FT_ListRec).  As its name suggests, an FT_ListNode is a
+/// handle to a single list element.
+typedef FT_ListNode = ffi.Pointer<FT_ListNodeRec_>;
+
+/// @struct:
+/// FT_ListNodeRec
+///
+/// @description:
+/// A structure used to hold a single list element.
+///
+/// @fields:
+/// prev ::
+/// The previous element in the list.  `NULL` if first.
+///
+/// next ::
+/// The next element in the list.  `NULL` if last.
+///
+/// data ::
+/// A typeless pointer to the listed object.
+final class FT_ListNodeRec_ extends ffi.Struct {
+  external FT_ListNode prev;
+
+  external FT_ListNode next;
+
+  external ffi.Pointer<ffi.Void> data;
+}
+
+/// @type:
+/// FT_ListNode
+///
+/// @description:
+/// Many elements and objects in FreeType are listed through an @FT_List
+/// record (see @FT_ListRec).  As its name suggests, an FT_ListNode is a
+/// handle to a single list element.
+typedef FT_ListNode$1 = ffi.Pointer<FT_ListNodeRec_>;
+
+/// @struct:
+/// FT_ListRec
+///
+/// @description:
+/// A structure used to hold a simple doubly-linked list.  These are used
+/// in many parts of FreeType.
+///
+/// @fields:
+/// head ::
+/// The head (first element) of doubly-linked list.
+///
+/// tail ::
+/// The tail (last element) of doubly-linked list.
+final class FT_ListRec_ extends ffi.Struct {
+  external FT_ListNode$1 head;
+
+  external FT_ListNode$1 tail;
+}
+
+/// @struct:
+/// FT_ListRec
+///
+/// @description:
+/// A structure used to hold a simple doubly-linked list.  These are used
+/// in many parts of FreeType.
+///
+/// @fields:
+/// head ::
+/// The head (first element) of doubly-linked list.
+///
+/// tail ::
+/// The tail (last element) of doubly-linked list.
+typedef FT_ListRec = FT_ListRec_;
+
+final class FT_Face_InternalRec_ extends ffi.Opaque {}
+
+/// @type:
+/// FT_Face_Internal
+///
+/// @description:
+/// An opaque handle to an `FT_Face_InternalRec` structure that models the
+/// private data of a given @FT_Face object.
+///
+/// This structure might change between releases of FreeType~2 and is not
+/// generally available to client applications.
+typedef FT_Face_Internal = ffi.Pointer<FT_Face_InternalRec_>;
 
 /// @struct:
 /// FT_FaceRec
@@ -2724,7 +4705,7 @@ final class FT_FaceRec_ extends ffi.Struct {
   @FT_Short()
   external int underline_thickness;
 
-  external FT_GlyphSlot glyph;
+  external FT_GlyphSlot$1 glyph;
 
   external FT_Size size;
 
@@ -2732,9 +4713,9 @@ final class FT_FaceRec_ extends ffi.Struct {
 
   external FT_Driver driver;
 
-  external FT_Memory memory;
+  external FT_Memory$1 memory;
 
-  external FT_Stream stream;
+  external FT_Stream$1 stream;
 
   external FT_ListRec sizes_list;
 
@@ -2744,98 +4725,6 @@ final class FT_FaceRec_ extends ffi.Struct {
 
   external FT_Face_Internal internal;
 }
-
-/// @type:
-/// FT_Long
-///
-/// @description:
-/// A typedef for signed long.
-typedef FT_Long = ffi.Long;
-typedef DartFT_Long = int;
-
-/// @type:
-/// FT_String
-///
-/// @description:
-/// A simple typedef for the char type, usually used for strings.
-typedef FT_String = ffi.Char;
-typedef DartFT_String = int;
-
-/// @type:
-/// FT_Int
-///
-/// @description:
-/// A typedef for the int type.
-typedef FT_Int = ffi.Int;
-typedef DartFT_Int = int;
-
-/// @struct:
-/// FT_Bitmap_Size
-///
-/// @description:
-/// This structure models the metrics of a bitmap strike (i.e., a set of
-/// glyphs for a given point size and resolution) in a bitmap font.  It is
-/// used for the `available_sizes` field of @FT_Face.
-///
-/// @fields:
-/// height ::
-/// The vertical distance, in pixels, between two consecutive baselines.
-/// It is always positive.
-///
-/// width ::
-/// The average width, in pixels, of all glyphs in the strike.
-///
-/// size ::
-/// The nominal size of the strike in 26.6 fractional points.  This
-/// field is not very useful.
-///
-/// x_ppem ::
-/// The horizontal ppem (nominal width) in 26.6 fractional pixels.
-///
-/// y_ppem ::
-/// The vertical ppem (nominal height) in 26.6 fractional pixels.
-///
-/// @note:
-/// Windows FNT:
-/// The nominal size given in a FNT font is not reliable.  If the driver
-/// finds it incorrect, it sets `size` to some calculated values, and
-/// `x_ppem` and `y_ppem` to the pixel width and height given in the
-/// font, respectively.
-///
-/// TrueType embedded bitmaps:
-/// `size`, `width`, and `height` values are not contained in the bitmap
-/// strike itself.  They are computed from the global font parameters.
-typedef FT_Bitmap_Size = FT_Bitmap_Size_;
-
-/// @type:
-/// FT_CharMap
-///
-/// @description:
-/// A handle to a character map (usually abbreviated to 'charmap').  A
-/// charmap is used to translate character codes in a given encoding into
-/// glyph indexes for its parent's face.  Some font formats may provide
-/// several charmaps per font.
-///
-/// Each face object owns zero or more charmaps, but only one of them can
-/// be 'active', providing the data used by @FT_Get_Char_Index or
-/// @FT_Load_Char.
-///
-/// The list of available charmaps in a face is available through the
-/// `face->num_charmaps` and `face->charmaps` fields of @FT_FaceRec.
-///
-/// The currently active charmap is available as `face->charmap`.  You
-/// should call @FT_Set_Charmap to change it.
-///
-/// @note:
-/// When a new face is created (either through @FT_New_Face or
-/// @FT_Open_Face), the library looks for a Unicode charmap within the
-/// list and automatically activates it.  If there is no Unicode charmap,
-/// FreeType doesn't set an 'active' charmap.
-///
-/// @also:
-/// See @FT_CharMapRec for the publicly accessible fields of a given
-/// character map.
-typedef FT_CharMap = ffi.Pointer<FT_CharMapRec_>;
 
 /// @struct:
 /// FT_CharMapRec
@@ -2859,393 +4748,203 @@ typedef FT_CharMap = ffi.Pointer<FT_CharMapRec_>;
 /// encoding_id ::
 /// A platform-specific encoding number.  This also comes from the
 /// TrueType specification and gets emulated similarly.
-final class FT_CharMapRec_ extends ffi.Struct {
-  external FT_Face face;
-
-  @ffi.Int32()
-  external int encoding;
-
-  @FT_UShort()
-  external int platform_id;
-
-  @FT_UShort()
-  external int encoding_id;
-}
-
-/// @type:
-/// FT_Face
-///
-/// @description:
-/// A handle to a typographic face object.  A face object models a given
-/// typeface, in a given style.
-///
-/// @note:
-/// A face object also owns a single @FT_GlyphSlot object, as well as one
-/// or more @FT_Size objects.
-///
-/// Use @FT_New_Face or @FT_Open_Face to create a new face object from a
-/// given filepath or a custom input stream.
-///
-/// Use @FT_Done_Face to destroy it (along with its slot and sizes).
-///
-/// An `FT_Face` object can only be safely used from one thread at a time.
-/// Similarly, creation and destruction of `FT_Face` with the same
-/// @FT_Library object can only be done from one thread at a time.  On the
-/// other hand, functions like @FT_Load_Glyph and its siblings are
-/// thread-safe and do not need the lock to be held as long as the same
-/// `FT_Face` object is not used from multiple threads at the same time.
-///
-/// @also:
-/// See @FT_FaceRec for the publicly accessible fields of a given face
-/// object.
-typedef FT_Face = ffi.Pointer<FT_FaceRec_>;
-
-/// @enum:
-/// FT_Encoding
-///
-/// @description:
-/// An enumeration to specify character sets supported by charmaps.  Used
-/// in the @FT_Select_Charmap API function.
-///
-/// @note:
-/// Despite the name, this enumeration lists specific character
-/// repertoires (i.e., charsets), and not text encoding methods (e.g.,
-/// UTF-8, UTF-16, etc.).
-///
-/// Other encodings might be defined in the future.
-///
-/// @values:
-/// FT_ENCODING_NONE ::
-/// The encoding value~0 is reserved for all formats except BDF, PCF,
-/// and Windows FNT; see below for more information.
-///
-/// FT_ENCODING_UNICODE ::
-/// The Unicode character set.  This value covers all versions of the
-/// Unicode repertoire, including ASCII and Latin-1.  Most fonts include
-/// a Unicode charmap, but not all of them.
-///
-/// For example, if you want to access Unicode value U+1F028 (and the
-/// font contains it), use value 0x1F028 as the input value for
-/// @FT_Get_Char_Index.
-///
-/// FT_ENCODING_MS_SYMBOL ::
-/// Microsoft Symbol encoding, used to encode mathematical symbols and
-/// wingdings.  For more information, see
-/// 'https://www.microsoft.com/typography/otspec/recom.htm#non-standard-symbol-fonts',
-/// 'http://www.kostis.net/charsets/symbol.htm', and
-/// 'http://www.kostis.net/charsets/wingding.htm'.
-///
-/// This encoding uses character codes from the PUA (Private Unicode
-/// Area) in the range U+F020-U+F0FF.
-///
-/// FT_ENCODING_SJIS ::
-/// Shift JIS encoding for Japanese.  More info at
-/// 'https://en.wikipedia.org/wiki/Shift_JIS'.  See note on multi-byte
-/// encodings below.
-///
-/// FT_ENCODING_PRC ::
-/// Corresponds to encoding systems mainly for Simplified Chinese as
-/// used in People's Republic of China (PRC).  The encoding layout is
-/// based on GB~2312 and its supersets GBK and GB~18030.
-///
-/// FT_ENCODING_BIG5 ::
-/// Corresponds to an encoding system for Traditional Chinese as used in
-/// Taiwan and Hong Kong.
-///
-/// FT_ENCODING_WANSUNG ::
-/// Corresponds to the Korean encoding system known as Extended Wansung
-/// (MS Windows code page 949).  For more information see
-/// 'https://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WindowsBestFit/bestfit949.txt'.
-///
-/// FT_ENCODING_JOHAB ::
-/// The Korean standard character set (KS~C 5601-1992), which
-/// corresponds to MS Windows code page 1361.  This character set
-/// includes all possible Hangul character combinations.
-///
-/// FT_ENCODING_ADOBE_LATIN_1 ::
-/// Corresponds to a Latin-1 encoding as defined in a Type~1 PostScript
-/// font.  It is limited to 256 character codes.
-///
-/// FT_ENCODING_ADOBE_STANDARD ::
-/// Adobe Standard encoding, as found in Type~1, CFF, and OpenType/CFF
-/// fonts.  It is limited to 256 character codes.
-///
-/// FT_ENCODING_ADOBE_EXPERT ::
-/// Adobe Expert encoding, as found in Type~1, CFF, and OpenType/CFF
-/// fonts.  It is limited to 256 character codes.
-///
-/// FT_ENCODING_ADOBE_CUSTOM ::
-/// Corresponds to a custom encoding, as found in Type~1, CFF, and
-/// OpenType/CFF fonts.  It is limited to 256 character codes.
-///
-/// FT_ENCODING_APPLE_ROMAN ::
-/// Apple roman encoding.  Many TrueType and OpenType fonts contain a
-/// charmap for this 8-bit encoding, since older versions of Mac OS are
-/// able to use it.
-///
-/// FT_ENCODING_OLD_LATIN_2 ::
-/// This value is deprecated and was neither used nor reported by
-/// FreeType.  Don't use or test for it.
-///
-/// FT_ENCODING_MS_SJIS ::
-/// Same as FT_ENCODING_SJIS.  Deprecated.
-///
-/// FT_ENCODING_MS_GB2312 ::
-/// Same as FT_ENCODING_PRC.  Deprecated.
-///
-/// FT_ENCODING_MS_BIG5 ::
-/// Same as FT_ENCODING_BIG5.  Deprecated.
-///
-/// FT_ENCODING_MS_WANSUNG ::
-/// Same as FT_ENCODING_WANSUNG.  Deprecated.
-///
-/// FT_ENCODING_MS_JOHAB ::
-/// Same as FT_ENCODING_JOHAB.  Deprecated.
-///
-/// @note:
-/// When loading a font, FreeType makes a Unicode charmap active if
-/// possible (either if the font provides such a charmap, or if FreeType
-/// can synthesize one from PostScript glyph name dictionaries; in either
-/// case, the charmap is tagged with `FT_ENCODING_UNICODE`).  If such a
-/// charmap is synthesized, it is placed at the first position of the
-/// charmap array.
-///
-/// All other encodings are considered legacy and tagged only if
-/// explicitly defined in the font file.  Otherwise, `FT_ENCODING_NONE` is
-/// used.
-///
-/// `FT_ENCODING_NONE` is set by the BDF and PCF drivers if the charmap is
-/// neither Unicode nor ISO-8859-1 (otherwise it is set to
-/// `FT_ENCODING_UNICODE`).  Use @FT_Get_BDF_Charset_ID to find out which
-/// encoding is really present.  If, for example, the `cs_registry` field
-/// is 'KOI8' and the `cs_encoding` field is 'R', the font is encoded in
-/// KOI8-R.
-///
-/// `FT_ENCODING_NONE` is always set (with a single exception) by the
-/// winfonts driver.  Use @FT_Get_WinFNT_Header and examine the `charset`
-/// field of the @FT_WinFNT_HeaderRec structure to find out which encoding
-/// is really present.  For example, @FT_WinFNT_ID_CP1251 (204) means
-/// Windows code page 1251 (for Russian).
-///
-/// `FT_ENCODING_NONE` is set if `platform_id` is @TT_PLATFORM_MACINTOSH
-/// and `encoding_id` is not `TT_MAC_ID_ROMAN` (otherwise it is set to
-/// `FT_ENCODING_APPLE_ROMAN`).
-///
-/// If `platform_id` is @TT_PLATFORM_MACINTOSH, use the function
-/// @FT_Get_CMap_Language_ID to query the Mac language ID that may be
-/// needed to be able to distinguish Apple encoding variants.  See
-///
-/// https://www.unicode.org/Public/MAPPINGS/VENDORS/APPLE/Readme.txt
-///
-/// to get an idea how to do that.  Basically, if the language ID is~0,
-/// don't use it, otherwise subtract 1 from the language ID.  Then examine
-/// `encoding_id`.  If, for example, `encoding_id` is `TT_MAC_ID_ROMAN`
-/// and the language ID (minus~1) is `TT_MAC_LANGID_GREEK`, it is the
-/// Greek encoding, not Roman.  `TT_MAC_ID_ARABIC` with
-/// `TT_MAC_LANGID_FARSI` means the Farsi variant of the Arabic encoding.
-abstract class FT_Encoding_ {
-  static const int FT_ENCODING_NONE = 0;
-  static const int FT_ENCODING_MS_SYMBOL = 1937337698;
-  static const int FT_ENCODING_UNICODE = 1970170211;
-  static const int FT_ENCODING_SJIS = 1936353651;
-  static const int FT_ENCODING_PRC = 1734484000;
-  static const int FT_ENCODING_BIG5 = 1651074869;
-  static const int FT_ENCODING_WANSUNG = 2002873971;
-  static const int FT_ENCODING_JOHAB = 1785686113;
-  static const int FT_ENCODING_GB2312 = 1734484000;
-  static const int FT_ENCODING_MS_SJIS = 1936353651;
-  static const int FT_ENCODING_MS_GB2312 = 1734484000;
-  static const int FT_ENCODING_MS_BIG5 = 1651074869;
-  static const int FT_ENCODING_MS_WANSUNG = 2002873971;
-  static const int FT_ENCODING_MS_JOHAB = 1785686113;
-  static const int FT_ENCODING_ADOBE_STANDARD = 1094995778;
-  static const int FT_ENCODING_ADOBE_EXPERT = 1094992453;
-  static const int FT_ENCODING_ADOBE_CUSTOM = 1094992451;
-  static const int FT_ENCODING_ADOBE_LATIN_1 = 1818326065;
-  static const int FT_ENCODING_OLD_LATIN_2 = 1818326066;
-  static const int FT_ENCODING_APPLE_ROMAN = 1634889070;
-}
-
-/// @type:
-/// FT_UShort
-///
-/// @description:
-/// A typedef for unsigned short.
-typedef FT_UShort = ffi.UnsignedShort;
-typedef DartFT_UShort = int;
+typedef FT_CharMapRec = FT_CharMapRec_;
 
 /// @struct:
-/// FT_Generic
+/// FT_FaceRec
 ///
 /// @description:
-/// Client applications often need to associate their own data to a
-/// variety of FreeType core objects.  For example, a text layout API
-/// might want to associate a glyph cache to a given size object.
-///
-/// Some FreeType object contains a `generic` field, of type `FT_Generic`,
-/// which usage is left to client applications and font servers.
-///
-/// It can be used to store a pointer to client-specific data, as well as
-/// the address of a 'finalizer' function, which will be called by
-/// FreeType when the object is destroyed (for example, the previous
-/// client example would put the address of the glyph cache destructor in
-/// the `finalizer` field).
+/// FreeType root face class structure.  A face object models a typeface
+/// in a font file.
 ///
 /// @fields:
-/// data ::
-/// A typeless pointer to any client-specified data. This field is
-/// completely ignored by the FreeType library.
+/// num_faces ::
+/// The number of faces in the font file.  Some font formats can have
+/// multiple faces in a single font file.
 ///
-/// finalizer ::
-/// A pointer to a 'generic finalizer' function, which will be called
-/// when the object is destroyed.  If this field is set to `NULL`, no
-/// code will be called.
-typedef FT_Generic = FT_Generic_;
-
-/// @struct:
-/// FT_Generic
+/// face_index ::
+/// This field holds two different values.  Bits 0-15 are the index of
+/// the face in the font file (starting with value~0).  They are set
+/// to~0 if there is only one face in the font file.
 ///
-/// @description:
-/// Client applications often need to associate their own data to a
-/// variety of FreeType core objects.  For example, a text layout API
-/// might want to associate a glyph cache to a given size object.
+/// [Since 2.6.1] Bits 16-30 are relevant to GX and OpenType variation
+/// fonts only, holding the named instance index for the current face
+/// index (starting with value~1; value~0 indicates font access without
+/// a named instance).  For non-variation fonts, bits 16-30 are ignored.
+/// If we have the third named instance of face~4, say, `face_index` is
+/// set to 0x00030004.
 ///
-/// Some FreeType object contains a `generic` field, of type `FT_Generic`,
-/// which usage is left to client applications and font servers.
+/// Bit 31 is always zero (that is, `face_index` is always a positive
+/// value).
 ///
-/// It can be used to store a pointer to client-specific data, as well as
-/// the address of a 'finalizer' function, which will be called by
-/// FreeType when the object is destroyed (for example, the previous
-/// client example would put the address of the glyph cache destructor in
-/// the `finalizer` field).
+/// [Since 2.9] Changing the design coordinates with
+/// @FT_Set_Var_Design_Coordinates or @FT_Set_Var_Blend_Coordinates does
+/// not influence the named instance index value (only
+/// @FT_Set_Named_Instance does that).
 ///
-/// @fields:
-/// data ::
-/// A typeless pointer to any client-specified data. This field is
-/// completely ignored by the FreeType library.
+/// face_flags ::
+/// A set of bit flags that give important information about the face;
+/// see @FT_FACE_FLAG_XXX for the details.
 ///
-/// finalizer ::
-/// A pointer to a 'generic finalizer' function, which will be called
-/// when the object is destroyed.  If this field is set to `NULL`, no
-/// code will be called.
-final class FT_Generic_ extends ffi.Struct {
-  external ffi.Pointer<ffi.Void> data;
-
-  external FT_Generic_Finalizer finalizer;
-}
-
-/// @functype:
-/// FT_Generic_Finalizer
+/// style_flags ::
+/// The lower 16~bits contain a set of bit flags indicating the style of
+/// the face; see @FT_STYLE_FLAG_XXX for the details.
 ///
-/// @description:
-/// Describe a function used to destroy the 'client' data of any FreeType
-/// object.  See the description of the @FT_Generic type for details of
-/// usage.
+/// [Since 2.6.1] Bits 16-30 hold the number of named instances
+/// available for the current face if we have a GX or OpenType variation
+/// (sub)font.  Bit 31 is always zero (that is, `style_flags` is always
+/// a positive value).  Note that a variation font has always at least
+/// one named instance, namely the default instance.
 ///
-/// @input:
-/// The address of the FreeType object that is under finalization.  Its
-/// client data is accessed through its `generic` field.
-typedef FT_Generic_Finalizer
-    = ffi.Pointer<ffi.NativeFunction<FT_Generic_FinalizerFunction>>;
-typedef FT_Generic_FinalizerFunction = ffi.Void Function(
-    ffi.Pointer<ffi.Void> object);
-typedef DartFT_Generic_FinalizerFunction = void Function(
-    ffi.Pointer<ffi.Void> object);
-
-/// @struct:
-/// FT_BBox
+/// num_glyphs ::
+/// The number of glyphs in the face.  If the face is scalable and has
+/// sbits (see `num_fixed_sizes`), it is set to the number of outline
+/// glyphs.
 ///
-/// @description:
-/// A structure used to hold an outline's bounding box, i.e., the
-/// coordinates of its extrema in the horizontal and vertical directions.
+/// For CID-keyed fonts (not in an SFNT wrapper) this value gives the
+/// highest CID used in the font.
 ///
-/// @fields:
-/// xMin ::
-/// The horizontal minimum (left-most).
+/// family_name ::
+/// The face's family name.  This is an ASCII string, usually in
+/// English, that describes the typeface's family (like 'Times New
+/// Roman', 'Bodoni', 'Garamond', etc).  This is a least common
+/// denominator used to list fonts.  Some formats (TrueType & OpenType)
+/// provide localized and Unicode versions of this string.  Applications
+/// should use the format-specific interface to access them.  Can be
+/// `NULL` (e.g., in fonts embedded in a PDF file).
 ///
-/// yMin ::
-/// The vertical minimum (bottom-most).
+/// In case the font doesn't provide a specific family name entry,
+/// FreeType tries to synthesize one, deriving it from other name
+/// entries.
 ///
-/// xMax ::
-/// The horizontal maximum (right-most).
+/// style_name ::
+/// The face's style name.  This is an ASCII string, usually in English,
+/// that describes the typeface's style (like 'Italic', 'Bold',
+/// 'Condensed', etc).  Not all font formats provide a style name, so
+/// this field is optional, and can be set to `NULL`.  As for
+/// `family_name`, some formats provide localized and Unicode versions
+/// of this string.  Applications should use the format-specific
+/// interface to access them.
 ///
-/// yMax ::
-/// The vertical maximum (top-most).
+/// num_fixed_sizes ::
+/// The number of bitmap strikes in the face.  Even if the face is
+/// scalable, there might still be bitmap strikes, which are called
+/// 'sbits' in that case.
+///
+/// available_sizes ::
+/// An array of @FT_Bitmap_Size for all bitmap strikes in the face.  It
+/// is set to `NULL` if there is no bitmap strike.
+///
+/// Note that FreeType tries to sanitize the strike data since they are
+/// sometimes sloppy or incorrect, but this can easily fail.
+///
+/// num_charmaps ::
+/// The number of charmaps in the face.
+///
+/// charmaps ::
+/// An array of the charmaps of the face.
+///
+/// generic ::
+/// A field reserved for client uses.  See the @FT_Generic type
+/// description.
+///
+/// bbox ::
+/// The font bounding box.  Coordinates are expressed in font units (see
+/// `units_per_EM`).  The box is large enough to contain any glyph from
+/// the font.  Thus, `bbox.yMax` can be seen as the 'maximum ascender',
+/// and `bbox.yMin` as the 'minimum descender'.  Only relevant for
+/// scalable formats.
+///
+/// Note that the bounding box might be off by (at least) one pixel for
+/// hinted fonts.  See @FT_Size_Metrics for further discussion.
+///
+/// Note that the bounding box does not vary in OpenType variation fonts
+/// and should only be used in relation to the default instance.
+///
+/// units_per_EM ::
+/// The number of font units per EM square for this face.  This is
+/// typically 2048 for TrueType fonts, and 1000 for Type~1 fonts.  Only
+/// relevant for scalable formats.
+///
+/// ascender ::
+/// The typographic ascender of the face, expressed in font units.  For
+/// font formats not having this information, it is set to `bbox.yMax`.
+/// Only relevant for scalable formats.
+///
+/// descender ::
+/// The typographic descender of the face, expressed in font units.  For
+/// font formats not having this information, it is set to `bbox.yMin`.
+/// Note that this field is negative for values below the baseline.
+/// Only relevant for scalable formats.
+///
+/// height ::
+/// This value is the vertical distance between two consecutive
+/// baselines, expressed in font units.  It is always positive.  Only
+/// relevant for scalable formats.
+///
+/// If you want the global glyph height, use `ascender - descender`.
+///
+/// max_advance_width ::
+/// The maximum advance width, in font units, for all glyphs in this
+/// face.  This can be used to make word wrapping computations faster.
+/// Only relevant for scalable formats.
+///
+/// max_advance_height ::
+/// The maximum advance height, in font units, for all glyphs in this
+/// face.  This is only relevant for vertical layouts, and is set to
+/// `height` for fonts that do not provide vertical metrics.  Only
+/// relevant for scalable formats.
+///
+/// underline_position ::
+/// The position, in font units, of the underline line for this face.
+/// It is the center of the underlining stem.  Only relevant for
+/// scalable formats.
+///
+/// underline_thickness ::
+/// The thickness, in font units, of the underline for this face.  Only
+/// relevant for scalable formats.
+///
+/// glyph ::
+/// The face's associated glyph slot(s).
+///
+/// size ::
+/// The current active size for this face.
+///
+/// charmap ::
+/// The current active charmap for this face.
 ///
 /// @note:
-/// The bounding box is specified with the coordinates of the lower left
-/// and the upper right corner.  In PostScript, those values are often
-/// called (llx,lly) and (urx,ury), respectively.
+/// Fields may be changed after a call to @FT_Attach_File or
+/// @FT_Attach_Stream.
 ///
-/// If `yMin` is negative, this value gives the glyph's descender.
-/// Otherwise, the glyph doesn't descend below the baseline.  Similarly,
-/// if `ymax` is positive, this value gives the glyph's ascender.
+/// For an OpenType variation font, the values of the following fields can
+/// change after a call to @FT_Set_Var_Design_Coordinates (and friends) if
+/// the font contains an 'MVAR' table: `ascender`, `descender`, `height`,
+/// `underline_position`, and `underline_thickness`.
 ///
-/// `xMin` gives the horizontal distance from the glyph's origin to the
-/// left edge of the glyph's bounding box.  If `xMin` is negative, the
-/// glyph extends to the left of the origin.
-typedef FT_BBox = FT_BBox_;
+/// Especially for TrueType fonts see also the documentation for
+/// @FT_Size_Metrics.
+typedef FT_FaceRec = FT_FaceRec_;
 
 /// @struct:
-/// FT_BBox
+/// FT_SizeRec
 ///
 /// @description:
-/// A structure used to hold an outline's bounding box, i.e., the
-/// coordinates of its extrema in the horizontal and vertical directions.
+/// FreeType root size class structure.  A size object models a face
+/// object at a given size.
 ///
 /// @fields:
-/// xMin ::
-/// The horizontal minimum (left-most).
+/// face ::
+/// Handle to the parent face object.
 ///
-/// yMin ::
-/// The vertical minimum (bottom-most).
+/// generic ::
+/// A typeless pointer, unused by the FreeType library or any of its
+/// drivers.  It can be used by client applications to link their own
+/// data to each size object.
 ///
-/// xMax ::
-/// The horizontal maximum (right-most).
-///
-/// yMax ::
-/// The vertical maximum (top-most).
-///
-/// @note:
-/// The bounding box is specified with the coordinates of the lower left
-/// and the upper right corner.  In PostScript, those values are often
-/// called (llx,lly) and (urx,ury), respectively.
-///
-/// If `yMin` is negative, this value gives the glyph's descender.
-/// Otherwise, the glyph doesn't descend below the baseline.  Similarly,
-/// if `ymax` is positive, this value gives the glyph's ascender.
-///
-/// `xMin` gives the horizontal distance from the glyph's origin to the
-/// left edge of the glyph's bounding box.  If `xMin` is negative, the
-/// glyph extends to the left of the origin.
-final class FT_BBox_ extends ffi.Struct {
-  @FT_Pos()
-  external int xMin;
-
-  @FT_Pos()
-  external int yMin;
-
-  @FT_Pos()
-  external int xMax;
-
-  @FT_Pos()
-  external int yMax;
-}
-
-/// @type:
-/// FT_GlyphSlot
-///
-/// @description:
-/// A handle to a given 'glyph slot'.  A slot is a container that can hold
-/// any of the glyphs contained in its parent face.
-///
-/// In other words, each time you call @FT_Load_Glyph or @FT_Load_Char,
-/// the slot's content is erased by the new glyph data, i.e., the glyph's
-/// metrics, its image (bitmap or outline), and other control information.
-///
-/// @also:
-/// See @FT_GlyphSlotRec for the publicly accessible glyph fields.
-typedef FT_GlyphSlot = ffi.Pointer<FT_GlyphSlotRec_>;
+/// metrics ::
+/// Metrics for this size object.  This field is read-only.
+typedef FT_SizeRec = FT_SizeRec_;
 
 /// @struct:
 /// FT_GlyphSlotRec
@@ -3442,1210 +5141,7 @@ typedef FT_GlyphSlot = ffi.Pointer<FT_GlyphSlotRec_>;
 /// small rendering sizes in most cases.  Note that it doesn't harm to use
 /// the above code for other hinting modes also, since the delta values
 /// are zero then.
-final class FT_GlyphSlotRec_ extends ffi.Struct {
-  external FT_Library library1;
-
-  external FT_Face face;
-
-  external FT_GlyphSlot1 next;
-
-  @FT_UInt()
-  external int glyph_index;
-
-  external FT_Generic generic;
-
-  external FT_Glyph_Metrics metrics;
-
-  @FT_Fixed()
-  external int linearHoriAdvance;
-
-  @FT_Fixed()
-  external int linearVertAdvance;
-
-  external FT_Vector advance;
-
-  @ffi.Int32()
-  external int format;
-
-  external FT_Bitmap bitmap;
-
-  @FT_Int()
-  external int bitmap_left;
-
-  @FT_Int()
-  external int bitmap_top;
-
-  external FT_Outline outline;
-
-  @FT_UInt()
-  external int num_subglyphs;
-
-  external FT_SubGlyph subglyphs;
-
-  external ffi.Pointer<ffi.Void> control_data;
-
-  @ffi.Long()
-  external int control_len;
-
-  @FT_Pos()
-  external int lsb_delta;
-
-  @FT_Pos()
-  external int rsb_delta;
-
-  external ffi.Pointer<ffi.Void> other;
-
-  external FT_Slot_Internal internal;
-}
-
-/// @type:
-/// FT_Library
-///
-/// @description:
-/// A handle to a FreeType library instance.  Each 'library' is completely
-/// independent from the others; it is the 'root' of a set of objects like
-/// fonts, faces, sizes, etc.
-///
-/// It also embeds a memory manager (see @FT_Memory), as well as a
-/// scan-line converter object (see @FT_Raster).
-///
-/// [Since 2.5.6] In multi-threaded applications it is easiest to use one
-/// `FT_Library` object per thread.  In case this is too cumbersome, a
-/// single `FT_Library` object across threads is possible also, as long as
-/// a mutex lock is used around @FT_New_Face and @FT_Done_Face.
-///
-/// @note:
-/// Library objects are normally created by @FT_Init_FreeType, and
-/// destroyed with @FT_Done_FreeType.  If you need reference-counting
-/// (cf. @FT_Reference_Library), use @FT_New_Library and @FT_Done_Library.
-typedef FT_Library = ffi.Pointer<FT_LibraryRec_>;
-
-/// @type:
-/// FT_GlyphSlot
-///
-/// @description:
-/// A handle to a given 'glyph slot'.  A slot is a container that can hold
-/// any of the glyphs contained in its parent face.
-///
-/// In other words, each time you call @FT_Load_Glyph or @FT_Load_Char,
-/// the slot's content is erased by the new glyph data, i.e., the glyph's
-/// metrics, its image (bitmap or outline), and other control information.
-///
-/// @also:
-/// See @FT_GlyphSlotRec for the publicly accessible glyph fields.
-typedef FT_GlyphSlot1 = ffi.Pointer<FT_GlyphSlotRec_>;
-
-/// @type:
-/// FT_UInt
-///
-/// @description:
-/// A typedef for the unsigned int type.
-typedef FT_UInt = ffi.UnsignedInt;
-typedef DartFT_UInt = int;
-
-/// @struct:
-/// FT_Glyph_Metrics
-///
-/// @description:
-/// A structure to model the metrics of a single glyph.  The values are
-/// expressed in 26.6 fractional pixel format; if the flag
-/// @FT_LOAD_NO_SCALE has been used while loading the glyph, values are
-/// expressed in font units instead.
-///
-/// @fields:
-/// width ::
-/// The glyph's width.
-///
-/// height ::
-/// The glyph's height.
-///
-/// horiBearingX ::
-/// Left side bearing for horizontal layout.
-///
-/// horiBearingY ::
-/// Top side bearing for horizontal layout.
-///
-/// horiAdvance ::
-/// Advance width for horizontal layout.
-///
-/// vertBearingX ::
-/// Left side bearing for vertical layout.
-///
-/// vertBearingY ::
-/// Top side bearing for vertical layout.  Larger positive values mean
-/// further below the vertical glyph origin.
-///
-/// vertAdvance ::
-/// Advance height for vertical layout.  Positive values mean the glyph
-/// has a positive advance downward.
-///
-/// @note:
-/// If not disabled with @FT_LOAD_NO_HINTING, the values represent
-/// dimensions of the hinted glyph (in case hinting is applicable).
-///
-/// Stroking a glyph with an outside border does not increase
-/// `horiAdvance` or `vertAdvance`; you have to manually adjust these
-/// values to account for the added width and height.
-///
-/// FreeType doesn't use the 'VORG' table data for CFF fonts because it
-/// doesn't have an interface to quickly retrieve the glyph height.  The
-/// y~coordinate of the vertical origin can be simply computed as
-/// `vertBearingY + height` after loading a glyph.
-typedef FT_Glyph_Metrics = FT_Glyph_Metrics_;
-
-/// @type:
-/// FT_Fixed
-///
-/// @description:
-/// This type is used to store 16.16 fixed-point values, like scaling
-/// values or matrix coefficients.
-typedef FT_Fixed = ffi.Long;
-typedef DartFT_Fixed = int;
-
-/// @struct:
-/// FT_Vector
-///
-/// @description:
-/// A simple structure used to store a 2D vector; coordinates are of the
-/// FT_Pos type.
-///
-/// @fields:
-/// x ::
-/// The horizontal coordinate.
-/// y ::
-/// The vertical coordinate.
-typedef FT_Vector = FT_Vector_;
-
-/// @struct:
-/// FT_Vector
-///
-/// @description:
-/// A simple structure used to store a 2D vector; coordinates are of the
-/// FT_Pos type.
-///
-/// @fields:
-/// x ::
-/// The horizontal coordinate.
-/// y ::
-/// The vertical coordinate.
-final class FT_Vector_ extends ffi.Struct {
-  @FT_Pos()
-  external int x;
-
-  @FT_Pos()
-  external int y;
-}
-
-/// @enum:
-/// FT_Glyph_Format
-///
-/// @description:
-/// An enumeration type used to describe the format of a given glyph
-/// image.  Note that this version of FreeType only supports two image
-/// formats, even though future font drivers will be able to register
-/// their own format.
-///
-/// @values:
-/// FT_GLYPH_FORMAT_NONE ::
-/// The value~0 is reserved.
-///
-/// FT_GLYPH_FORMAT_COMPOSITE ::
-/// The glyph image is a composite of several other images.  This format
-/// is _only_ used with @FT_LOAD_NO_RECURSE, and is used to report
-/// compound glyphs (like accented characters).
-///
-/// FT_GLYPH_FORMAT_BITMAP ::
-/// The glyph image is a bitmap, and can be described as an @FT_Bitmap.
-/// You generally need to access the `bitmap` field of the
-/// @FT_GlyphSlotRec structure to read it.
-///
-/// FT_GLYPH_FORMAT_OUTLINE ::
-/// The glyph image is a vectorial outline made of line segments and
-/// Bezier arcs; it can be described as an @FT_Outline; you generally
-/// want to access the `outline` field of the @FT_GlyphSlotRec structure
-/// to read it.
-///
-/// FT_GLYPH_FORMAT_PLOTTER ::
-/// The glyph image is a vectorial path with no inside and outside
-/// contours.  Some Type~1 fonts, like those in the Hershey family,
-/// contain glyphs in this format.  These are described as @FT_Outline,
-/// but FreeType isn't currently capable of rendering them correctly.
-///
-/// FT_GLYPH_FORMAT_SVG ::
-/// [Since 2.12] The glyph is represented by an SVG document in the
-/// 'SVG~' table.
-abstract class FT_Glyph_Format_ {
-  static const int FT_GLYPH_FORMAT_NONE = 0;
-  static const int FT_GLYPH_FORMAT_COMPOSITE = 1668246896;
-  static const int FT_GLYPH_FORMAT_BITMAP = 1651078259;
-  static const int FT_GLYPH_FORMAT_OUTLINE = 1869968492;
-  static const int FT_GLYPH_FORMAT_PLOTTER = 1886154612;
-  static const int FT_GLYPH_FORMAT_SVG = 1398163232;
-}
-
-/// @struct:
-/// FT_Bitmap
-///
-/// @description:
-/// A structure used to describe a bitmap or pixmap to the raster.  Note
-/// that we now manage pixmaps of various depths through the `pixel_mode`
-/// field.
-///
-/// @fields:
-/// rows ::
-/// The number of bitmap rows.
-///
-/// width ::
-/// The number of pixels in bitmap row.
-///
-/// pitch ::
-/// The pitch's absolute value is the number of bytes taken by one
-/// bitmap row, including padding.  However, the pitch is positive when
-/// the bitmap has a 'down' flow, and negative when it has an 'up' flow.
-/// In all cases, the pitch is an offset to add to a bitmap pointer in
-/// order to go down one row.
-///
-/// Note that 'padding' means the alignment of a bitmap to a byte
-/// border, and FreeType functions normally align to the smallest
-/// possible integer value.
-///
-/// For the B/W rasterizer, `pitch` is always an even number.
-///
-/// To change the pitch of a bitmap (say, to make it a multiple of 4),
-/// use @FT_Bitmap_Convert.  Alternatively, you might use callback
-/// functions to directly render to the application's surface; see the
-/// file `example2.cpp` in the tutorial for a demonstration.
-///
-/// buffer ::
-/// A typeless pointer to the bitmap buffer.  This value should be
-/// aligned on 32-bit boundaries in most cases.
-///
-/// num_grays ::
-/// This field is only used with @FT_PIXEL_MODE_GRAY; it gives the
-/// number of gray levels used in the bitmap.
-///
-/// pixel_mode ::
-/// The pixel mode, i.e., how pixel bits are stored.  See @FT_Pixel_Mode
-/// for possible values.
-///
-/// palette_mode ::
-/// This field is intended for paletted pixel modes; it indicates how
-/// the palette is stored.  Not used currently.
-///
-/// palette ::
-/// A typeless pointer to the bitmap palette; this field is intended for
-/// paletted pixel modes.  Not used currently.
-///
-/// @note:
-/// `width` and `rows` refer to the *physical* size of the bitmap, not the
-/// *logical* one.  For example, if @FT_Pixel_Mode is set to
-/// `FT_PIXEL_MODE_LCD`, the logical width is a just a third of the
-/// physical one.
-typedef FT_Bitmap = FT_Bitmap_;
-
-/// @struct:
-/// FT_Bitmap
-///
-/// @description:
-/// A structure used to describe a bitmap or pixmap to the raster.  Note
-/// that we now manage pixmaps of various depths through the `pixel_mode`
-/// field.
-///
-/// @fields:
-/// rows ::
-/// The number of bitmap rows.
-///
-/// width ::
-/// The number of pixels in bitmap row.
-///
-/// pitch ::
-/// The pitch's absolute value is the number of bytes taken by one
-/// bitmap row, including padding.  However, the pitch is positive when
-/// the bitmap has a 'down' flow, and negative when it has an 'up' flow.
-/// In all cases, the pitch is an offset to add to a bitmap pointer in
-/// order to go down one row.
-///
-/// Note that 'padding' means the alignment of a bitmap to a byte
-/// border, and FreeType functions normally align to the smallest
-/// possible integer value.
-///
-/// For the B/W rasterizer, `pitch` is always an even number.
-///
-/// To change the pitch of a bitmap (say, to make it a multiple of 4),
-/// use @FT_Bitmap_Convert.  Alternatively, you might use callback
-/// functions to directly render to the application's surface; see the
-/// file `example2.cpp` in the tutorial for a demonstration.
-///
-/// buffer ::
-/// A typeless pointer to the bitmap buffer.  This value should be
-/// aligned on 32-bit boundaries in most cases.
-///
-/// num_grays ::
-/// This field is only used with @FT_PIXEL_MODE_GRAY; it gives the
-/// number of gray levels used in the bitmap.
-///
-/// pixel_mode ::
-/// The pixel mode, i.e., how pixel bits are stored.  See @FT_Pixel_Mode
-/// for possible values.
-///
-/// palette_mode ::
-/// This field is intended for paletted pixel modes; it indicates how
-/// the palette is stored.  Not used currently.
-///
-/// palette ::
-/// A typeless pointer to the bitmap palette; this field is intended for
-/// paletted pixel modes.  Not used currently.
-///
-/// @note:
-/// `width` and `rows` refer to the *physical* size of the bitmap, not the
-/// *logical* one.  For example, if @FT_Pixel_Mode is set to
-/// `FT_PIXEL_MODE_LCD`, the logical width is a just a third of the
-/// physical one.
-final class FT_Bitmap_ extends ffi.Struct {
-  @ffi.UnsignedInt()
-  external int rows;
-
-  @ffi.UnsignedInt()
-  external int width;
-
-  @ffi.Int()
-  external int pitch;
-
-  external ffi.Pointer<ffi.UnsignedChar> buffer;
-
-  @ffi.UnsignedShort()
-  external int num_grays;
-
-  @ffi.UnsignedChar()
-  external int pixel_mode;
-
-  @ffi.UnsignedChar()
-  external int palette_mode;
-
-  external ffi.Pointer<ffi.Void> palette;
-}
-
-/// @struct:
-/// FT_Outline
-///
-/// @description:
-/// This structure is used to describe an outline to the scan-line
-/// converter.
-///
-/// @fields:
-/// n_contours ::
-/// The number of contours in the outline.
-///
-/// n_points ::
-/// The number of points in the outline.
-///
-/// points ::
-/// A pointer to an array of `n_points` @FT_Vector elements, giving the
-/// outline's point coordinates.
-///
-/// tags ::
-/// A pointer to an array of `n_points` chars, giving each outline
-/// point's type.
-///
-/// If bit~0 is unset, the point is 'off' the curve, i.e., a Bezier
-/// control point, while it is 'on' if set.
-///
-/// Bit~1 is meaningful for 'off' points only.  If set, it indicates a
-/// third-order Bezier arc control point; and a second-order control
-/// point if unset.
-///
-/// If bit~2 is set, bits 5-7 contain the drop-out mode (as defined in
-/// the OpenType specification; the value is the same as the argument to
-/// the 'SCANMODE' instruction).
-///
-/// Bits 3 and~4 are reserved for internal purposes.
-///
-/// contours ::
-/// An array of `n_contours` shorts, giving the end point of each
-/// contour within the outline.  For example, the first contour is
-/// defined by the points '0' to `contours[0]`, the second one is
-/// defined by the points `contours[0]+1` to `contours[1]`, etc.
-///
-/// flags ::
-/// A set of bit flags used to characterize the outline and give hints
-/// to the scan-converter and hinter on how to convert/grid-fit it.  See
-/// @FT_OUTLINE_XXX.
-///
-/// @note:
-/// The B/W rasterizer only checks bit~2 in the `tags` array for the first
-/// point of each contour.  The drop-out mode as given with
-/// @FT_OUTLINE_IGNORE_DROPOUTS, @FT_OUTLINE_SMART_DROPOUTS, and
-/// @FT_OUTLINE_INCLUDE_STUBS in `flags` is then overridden.
-typedef FT_Outline = FT_Outline_;
-
-/// @struct:
-/// FT_Outline
-///
-/// @description:
-/// This structure is used to describe an outline to the scan-line
-/// converter.
-///
-/// @fields:
-/// n_contours ::
-/// The number of contours in the outline.
-///
-/// n_points ::
-/// The number of points in the outline.
-///
-/// points ::
-/// A pointer to an array of `n_points` @FT_Vector elements, giving the
-/// outline's point coordinates.
-///
-/// tags ::
-/// A pointer to an array of `n_points` chars, giving each outline
-/// point's type.
-///
-/// If bit~0 is unset, the point is 'off' the curve, i.e., a Bezier
-/// control point, while it is 'on' if set.
-///
-/// Bit~1 is meaningful for 'off' points only.  If set, it indicates a
-/// third-order Bezier arc control point; and a second-order control
-/// point if unset.
-///
-/// If bit~2 is set, bits 5-7 contain the drop-out mode (as defined in
-/// the OpenType specification; the value is the same as the argument to
-/// the 'SCANMODE' instruction).
-///
-/// Bits 3 and~4 are reserved for internal purposes.
-///
-/// contours ::
-/// An array of `n_contours` shorts, giving the end point of each
-/// contour within the outline.  For example, the first contour is
-/// defined by the points '0' to `contours[0]`, the second one is
-/// defined by the points `contours[0]+1` to `contours[1]`, etc.
-///
-/// flags ::
-/// A set of bit flags used to characterize the outline and give hints
-/// to the scan-converter and hinter on how to convert/grid-fit it.  See
-/// @FT_OUTLINE_XXX.
-///
-/// @note:
-/// The B/W rasterizer only checks bit~2 in the `tags` array for the first
-/// point of each contour.  The drop-out mode as given with
-/// @FT_OUTLINE_IGNORE_DROPOUTS, @FT_OUTLINE_SMART_DROPOUTS, and
-/// @FT_OUTLINE_INCLUDE_STUBS in `flags` is then overridden.
-final class FT_Outline_ extends ffi.Struct {
-  @ffi.Short()
-  external int n_contours;
-
-  @ffi.Short()
-  external int n_points;
-
-  external ffi.Pointer<FT_Vector> points;
-
-  external ffi.Pointer<ffi.Char> tags;
-
-  external ffi.Pointer<ffi.Short> contours;
-
-  @ffi.Int()
-  external int flags;
-}
-
-/// @struct:
-/// FT_SubGlyph
-///
-/// @description:
-/// The subglyph structure is an internal object used to describe
-/// subglyphs (for example, in the case of composites).
-///
-/// @note:
-/// The subglyph implementation is not part of the high-level API, hence
-/// the forward structure declaration.
-///
-/// You can however retrieve subglyph information with
-/// @FT_Get_SubGlyph_Info.
-typedef FT_SubGlyph = ffi.Pointer<FT_SubGlyphRec_>;
-
-final class FT_SubGlyphRec_ extends ffi.Opaque {}
-
-/// @type:
-/// FT_Slot_Internal
-///
-/// @description:
-/// An opaque handle to an `FT_Slot_InternalRec` structure, used to model
-/// private data of a given @FT_GlyphSlot object.
-typedef FT_Slot_Internal = ffi.Pointer<FT_Slot_InternalRec_>;
-
-final class FT_Slot_InternalRec_ extends ffi.Opaque {}
-
-/// @type:
-/// FT_Size
-///
-/// @description:
-/// A handle to an object that models a face scaled to a given character
-/// size.
-///
-/// @note:
-/// An @FT_Face has one _active_ `FT_Size` object that is used by
-/// functions like @FT_Load_Glyph to determine the scaling transformation
-/// that in turn is used to load and hint glyphs and metrics.
-///
-/// A newly created `FT_Size` object contains only meaningless zero values.
-/// You must use @FT_Set_Char_Size, @FT_Set_Pixel_Sizes, @FT_Request_Size
-/// or even @FT_Select_Size to change the content (i.e., the scaling
-/// values) of the active `FT_Size`.  Otherwise, the scaling and hinting
-/// will not be performed.
-///
-/// You can use @FT_New_Size to create additional size objects for a given
-/// @FT_Face, but they won't be used by other functions until you activate
-/// it through @FT_Activate_Size.  Only one size can be activated at any
-/// given time per face.
-///
-/// @also:
-/// See @FT_SizeRec for the publicly accessible fields of a given size
-/// object.
-typedef FT_Size = ffi.Pointer<FT_SizeRec_>;
-
-/// @struct:
-/// FT_SizeRec
-///
-/// @description:
-/// FreeType root size class structure.  A size object models a face
-/// object at a given size.
-///
-/// @fields:
-/// face ::
-/// Handle to the parent face object.
-///
-/// generic ::
-/// A typeless pointer, unused by the FreeType library or any of its
-/// drivers.  It can be used by client applications to link their own
-/// data to each size object.
-///
-/// metrics ::
-/// Metrics for this size object.  This field is read-only.
-final class FT_SizeRec_ extends ffi.Struct {
-  external FT_Face face;
-
-  external FT_Generic generic;
-
-  external FT_Size_Metrics metrics;
-
-  external FT_Size_Internal internal;
-}
-
-/// @struct:
-/// FT_Size_Metrics
-///
-/// @description:
-/// The size metrics structure gives the metrics of a size object.
-///
-/// @fields:
-/// x_ppem ::
-/// The width of the scaled EM square in pixels, hence the term 'ppem'
-/// (pixels per EM).  It is also referred to as 'nominal width'.
-///
-/// y_ppem ::
-/// The height of the scaled EM square in pixels, hence the term 'ppem'
-/// (pixels per EM).  It is also referred to as 'nominal height'.
-///
-/// x_scale ::
-/// A 16.16 fractional scaling value to convert horizontal metrics from
-/// font units to 26.6 fractional pixels.  Only relevant for scalable
-/// font formats.
-///
-/// y_scale ::
-/// A 16.16 fractional scaling value to convert vertical metrics from
-/// font units to 26.6 fractional pixels.  Only relevant for scalable
-/// font formats.
-///
-/// ascender ::
-/// The ascender in 26.6 fractional pixels, rounded up to an integer
-/// value.  See @FT_FaceRec for the details.
-///
-/// descender ::
-/// The descender in 26.6 fractional pixels, rounded down to an integer
-/// value.  See @FT_FaceRec for the details.
-///
-/// height ::
-/// The height in 26.6 fractional pixels, rounded to an integer value.
-/// See @FT_FaceRec for the details.
-///
-/// max_advance ::
-/// The maximum advance width in 26.6 fractional pixels, rounded to an
-/// integer value.  See @FT_FaceRec for the details.
-///
-/// @note:
-/// The scaling values, if relevant, are determined first during a size
-/// changing operation.  The remaining fields are then set by the driver.
-/// For scalable formats, they are usually set to scaled values of the
-/// corresponding fields in @FT_FaceRec.  Some values like ascender or
-/// descender are rounded for historical reasons; more precise values (for
-/// outline fonts) can be derived by scaling the corresponding @FT_FaceRec
-/// values manually, with code similar to the following.
-///
-/// ```
-/// scaled_ascender = FT_MulFix( face->ascender,
-/// size_metrics->y_scale );
-/// ```
-///
-/// Note that due to glyph hinting and the selected rendering mode these
-/// values are usually not exact; consequently, they must be treated as
-/// unreliable with an error margin of at least one pixel!
-///
-/// Indeed, the only way to get the exact metrics is to render _all_
-/// glyphs.  As this would be a definite performance hit, it is up to
-/// client applications to perform such computations.
-///
-/// The `FT_Size_Metrics` structure is valid for bitmap fonts also.
-///
-///
-/// **TrueType fonts with native bytecode hinting**
-///
-/// All applications that handle TrueType fonts with native hinting must
-/// be aware that TTFs expect different rounding of vertical font
-/// dimensions.  The application has to cater for this, especially if it
-/// wants to rely on a TTF's vertical data (for example, to properly align
-/// box characters vertically).
-///
-/// Only the application knows _in advance_ that it is going to use native
-/// hinting for TTFs!  FreeType, on the other hand, selects the hinting
-/// mode not at the time of creating an @FT_Size object but much later,
-/// namely while calling @FT_Load_Glyph.
-///
-/// Here is some pseudo code that illustrates a possible solution.
-///
-/// ```
-/// font_format = FT_Get_Font_Format( face );
-///
-/// if ( !strcmp( font_format, "TrueType" ) &&
-/// do_native_bytecode_hinting         )
-/// {
-/// ascender  = ROUND( FT_MulFix( face->ascender,
-/// size_metrics->y_scale ) );
-/// descender = ROUND( FT_MulFix( face->descender,
-/// size_metrics->y_scale ) );
-/// }
-/// else
-/// {
-/// ascender  = size_metrics->ascender;
-/// descender = size_metrics->descender;
-/// }
-///
-/// height      = size_metrics->height;
-/// max_advance = size_metrics->max_advance;
-/// ```
-typedef FT_Size_Metrics = FT_Size_Metrics_;
-
-/// @struct:
-/// FT_Size_Metrics
-///
-/// @description:
-/// The size metrics structure gives the metrics of a size object.
-///
-/// @fields:
-/// x_ppem ::
-/// The width of the scaled EM square in pixels, hence the term 'ppem'
-/// (pixels per EM).  It is also referred to as 'nominal width'.
-///
-/// y_ppem ::
-/// The height of the scaled EM square in pixels, hence the term 'ppem'
-/// (pixels per EM).  It is also referred to as 'nominal height'.
-///
-/// x_scale ::
-/// A 16.16 fractional scaling value to convert horizontal metrics from
-/// font units to 26.6 fractional pixels.  Only relevant for scalable
-/// font formats.
-///
-/// y_scale ::
-/// A 16.16 fractional scaling value to convert vertical metrics from
-/// font units to 26.6 fractional pixels.  Only relevant for scalable
-/// font formats.
-///
-/// ascender ::
-/// The ascender in 26.6 fractional pixels, rounded up to an integer
-/// value.  See @FT_FaceRec for the details.
-///
-/// descender ::
-/// The descender in 26.6 fractional pixels, rounded down to an integer
-/// value.  See @FT_FaceRec for the details.
-///
-/// height ::
-/// The height in 26.6 fractional pixels, rounded to an integer value.
-/// See @FT_FaceRec for the details.
-///
-/// max_advance ::
-/// The maximum advance width in 26.6 fractional pixels, rounded to an
-/// integer value.  See @FT_FaceRec for the details.
-///
-/// @note:
-/// The scaling values, if relevant, are determined first during a size
-/// changing operation.  The remaining fields are then set by the driver.
-/// For scalable formats, they are usually set to scaled values of the
-/// corresponding fields in @FT_FaceRec.  Some values like ascender or
-/// descender are rounded for historical reasons; more precise values (for
-/// outline fonts) can be derived by scaling the corresponding @FT_FaceRec
-/// values manually, with code similar to the following.
-///
-/// ```
-/// scaled_ascender = FT_MulFix( face->ascender,
-/// size_metrics->y_scale );
-/// ```
-///
-/// Note that due to glyph hinting and the selected rendering mode these
-/// values are usually not exact; consequently, they must be treated as
-/// unreliable with an error margin of at least one pixel!
-///
-/// Indeed, the only way to get the exact metrics is to render _all_
-/// glyphs.  As this would be a definite performance hit, it is up to
-/// client applications to perform such computations.
-///
-/// The `FT_Size_Metrics` structure is valid for bitmap fonts also.
-///
-///
-/// **TrueType fonts with native bytecode hinting**
-///
-/// All applications that handle TrueType fonts with native hinting must
-/// be aware that TTFs expect different rounding of vertical font
-/// dimensions.  The application has to cater for this, especially if it
-/// wants to rely on a TTF's vertical data (for example, to properly align
-/// box characters vertically).
-///
-/// Only the application knows _in advance_ that it is going to use native
-/// hinting for TTFs!  FreeType, on the other hand, selects the hinting
-/// mode not at the time of creating an @FT_Size object but much later,
-/// namely while calling @FT_Load_Glyph.
-///
-/// Here is some pseudo code that illustrates a possible solution.
-///
-/// ```
-/// font_format = FT_Get_Font_Format( face );
-///
-/// if ( !strcmp( font_format, "TrueType" ) &&
-/// do_native_bytecode_hinting         )
-/// {
-/// ascender  = ROUND( FT_MulFix( face->ascender,
-/// size_metrics->y_scale ) );
-/// descender = ROUND( FT_MulFix( face->descender,
-/// size_metrics->y_scale ) );
-/// }
-/// else
-/// {
-/// ascender  = size_metrics->ascender;
-/// descender = size_metrics->descender;
-/// }
-///
-/// height      = size_metrics->height;
-/// max_advance = size_metrics->max_advance;
-/// ```
-final class FT_Size_Metrics_ extends ffi.Struct {
-  @FT_UShort()
-  external int x_ppem;
-
-  @FT_UShort()
-  external int y_ppem;
-
-  @FT_Fixed()
-  external int x_scale;
-
-  @FT_Fixed()
-  external int y_scale;
-
-  @FT_Pos()
-  external int ascender;
-
-  @FT_Pos()
-  external int descender;
-
-  @FT_Pos()
-  external int height;
-
-  @FT_Pos()
-  external int max_advance;
-}
-
-/// @type:
-/// FT_Size_Internal
-///
-/// @description:
-/// An opaque handle to an `FT_Size_InternalRec` structure, used to model
-/// private data of a given @FT_Size object.
-typedef FT_Size_Internal = ffi.Pointer<FT_Size_InternalRec_>;
-
-final class FT_Size_InternalRec_ extends ffi.Opaque {}
-
-/// @type:
-/// FT_Driver
-///
-/// @description:
-/// A handle to a given FreeType font driver object.  A font driver is a
-/// module capable of creating faces from font files.
-typedef FT_Driver = ffi.Pointer<FT_DriverRec_>;
-
-/// @type:
-/// FT_Memory
-///
-/// @description:
-/// A handle to a given memory manager object, defined with an
-/// @FT_MemoryRec structure.
-typedef FT_Memory = ffi.Pointer<FT_MemoryRec_>;
-
-/// @struct:
-/// FT_MemoryRec
-///
-/// @description:
-/// A structure used to describe a given memory manager to FreeType~2.
-///
-/// @fields:
-/// user ::
-/// A generic typeless pointer for user data.
-///
-/// alloc ::
-/// A pointer type to an allocation function.
-///
-/// free ::
-/// A pointer type to an memory freeing function.
-///
-/// realloc ::
-/// A pointer type to a reallocation function.
-final class FT_MemoryRec_ extends ffi.Struct {
-  external ffi.Pointer<ffi.Void> user;
-
-  external FT_Alloc_Func alloc;
-
-  external FT_Free_Func free;
-
-  external FT_Realloc_Func realloc;
-}
-
-/// @functype:
-/// FT_Alloc_Func
-///
-/// @description:
-/// A function used to allocate `size` bytes from `memory`.
-///
-/// @input:
-/// memory ::
-/// A handle to the source memory manager.
-///
-/// size ::
-/// The size in bytes to allocate.
-///
-/// @return:
-/// Address of new memory block.  0~in case of failure.
-typedef FT_Alloc_Func = ffi.Pointer<ffi.NativeFunction<FT_Alloc_FuncFunction>>;
-typedef FT_Alloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
-    FT_Memory1 memory, ffi.Long size);
-typedef DartFT_Alloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
-    FT_Memory1 memory, int size);
-
-/// @type:
-/// FT_Memory
-///
-/// @description:
-/// A handle to a given memory manager object, defined with an
-/// @FT_MemoryRec structure.
-typedef FT_Memory1 = ffi.Pointer<FT_MemoryRec_>;
-
-/// @functype:
-/// FT_Free_Func
-///
-/// @description:
-/// A function used to release a given block of memory.
-///
-/// @input:
-/// memory ::
-/// A handle to the source memory manager.
-///
-/// block ::
-/// The address of the target memory block.
-typedef FT_Free_Func = ffi.Pointer<ffi.NativeFunction<FT_Free_FuncFunction>>;
-typedef FT_Free_FuncFunction = ffi.Void Function(
-    FT_Memory1 memory, ffi.Pointer<ffi.Void> block);
-typedef DartFT_Free_FuncFunction = void Function(
-    FT_Memory1 memory, ffi.Pointer<ffi.Void> block);
-
-/// @functype:
-/// FT_Realloc_Func
-///
-/// @description:
-/// A function used to re-allocate a given block of memory.
-///
-/// @input:
-/// memory ::
-/// A handle to the source memory manager.
-///
-/// cur_size ::
-/// The block's current size in bytes.
-///
-/// new_size ::
-/// The block's requested new size.
-///
-/// block ::
-/// The block's current address.
-///
-/// @return:
-/// New block address.  0~in case of memory shortage.
-///
-/// @note:
-/// In case of error, the old block must still be available.
-typedef FT_Realloc_Func
-    = ffi.Pointer<ffi.NativeFunction<FT_Realloc_FuncFunction>>;
-typedef FT_Realloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
-    FT_Memory1 memory,
-    ffi.Long cur_size,
-    ffi.Long new_size,
-    ffi.Pointer<ffi.Void> block);
-typedef DartFT_Realloc_FuncFunction = ffi.Pointer<ffi.Void> Function(
-    FT_Memory1 memory, int cur_size, int new_size, ffi.Pointer<ffi.Void> block);
-
-/// @type:
-/// FT_Stream
-///
-/// @description:
-/// A handle to an input stream.
-///
-/// @also:
-/// See @FT_StreamRec for the publicly accessible fields of a given stream
-/// object.
-typedef FT_Stream = ffi.Pointer<FT_StreamRec_>;
-
-/// @struct:
-/// FT_StreamRec
-///
-/// @description:
-/// A structure used to describe an input stream.
-///
-/// @input:
-/// base ::
-/// For memory-based streams, this is the address of the first stream
-/// byte in memory.  This field should always be set to `NULL` for
-/// disk-based streams.
-///
-/// size ::
-/// The stream size in bytes.
-///
-/// In case of compressed streams where the size is unknown before
-/// actually doing the decompression, the value is set to 0x7FFFFFFF.
-/// (Note that this size value can occur for normal streams also; it is
-/// thus just a hint.)
-///
-/// pos ::
-/// The current position within the stream.
-///
-/// descriptor ::
-/// This field is a union that can hold an integer or a pointer.  It is
-/// used by stream implementations to store file descriptors or `FILE*`
-/// pointers.
-///
-/// pathname ::
-/// This field is completely ignored by FreeType.  However, it is often
-/// useful during debugging to use it to store the stream's filename
-/// (where available).
-///
-/// read ::
-/// The stream's input function.
-///
-/// close ::
-/// The stream's close function.
-///
-/// memory ::
-/// The memory manager to use to preload frames.  This is set internally
-/// by FreeType and shouldn't be touched by stream implementations.
-///
-/// cursor ::
-/// This field is set and used internally by FreeType when parsing
-/// frames.  In particular, the `FT_GET_XXX` macros use this instead of
-/// the `pos` field.
-///
-/// limit ::
-/// This field is set and used internally by FreeType when parsing
-/// frames.
-final class FT_StreamRec_ extends ffi.Struct {
-  external ffi.Pointer<ffi.UnsignedChar> base;
-
-  @ffi.UnsignedLong()
-  external int size;
-
-  @ffi.UnsignedLong()
-  external int pos;
-
-  external FT_StreamDesc descriptor;
-
-  external FT_StreamDesc pathname;
-
-  external FT_Stream_IoFunc read;
-
-  external FT_Stream_CloseFunc close;
-
-  external FT_Memory memory;
-
-  external ffi.Pointer<ffi.UnsignedChar> cursor;
-
-  external ffi.Pointer<ffi.UnsignedChar> limit;
-}
-
-/// @struct:
-/// FT_StreamDesc
-///
-/// @description:
-/// A union type used to store either a long or a pointer.  This is used
-/// to store a file descriptor or a `FILE*` in an input stream.
-typedef FT_StreamDesc = FT_StreamDesc_;
-
-/// @struct:
-/// FT_StreamDesc
-///
-/// @description:
-/// A union type used to store either a long or a pointer.  This is used
-/// to store a file descriptor or a `FILE*` in an input stream.
-final class FT_StreamDesc_ extends ffi.Union {
-  @ffi.Long()
-  external int value;
-
-  external ffi.Pointer<ffi.Void> pointer;
-}
-
-/// @functype:
-/// FT_Stream_IoFunc
-///
-/// @description:
-/// A function used to seek and read data from a given input stream.
-///
-/// @input:
-/// stream ::
-/// A handle to the source stream.
-///
-/// offset ::
-/// The offset from the start of the stream to seek to.
-///
-/// buffer ::
-/// The address of the read buffer.
-///
-/// count ::
-/// The number of bytes to read from the stream.
-///
-/// @return:
-/// If count >~0, return the number of bytes effectively read by the
-/// stream (after seeking to `offset`).  If count ==~0, return the status
-/// of the seek operation (non-zero indicates an error).
-typedef FT_Stream_IoFunc
-    = ffi.Pointer<ffi.NativeFunction<FT_Stream_IoFuncFunction>>;
-typedef FT_Stream_IoFuncFunction = ffi.UnsignedLong Function(
-    FT_Stream1 stream,
-    ffi.UnsignedLong offset,
-    ffi.Pointer<ffi.UnsignedChar> buffer,
-    ffi.UnsignedLong count);
-typedef DartFT_Stream_IoFuncFunction = int Function(FT_Stream1 stream,
-    int offset, ffi.Pointer<ffi.UnsignedChar> buffer, int count);
-
-/// @type:
-/// FT_Stream
-///
-/// @description:
-/// A handle to an input stream.
-///
-/// @also:
-/// See @FT_StreamRec for the publicly accessible fields of a given stream
-/// object.
-typedef FT_Stream1 = ffi.Pointer<FT_StreamRec_>;
-
-/// @functype:
-/// FT_Stream_CloseFunc
-///
-/// @description:
-/// A function used to close a given input stream.
-///
-/// @input:
-/// stream ::
-/// A handle to the target stream.
-typedef FT_Stream_CloseFunc
-    = ffi.Pointer<ffi.NativeFunction<FT_Stream_CloseFuncFunction>>;
-typedef FT_Stream_CloseFuncFunction = ffi.Void Function(FT_Stream1 stream);
-typedef DartFT_Stream_CloseFuncFunction = void Function(FT_Stream1 stream);
-
-/// @struct:
-/// FT_ListRec
-///
-/// @description:
-/// A structure used to hold a simple doubly-linked list.  These are used
-/// in many parts of FreeType.
-///
-/// @fields:
-/// head ::
-/// The head (first element) of doubly-linked list.
-///
-/// tail ::
-/// The tail (last element) of doubly-linked list.
-typedef FT_ListRec = FT_ListRec_;
-
-/// @struct:
-/// FT_ListRec
-///
-/// @description:
-/// A structure used to hold a simple doubly-linked list.  These are used
-/// in many parts of FreeType.
-///
-/// @fields:
-/// head ::
-/// The head (first element) of doubly-linked list.
-///
-/// tail ::
-/// The tail (last element) of doubly-linked list.
-final class FT_ListRec_ extends ffi.Struct {
-  external FT_ListNode head;
-
-  external FT_ListNode tail;
-}
-
-/// @type:
-/// FT_ListNode
-///
-/// @description:
-/// Many elements and objects in FreeType are listed through an @FT_List
-/// record (see @FT_ListRec).  As its name suggests, an FT_ListNode is a
-/// handle to a single list element.
-typedef FT_ListNode = ffi.Pointer<FT_ListNodeRec_>;
-
-/// @struct:
-/// FT_ListNodeRec
-///
-/// @description:
-/// A structure used to hold a single list element.
-///
-/// @fields:
-/// prev ::
-/// The previous element in the list.  `NULL` if first.
-///
-/// next ::
-/// The next element in the list.  `NULL` if last.
-///
-/// data ::
-/// A typeless pointer to the listed object.
-final class FT_ListNodeRec_ extends ffi.Struct {
-  external FT_ListNode1 prev;
-
-  external FT_ListNode1 next;
-
-  external ffi.Pointer<ffi.Void> data;
-}
-
-/// @type:
-/// FT_ListNode
-///
-/// @description:
-/// Many elements and objects in FreeType are listed through an @FT_List
-/// record (see @FT_ListRec).  As its name suggests, an FT_ListNode is a
-/// handle to a single list element.
-typedef FT_ListNode1 = ffi.Pointer<FT_ListNodeRec_>;
-
-/// @type:
-/// FT_Face_Internal
-///
-/// @description:
-/// An opaque handle to an `FT_Face_InternalRec` structure that models the
-/// private data of a given @FT_Face object.
-///
-/// This structure might change between releases of FreeType~2 and is not
-/// generally available to client applications.
-typedef FT_Face_Internal = ffi.Pointer<FT_Face_InternalRec_>;
-
-final class FT_Face_InternalRec_ extends ffi.Opaque {}
+typedef FT_GlyphSlotRec = FT_GlyphSlotRec_;
 
 /// @type:
 /// FT_Error
@@ -4655,6 +5151,21 @@ final class FT_Face_InternalRec_ extends ffi.Opaque {}
 /// successful operation.
 typedef FT_Error = ffi.Int;
 typedef DartFT_Error = int;
+
+/// @type:
+/// FT_ULong
+///
+/// @description:
+/// A typedef for unsigned long.
+typedef FT_ULong = ffi.UnsignedLong;
+typedef DartFT_ULong = int;
+
+/// @type:
+/// FT_Pointer
+///
+/// @description:
+/// A simple typedef for a typeless pointer.
+typedef FT_Pointer = ffi.Pointer<ffi.Void>;
 
 /// @struct:
 /// FT_Parameter
@@ -4680,20 +5191,32 @@ final class FT_Parameter_ extends ffi.Struct {
   external FT_Pointer data;
 }
 
-/// @type:
-/// FT_ULong
+/// @struct:
+/// FT_Parameter
 ///
 /// @description:
-/// A typedef for unsigned long.
-typedef FT_ULong = ffi.UnsignedLong;
-typedef DartFT_ULong = int;
+/// A simple structure to pass more or less generic parameters to
+/// @FT_Open_Face and @FT_Face_Properties.
+///
+/// @fields:
+/// tag ::
+/// A four-byte identification tag.
+///
+/// data ::
+/// A pointer to the parameter data.
+///
+/// @note:
+/// The ID and function of parameters are driver-specific.  See section
+/// @parameter_tags for more information.
+typedef FT_Parameter = FT_Parameter_;
 
 /// @type:
-/// FT_Pointer
+/// FT_Byte
 ///
 /// @description:
-/// A simple typedef for a typeless pointer.
-typedef FT_Pointer = ffi.Pointer<ffi.Void>;
+/// A simple typedef for the _unsigned_ char type.
+typedef FT_Byte = ffi.UnsignedChar;
+typedef DartFT_Byte = int;
 
 /// @struct:
 /// FT_Open_Args
@@ -4770,7 +5293,7 @@ final class FT_Open_Args_ extends ffi.Struct {
 
   external ffi.Pointer<FT_String> pathname;
 
-  external FT_Stream stream;
+  external FT_Stream$1 stream;
 
   external FT_Module driver;
 
@@ -4779,42 +5302,6 @@ final class FT_Open_Args_ extends ffi.Struct {
 
   external ffi.Pointer<FT_Parameter> params;
 }
-
-/// @type:
-/// FT_Byte
-///
-/// @description:
-/// A simple typedef for the _unsigned_ char type.
-typedef FT_Byte = ffi.UnsignedChar;
-typedef DartFT_Byte = int;
-
-/// @type:
-/// FT_Module
-///
-/// @description:
-/// A handle to a given FreeType module object.  A module can be a font
-/// driver, a renderer, or anything else that provides services to the
-/// former.
-typedef FT_Module = ffi.Pointer<FT_ModuleRec_>;
-
-/// @struct:
-/// FT_Parameter
-///
-/// @description:
-/// A simple structure to pass more or less generic parameters to
-/// @FT_Open_Face and @FT_Face_Properties.
-///
-/// @fields:
-/// tag ::
-/// A four-byte identification tag.
-///
-/// data ::
-/// A pointer to the parameter data.
-///
-/// @note:
-/// The ID and function of parameters are driver-specific.  See section
-/// @parameter_tags for more information.
-typedef FT_Parameter = FT_Parameter_;
 
 /// @struct:
 /// FT_Open_Args
@@ -4928,13 +5415,27 @@ typedef FT_Open_Args = FT_Open_Args_;
 ///
 /// See the note section of @FT_Size_Metrics if you wonder how size
 /// requesting relates to scaling values.
-abstract class FT_Size_Request_Type_ {
-  static const int FT_SIZE_REQUEST_TYPE_NOMINAL = 0;
-  static const int FT_SIZE_REQUEST_TYPE_REAL_DIM = 1;
-  static const int FT_SIZE_REQUEST_TYPE_BBOX = 2;
-  static const int FT_SIZE_REQUEST_TYPE_CELL = 3;
-  static const int FT_SIZE_REQUEST_TYPE_SCALES = 4;
-  static const int FT_SIZE_REQUEST_TYPE_MAX = 5;
+enum FT_Size_Request_Type_ {
+  FT_SIZE_REQUEST_TYPE_NOMINAL(0),
+  FT_SIZE_REQUEST_TYPE_REAL_DIM(1),
+  FT_SIZE_REQUEST_TYPE_BBOX(2),
+  FT_SIZE_REQUEST_TYPE_CELL(3),
+  FT_SIZE_REQUEST_TYPE_SCALES(4),
+  FT_SIZE_REQUEST_TYPE_MAX(5);
+
+  final int value;
+  const FT_Size_Request_Type_(this.value);
+
+  static FT_Size_Request_Type_ fromValue(int value) => switch (value) {
+        0 => FT_SIZE_REQUEST_TYPE_NOMINAL,
+        1 => FT_SIZE_REQUEST_TYPE_REAL_DIM,
+        2 => FT_SIZE_REQUEST_TYPE_BBOX,
+        3 => FT_SIZE_REQUEST_TYPE_CELL,
+        4 => FT_SIZE_REQUEST_TYPE_SCALES,
+        5 => FT_SIZE_REQUEST_TYPE_MAX,
+        _ => throw ArgumentError(
+            'Unknown value for FT_Size_Request_Type_: $value'),
+      };
 }
 
 /// @struct:
@@ -4974,8 +5475,10 @@ abstract class FT_Size_Request_Type_ {
 /// further modification, and both `horiResolution` and `vertResolution`
 /// are ignored.
 final class FT_Size_RequestRec_ extends ffi.Struct {
-  @ffi.Int32()
-  external int type;
+  @ffi.UnsignedInt()
+  external int typeAsInt;
+
+  FT_Size_Request_Type_ get type => FT_Size_Request_Type_.fromValue(typeAsInt);
 
   @FT_Long()
   external int width;
@@ -4989,6 +5492,44 @@ final class FT_Size_RequestRec_ extends ffi.Struct {
   @FT_UInt()
   external int vertResolution;
 }
+
+/// @struct:
+/// FT_Size_RequestRec
+///
+/// @description:
+/// A structure to model a size request.
+///
+/// @fields:
+/// type ::
+/// See @FT_Size_Request_Type.
+///
+/// width ::
+/// The desired width, given as a 26.6 fractional point value (with 72pt
+/// = 1in).
+///
+/// height ::
+/// The desired height, given as a 26.6 fractional point value (with
+/// 72pt = 1in).
+///
+/// horiResolution ::
+/// The horizontal resolution (dpi, i.e., pixels per inch).  If set to
+/// zero, `width` is treated as a 26.6 fractional **pixel** value, which
+/// gets internally rounded to an integer.
+///
+/// vertResolution ::
+/// The vertical resolution (dpi, i.e., pixels per inch).  If set to
+/// zero, `height` is treated as a 26.6 fractional **pixel** value,
+/// which gets internally rounded to an integer.
+///
+/// @note:
+/// If `width` is zero, the horizontal scaling value is set equal to the
+/// vertical scaling value, and vice versa.
+///
+/// If `type` is `FT_SIZE_REQUEST_TYPE_SCALES`, `width` and `height` are
+/// interpreted directly as 16.16 fractional scaling values, without any
+/// further modification, and both `horiResolution` and `vertResolution`
+/// are ignored.
+typedef FT_Size_RequestRec = FT_Size_RequestRec_;
 
 /// @struct:
 /// FT_Size_Request
@@ -5031,7 +5572,19 @@ typedef DartFT_Int32 = int;
 ///
 /// yy ::
 /// Matrix coefficient.
-typedef FT_Matrix = FT_Matrix_;
+final class FT_Matrix_ extends ffi.Struct {
+  @FT_Fixed()
+  external int xx;
+
+  @FT_Fixed()
+  external int xy;
+
+  @FT_Fixed()
+  external int yx;
+
+  @FT_Fixed()
+  external int yy;
+}
 
 /// @struct:
 /// FT_Matrix
@@ -5057,19 +5610,7 @@ typedef FT_Matrix = FT_Matrix_;
 ///
 /// yy ::
 /// Matrix coefficient.
-final class FT_Matrix_ extends ffi.Struct {
-  @FT_Fixed()
-  external int xx;
-
-  @FT_Fixed()
-  external int xy;
-
-  @FT_Fixed()
-  external int yx;
-
-  @FT_Fixed()
-  external int yy;
-}
+typedef FT_Matrix = FT_Matrix_;
 
 /// @enum:
 /// FT_Render_Mode
@@ -5197,14 +5738,28 @@ final class FT_Matrix_ extends ffi.Struct {
 ///
 /// Points (1) and (2) can be avoided by using the `bsdf` rasterizer,
 /// which is more stable than the `sdf` rasterizer in general.
-abstract class FT_Render_Mode_ {
-  static const int FT_RENDER_MODE_NORMAL = 0;
-  static const int FT_RENDER_MODE_LIGHT = 1;
-  static const int FT_RENDER_MODE_MONO = 2;
-  static const int FT_RENDER_MODE_LCD = 3;
-  static const int FT_RENDER_MODE_LCD_V = 4;
-  static const int FT_RENDER_MODE_SDF = 5;
-  static const int FT_RENDER_MODE_MAX = 6;
+enum FT_Render_Mode_ {
+  FT_RENDER_MODE_NORMAL(0),
+  FT_RENDER_MODE_LIGHT(1),
+  FT_RENDER_MODE_MONO(2),
+  FT_RENDER_MODE_LCD(3),
+  FT_RENDER_MODE_LCD_V(4),
+  FT_RENDER_MODE_SDF(5),
+  FT_RENDER_MODE_MAX(6);
+
+  final int value;
+  const FT_Render_Mode_(this.value);
+
+  static FT_Render_Mode_ fromValue(int value) => switch (value) {
+        0 => FT_RENDER_MODE_NORMAL,
+        1 => FT_RENDER_MODE_LIGHT,
+        2 => FT_RENDER_MODE_MONO,
+        3 => FT_RENDER_MODE_LCD,
+        4 => FT_RENDER_MODE_LCD_V,
+        5 => FT_RENDER_MODE_SDF,
+        6 => FT_RENDER_MODE_MAX,
+        _ => throw ArgumentError('Unknown value for FT_Render_Mode_: $value'),
+      };
 }
 
 /// @enum:
@@ -5232,10 +5787,20 @@ abstract class FT_Render_Mode_ {
 /// Both `FT_KERNING_DEFAULT` and `FT_KERNING_UNFITTED` use the current
 /// horizontal scaling factor (as set e.g. with @FT_Set_Char_Size) to
 /// convert font units to pixels.
-abstract class FT_Kerning_Mode_ {
-  static const int FT_KERNING_DEFAULT = 0;
-  static const int FT_KERNING_UNFITTED = 1;
-  static const int FT_KERNING_UNSCALED = 2;
+enum FT_Kerning_Mode_ {
+  FT_KERNING_DEFAULT(0),
+  FT_KERNING_UNFITTED(1),
+  FT_KERNING_UNSCALED(2);
+
+  final int value;
+  const FT_Kerning_Mode_(this.value);
+
+  static FT_Kerning_Mode_ fromValue(int value) => switch (value) {
+        0 => FT_KERNING_DEFAULT,
+        1 => FT_KERNING_UNFITTED,
+        2 => FT_KERNING_UNSCALED,
+        _ => throw ArgumentError('Unknown value for FT_Kerning_Mode_: $value'),
+      };
 }
 
 typedef FT_UInt32 = ffi.UnsignedInt;
