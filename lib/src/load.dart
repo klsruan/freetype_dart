@@ -1,11 +1,12 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'generated_bindings.dart';
 import 'package:path/path.dart' as p;
+import 'generated_bindings.dart';
 
 FreetypeBinding loadFreeType() {
-  final execDir = File(Platform.resolvedExecutable).parent;
-
+  final currentFile = File.fromUri(Platform.script);
+  final currentDir = currentFile.parent;
+  final packageRoot = p.normalize(p.join(currentDir.path, '../../'));
   String libName;
   if (Platform.isWindows) {
     libName = 'libfreetype-6.dll';
@@ -16,9 +17,9 @@ FreetypeBinding loadFreeType() {
   } else {
     throw UnsupportedError('Unsupported platform');
   }
-  final libPath = p.join(execDir.path, 'bin', libName);
+  final libPath = p.join(packageRoot, 'bin', libName);
   if (!File(libPath).existsSync()) {
-    throw Exception('Library not found in path: $libPath');
+    throw Exception('Library not found at path: $libPath');
   }
   return FreetypeBinding(DynamicLibrary.open(libPath));
 }
