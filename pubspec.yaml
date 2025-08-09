@@ -1,8 +1,8 @@
-name: dart_freetype
+name: freetype_dart
 version: 1.0.0
 description: freetype dart bindings
-homepage: https://github.com/klsruan/dart_freetype
-repository: https://github.com/klsruan/dart_freetype
+homepage: https://github.com/klsruan/freetype_dart
+repository: https://github.com/klsruan/freetype_dart
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
