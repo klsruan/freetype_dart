@@ -1,15 +1,23 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'generated_bindings.dart';
+import 'package:path/path.dart' as p;
 
 FreetypeBinding loadFreeType() {
-  String path = '../../bin/';
+  final scriptDir = File.fromUri(Platform.script).parent;
+  final binDir = p.join(scriptDir.path, 'bin');
+  String libName;
   if (Platform.isWindows) {
-    path += 'libfreetype-6.dll';
+    libName = 'libfreetype-6.dll';
   } else if (Platform.isMacOS) {
-    path += 'libfreetype.6.dylib';
+    libName = 'libfreetype.6.dylib';
   } else {
-    path += 'libfreetype.so.6';
+    libName = 'libfreetype.so.6';
   }
-  return FreetypeBinding(DynamicLibrary.open(path));
+  final libPath = p.join(binDir, libName);
+  if (!File(libPath).existsSync()) {
+    throw Exception('Biblioteca freetype não encontrada em: $libPath');
+  }
+  final dylib = DynamicLibrary.open(libPath);
+  return FreetypeBinding(dylib);
 }
