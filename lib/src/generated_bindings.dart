@@ -3169,6 +3169,223 @@ class FreetypeBinding {
           'FT_Get_CMap_Format');
   late final _FT_Get_CMap_Format =
       _FT_Get_CMap_FormatPtr.asFunction<int Function(FT_CharMap)>();
+
+  /// @function:
+  /// FT_Has_PS_Glyph_Names
+  ///
+  /// @description:
+  /// Return true if a given face provides reliable PostScript glyph names.
+  /// This is similar to using the @FT_HAS_GLYPH_NAMES macro, except that
+  /// certain fonts (mostly TrueType) contain incorrect glyph name tables.
+  ///
+  /// When this function returns true, the caller is sure that the glyph
+  /// names returned by @FT_Get_Glyph_Name are reliable.
+  ///
+  /// @input:
+  /// face ::
+  /// face handle
+  ///
+  /// @return:
+  /// Boolean.  True if glyph names are reliable.
+  int FT_Has_PS_Glyph_Names(
+    FT_Face face,
+  ) {
+    return _FT_Has_PS_Glyph_Names(
+      face,
+    );
+  }
+
+  late final _FT_Has_PS_Glyph_NamesPtr =
+      _lookup<ffi.NativeFunction<FT_Int Function(FT_Face)>>(
+          'FT_Has_PS_Glyph_Names');
+  late final _FT_Has_PS_Glyph_Names =
+      _FT_Has_PS_Glyph_NamesPtr.asFunction<int Function(FT_Face)>();
+
+  /// @function:
+  /// FT_Get_PS_Font_Info
+  ///
+  /// @description:
+  /// Retrieve the @PS_FontInfoRec structure corresponding to a given
+  /// PostScript font.
+  ///
+  /// @input:
+  /// face ::
+  /// PostScript face handle.
+  ///
+  /// @output:
+  /// afont_info ::
+  /// A pointer to a @PS_FontInfoRec object.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// String pointers within the @PS_FontInfoRec structure are owned by the
+  /// face and don't need to be freed by the caller.  Missing entries in the
+  /// font's FontInfo dictionary are represented by `NULL` pointers.
+  ///
+  /// The following font formats support this feature: 'Type~1', 'Type~42',
+  /// 'CFF', 'CID~Type~1'.  For other font formats this function returns the
+  /// `FT_Err_Invalid_Argument` error code.
+  ///
+  /// @example:
+  /// ```
+  /// PS_FontInfoRec  font_info;
+  ///
+  ///
+  /// error = FT_Get_PS_Font_Info( face, &font_info );
+  /// ...
+  /// ```
+  int FT_Get_PS_Font_Info(
+    FT_Face face,
+    PS_FontInfo afont_info,
+  ) {
+    return _FT_Get_PS_Font_Info(
+      face,
+      afont_info,
+    );
+  }
+
+  late final _FT_Get_PS_Font_InfoPtr =
+      _lookup<ffi.NativeFunction<FT_Error Function(FT_Face, PS_FontInfo)>>(
+          'FT_Get_PS_Font_Info');
+  late final _FT_Get_PS_Font_Info =
+      _FT_Get_PS_Font_InfoPtr.asFunction<int Function(FT_Face, PS_FontInfo)>();
+
+  /// @function:
+  /// FT_Get_PS_Font_Private
+  ///
+  /// @description:
+  /// Retrieve the @PS_PrivateRec structure corresponding to a given
+  /// PostScript font.
+  ///
+  /// @input:
+  /// face ::
+  /// PostScript face handle.
+  ///
+  /// @output:
+  /// afont_private ::
+  /// A pointer to a @PS_PrivateRec object.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// The string pointers within the @PS_PrivateRec structure are owned by
+  /// the face and don't need to be freed by the caller.
+  ///
+  /// Only the 'Type~1' font format supports this feature.  For other font
+  /// formats this function returns the `FT_Err_Invalid_Argument` error
+  /// code.
+  ///
+  /// @example:
+  /// ```
+  /// PS_PrivateRec  font_private;
+  ///
+  ///
+  /// error = FT_Get_PS_Font_Private( face, &font_private );
+  /// ...
+  /// ```
+  int FT_Get_PS_Font_Private(
+    FT_Face face,
+    PS_Private afont_private,
+  ) {
+    return _FT_Get_PS_Font_Private(
+      face,
+      afont_private,
+    );
+  }
+
+  late final _FT_Get_PS_Font_PrivatePtr =
+      _lookup<ffi.NativeFunction<FT_Error Function(FT_Face, PS_Private)>>(
+          'FT_Get_PS_Font_Private');
+  late final _FT_Get_PS_Font_Private = _FT_Get_PS_Font_PrivatePtr.asFunction<
+      int Function(FT_Face, PS_Private)>();
+
+  /// @function:
+  /// FT_Get_PS_Font_Value
+  ///
+  /// @description:
+  /// Retrieve the value for the supplied key from a PostScript font.
+  ///
+  /// @input:
+  /// face ::
+  /// PostScript face handle.
+  ///
+  /// key ::
+  /// An enumeration value representing the dictionary key to retrieve.
+  ///
+  /// idx ::
+  /// For array values, this specifies the index to be returned.
+  ///
+  /// value ::
+  /// A pointer to memory into which to write the value.
+  ///
+  /// valen_len ::
+  /// The size, in bytes, of the memory supplied for the value.
+  ///
+  /// @output:
+  /// value ::
+  /// The value matching the above key, if it exists.
+  ///
+  /// @return:
+  /// The amount of memory (in bytes) required to hold the requested value
+  /// (if it exists, -1 otherwise).
+  ///
+  /// @note:
+  /// The values returned are not pointers into the internal structures of
+  /// the face, but are 'fresh' copies, so that the memory containing them
+  /// belongs to the calling application.  This also enforces the
+  /// 'read-only' nature of these values, i.e., this function cannot be
+  /// used to manipulate the face.
+  ///
+  /// `value` is a void pointer because the values returned can be of
+  /// various types.
+  ///
+  /// If either `value` is `NULL` or `value_len` is too small, just the
+  /// required memory size for the requested entry is returned.
+  ///
+  /// The `idx` parameter is used, not only to retrieve elements of, for
+  /// example, the FontMatrix or FontBBox, but also to retrieve name keys
+  /// from the CharStrings dictionary, and the charstrings themselves.  It
+  /// is ignored for atomic values.
+  ///
+  /// `PS_DICT_BLUE_SCALE` returns a value that is scaled up by 1000.  To
+  /// get the value as in the font stream, you need to divide by 65536000.0
+  /// (to remove the FT_Fixed scale, and the x1000 scale).
+  ///
+  /// IMPORTANT: Only key/value pairs read by the FreeType interpreter can
+  /// be retrieved.  So, for example, PostScript procedures such as NP, ND,
+  /// and RD are not available.  Arbitrary keys are, obviously, not be
+  /// available either.
+  ///
+  /// If the font's format is not PostScript-based, this function returns
+  /// the `FT_Err_Invalid_Argument` error code.
+  ///
+  /// @since:
+  /// 2.4.8
+  DartFT_Long FT_Get_PS_Font_Value(
+    FT_Face face,
+    PS_Dict_Keys_ key,
+    DartFT_UInt idx,
+    ffi.Pointer<ffi.Void> value,
+    DartFT_Long value_len,
+  ) {
+    return _FT_Get_PS_Font_Value(
+      face,
+      key.value,
+      idx,
+      value,
+      value_len,
+    );
+  }
+
+  late final _FT_Get_PS_Font_ValuePtr = _lookup<
+      ffi.NativeFunction<
+          FT_Long Function(FT_Face, ffi.UnsignedInt, FT_UInt,
+              ffi.Pointer<ffi.Void>, FT_Long)>>('FT_Get_PS_Font_Value');
+  late final _FT_Get_PS_Font_Value = _FT_Get_PS_Font_ValuePtr.asFunction<
+      int Function(FT_Face, int, int, ffi.Pointer<ffi.Void>, int)>();
 }
 
 /// @type:
@@ -8206,6 +8423,649 @@ enum FT_Sfnt_Tag_ {
       };
 }
 
+/// @struct:
+/// PS_FontInfoRec
+///
+/// @description:
+/// A structure used to model a Type~1 or Type~2 FontInfo dictionary.
+/// Note that for Multiple Master fonts, each instance has its own
+/// FontInfo dictionary.
+final class PS_FontInfoRec_ extends ffi.Struct {
+  external ffi.Pointer<FT_String> version;
+
+  external ffi.Pointer<FT_String> notice;
+
+  external ffi.Pointer<FT_String> full_name;
+
+  external ffi.Pointer<FT_String> family_name;
+
+  external ffi.Pointer<FT_String> weight;
+
+  @FT_Long()
+  external int italic_angle;
+
+  @FT_Bool()
+  external int is_fixed_pitch;
+
+  @FT_Short()
+  external int underline_position;
+
+  @FT_UShort()
+  external int underline_thickness;
+}
+
+/// @struct:
+/// PS_FontInfoRec
+///
+/// @description:
+/// A structure used to model a Type~1 or Type~2 FontInfo dictionary.
+/// Note that for Multiple Master fonts, each instance has its own
+/// FontInfo dictionary.
+typedef PS_FontInfoRec = PS_FontInfoRec_;
+
+/// @struct:
+/// PS_FontInfo
+///
+/// @description:
+/// A handle to a @PS_FontInfoRec structure.
+typedef PS_FontInfo = ffi.Pointer<PS_FontInfoRec_>;
+
+/// @struct:
+/// T1_FontInfo
+///
+/// @description:
+/// This type is equivalent to @PS_FontInfoRec.  It is deprecated but kept
+/// to maintain source compatibility between various versions of FreeType.
+typedef T1_FontInfo = PS_FontInfoRec;
+
+/// @struct:
+/// PS_PrivateRec
+///
+/// @description:
+/// A structure used to model a Type~1 or Type~2 private dictionary.  Note
+/// that for Multiple Master fonts, each instance has its own Private
+/// dictionary.
+final class PS_PrivateRec_ extends ffi.Struct {
+  @FT_Int()
+  external int unique_id;
+
+  @FT_Int()
+  external int lenIV;
+
+  @FT_Byte()
+  external int num_blue_values;
+
+  @FT_Byte()
+  external int num_other_blues;
+
+  @FT_Byte()
+  external int num_family_blues;
+
+  @FT_Byte()
+  external int num_family_other_blues;
+
+  @ffi.Array.multi([14])
+  external ffi.Array<FT_Short> blue_values;
+
+  @ffi.Array.multi([10])
+  external ffi.Array<FT_Short> other_blues;
+
+  @ffi.Array.multi([14])
+  external ffi.Array<FT_Short> family_blues;
+
+  @ffi.Array.multi([10])
+  external ffi.Array<FT_Short> family_other_blues;
+
+  @FT_Fixed()
+  external int blue_scale;
+
+  @FT_Int()
+  external int blue_shift;
+
+  @FT_Int()
+  external int blue_fuzz;
+
+  @ffi.Array.multi([1])
+  external ffi.Array<FT_UShort> standard_width;
+
+  @ffi.Array.multi([1])
+  external ffi.Array<FT_UShort> standard_height;
+
+  @FT_Byte()
+  external int num_snap_widths;
+
+  @FT_Byte()
+  external int num_snap_heights;
+
+  @FT_Bool()
+  external int force_bold;
+
+  @FT_Bool()
+  external int round_stem_up;
+
+  @ffi.Array.multi([13])
+  external ffi.Array<FT_Short> snap_widths;
+
+  @ffi.Array.multi([13])
+  external ffi.Array<FT_Short> snap_heights;
+
+  @FT_Fixed()
+  external int expansion_factor;
+
+  @FT_Long()
+  external int language_group;
+
+  @FT_Long()
+  external int password;
+
+  @ffi.Array.multi([2])
+  external ffi.Array<FT_Short> min_feature;
+}
+
+/// @struct:
+/// PS_PrivateRec
+///
+/// @description:
+/// A structure used to model a Type~1 or Type~2 private dictionary.  Note
+/// that for Multiple Master fonts, each instance has its own Private
+/// dictionary.
+typedef PS_PrivateRec = PS_PrivateRec_;
+
+/// @struct:
+/// PS_Private
+///
+/// @description:
+/// A handle to a @PS_PrivateRec structure.
+typedef PS_Private = ffi.Pointer<PS_PrivateRec_>;
+
+/// @struct:
+/// T1_Private
+///
+/// @description:
+/// This type is equivalent to @PS_PrivateRec.  It is deprecated but kept
+/// to maintain source compatibility between various versions of FreeType.
+typedef T1_Private = PS_PrivateRec;
+
+/// @enum:
+/// T1_Blend_Flags
+///
+/// @description:
+/// A set of flags used to indicate which fields are present in a given
+/// blend dictionary (font info or private).  Used to support Multiple
+/// Masters fonts.
+///
+/// @values:
+/// T1_BLEND_UNDERLINE_POSITION ::
+/// T1_BLEND_UNDERLINE_THICKNESS ::
+/// T1_BLEND_ITALIC_ANGLE ::
+/// T1_BLEND_BLUE_VALUES ::
+/// T1_BLEND_OTHER_BLUES ::
+/// T1_BLEND_STANDARD_WIDTH ::
+/// T1_BLEND_STANDARD_HEIGHT ::
+/// T1_BLEND_STEM_SNAP_WIDTHS ::
+/// T1_BLEND_STEM_SNAP_HEIGHTS ::
+/// T1_BLEND_BLUE_SCALE ::
+/// T1_BLEND_BLUE_SHIFT ::
+/// T1_BLEND_FAMILY_BLUES ::
+/// T1_BLEND_FAMILY_OTHER_BLUES ::
+/// T1_BLEND_FORCE_BOLD ::
+enum T1_Blend_Flags_ {
+  T1_BLEND_UNDERLINE_POSITION(0),
+  T1_BLEND_UNDERLINE_THICKNESS(1),
+  T1_BLEND_ITALIC_ANGLE(2),
+  T1_BLEND_BLUE_VALUES(3),
+  T1_BLEND_OTHER_BLUES(4),
+  T1_BLEND_STANDARD_WIDTH(5),
+  T1_BLEND_STANDARD_HEIGHT(6),
+  T1_BLEND_STEM_SNAP_WIDTHS(7),
+  T1_BLEND_STEM_SNAP_HEIGHTS(8),
+  T1_BLEND_BLUE_SCALE(9),
+  T1_BLEND_BLUE_SHIFT(10),
+  T1_BLEND_FAMILY_BLUES(11),
+  T1_BLEND_FAMILY_OTHER_BLUES(12),
+  T1_BLEND_FORCE_BOLD(13),
+  T1_BLEND_MAX(14);
+
+  final int value;
+  const T1_Blend_Flags_(this.value);
+
+  static T1_Blend_Flags_ fromValue(int value) => switch (value) {
+        0 => T1_BLEND_UNDERLINE_POSITION,
+        1 => T1_BLEND_UNDERLINE_THICKNESS,
+        2 => T1_BLEND_ITALIC_ANGLE,
+        3 => T1_BLEND_BLUE_VALUES,
+        4 => T1_BLEND_OTHER_BLUES,
+        5 => T1_BLEND_STANDARD_WIDTH,
+        6 => T1_BLEND_STANDARD_HEIGHT,
+        7 => T1_BLEND_STEM_SNAP_WIDTHS,
+        8 => T1_BLEND_STEM_SNAP_HEIGHTS,
+        9 => T1_BLEND_BLUE_SCALE,
+        10 => T1_BLEND_BLUE_SHIFT,
+        11 => T1_BLEND_FAMILY_BLUES,
+        12 => T1_BLEND_FAMILY_OTHER_BLUES,
+        13 => T1_BLEND_FORCE_BOLD,
+        14 => T1_BLEND_MAX,
+        _ => throw ArgumentError('Unknown value for T1_Blend_Flags_: $value'),
+      };
+}
+
+final class PS_DesignMap_ extends ffi.Struct {
+  @FT_Byte()
+  external int num_points;
+
+  external ffi.Pointer<FT_Long> design_points;
+
+  external ffi.Pointer<FT_Fixed> blend_points;
+}
+
+typedef PS_DesignMapRec = PS_DesignMap_;
+typedef PS_DesignMap = ffi.Pointer<PS_DesignMap_>;
+typedef T1_DesignMap = PS_DesignMapRec;
+
+final class PS_BlendRec_ extends ffi.Struct {
+  @FT_UInt()
+  external int num_designs;
+
+  @FT_UInt()
+  external int num_axis;
+
+  @ffi.Array.multi([4])
+  external ffi.Array<ffi.Pointer<FT_String>> axis_names;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<ffi.Pointer<FT_Fixed>> design_pos;
+
+  @ffi.Array.multi([4])
+  external ffi.Array<PS_DesignMapRec> design_map;
+
+  external ffi.Pointer<FT_Fixed> weight_vector;
+
+  external ffi.Pointer<FT_Fixed> default_weight_vector;
+
+  @ffi.Array.multi([17])
+  external ffi.Array<PS_FontInfo> font_infos;
+
+  @ffi.Array.multi([17])
+  external ffi.Array<PS_Private> privates;
+
+  @FT_ULong()
+  external int blend_bitflags;
+
+  @ffi.Array.multi([17])
+  external ffi.Array<ffi.Pointer<FT_BBox>> bboxes;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<FT_UInt> default_design_vector;
+
+  @FT_UInt()
+  external int num_default_design_vector;
+}
+
+typedef PS_BlendRec = PS_BlendRec_;
+typedef PS_Blend = ffi.Pointer<PS_BlendRec_>;
+typedef T1_Blend = PS_BlendRec;
+
+/// @struct:
+/// CID_FaceDictRec
+///
+/// @description:
+/// A structure used to represent data in a CID top-level dictionary.  In
+/// most cases, they are part of the font's '/FDArray' array.  Within a
+/// CID font file, such (internal) subfont dictionaries are enclosed by
+/// '%ADOBeginFontDict' and '%ADOEndFontDict' comments.
+///
+/// Note that `CID_FaceDictRec` misses a field for the '/FontName'
+/// keyword, specifying the subfont's name (the top-level font name is
+/// given by the '/CIDFontName' keyword).  This is an oversight, but it
+/// doesn't limit the 'cid' font module's functionality because FreeType
+/// neither needs this entry nor gives access to CID subfonts.
+final class CID_FaceDictRec_ extends ffi.Struct {
+  external PS_PrivateRec private_dict;
+
+  @FT_UInt()
+  external int len_buildchar;
+
+  @FT_Fixed()
+  external int forcebold_threshold;
+
+  @FT_Pos()
+  external int stroke_width;
+
+  @FT_Fixed()
+  external int expansion_factor;
+
+  @FT_Byte()
+  external int paint_type;
+
+  @FT_Byte()
+  external int font_type;
+
+  external FT_Matrix font_matrix;
+
+  external FT_Vector font_offset;
+
+  @FT_UInt()
+  external int num_subrs;
+
+  @FT_ULong()
+  external int subrmap_offset;
+
+  @FT_UInt()
+  external int sd_bytes;
+}
+
+/// @struct:
+/// CID_FaceDictRec
+///
+/// @description:
+/// A structure used to represent data in a CID top-level dictionary.  In
+/// most cases, they are part of the font's '/FDArray' array.  Within a
+/// CID font file, such (internal) subfont dictionaries are enclosed by
+/// '%ADOBeginFontDict' and '%ADOEndFontDict' comments.
+///
+/// Note that `CID_FaceDictRec` misses a field for the '/FontName'
+/// keyword, specifying the subfont's name (the top-level font name is
+/// given by the '/CIDFontName' keyword).  This is an oversight, but it
+/// doesn't limit the 'cid' font module's functionality because FreeType
+/// neither needs this entry nor gives access to CID subfonts.
+typedef CID_FaceDictRec = CID_FaceDictRec_;
+
+/// @struct:
+/// CID_FaceDict
+///
+/// @description:
+/// A handle to a @CID_FaceDictRec structure.
+typedef CID_FaceDict = ffi.Pointer<CID_FaceDictRec_>;
+
+/// @struct:
+/// CID_FontDict
+///
+/// @description:
+/// This type is equivalent to @CID_FaceDictRec.  It is deprecated but
+/// kept to maintain source compatibility between various versions of
+/// FreeType.
+typedef CID_FontDict = CID_FaceDictRec;
+
+/// @struct:
+/// CID_FaceInfoRec
+///
+/// @description:
+/// A structure used to represent CID Face information.
+final class CID_FaceInfoRec_ extends ffi.Struct {
+  external ffi.Pointer<FT_String> cid_font_name;
+
+  @FT_Fixed()
+  external int cid_version;
+
+  @FT_Int()
+  external int cid_font_type;
+
+  external ffi.Pointer<FT_String> registry;
+
+  external ffi.Pointer<FT_String> ordering;
+
+  @FT_Int()
+  external int supplement;
+
+  external PS_FontInfoRec font_info;
+
+  external FT_BBox font_bbox;
+
+  @FT_ULong()
+  external int uid_base;
+
+  @FT_Int()
+  external int num_xuid;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<FT_ULong> xuid;
+
+  @FT_ULong()
+  external int cidmap_offset;
+
+  @FT_UInt()
+  external int fd_bytes;
+
+  @FT_UInt()
+  external int gd_bytes;
+
+  @FT_ULong()
+  external int cid_count;
+
+  @FT_UInt()
+  external int num_dicts;
+
+  external CID_FaceDict font_dicts;
+
+  @FT_ULong()
+  external int data_offset;
+}
+
+/// @struct:
+/// CID_FaceInfoRec
+///
+/// @description:
+/// A structure used to represent CID Face information.
+typedef CID_FaceInfoRec = CID_FaceInfoRec_;
+
+/// @struct:
+/// CID_FaceInfo
+///
+/// @description:
+/// A handle to a @CID_FaceInfoRec structure.
+typedef CID_FaceInfo = ffi.Pointer<CID_FaceInfoRec_>;
+
+/// @struct:
+/// CID_Info
+///
+/// @description:
+/// This type is equivalent to @CID_FaceInfoRec.  It is deprecated but kept
+/// to maintain source compatibility between various versions of FreeType.
+typedef CID_Info = CID_FaceInfoRec;
+
+/// @enum:
+/// T1_EncodingType
+///
+/// @description:
+/// An enumeration describing the 'Encoding' entry in a Type 1 dictionary.
+///
+/// @values:
+/// T1_ENCODING_TYPE_NONE ::
+/// T1_ENCODING_TYPE_ARRAY ::
+/// T1_ENCODING_TYPE_STANDARD ::
+/// T1_ENCODING_TYPE_ISOLATIN1 ::
+/// T1_ENCODING_TYPE_EXPERT ::
+///
+/// @since:
+/// 2.4.8
+enum T1_EncodingType_ {
+  T1_ENCODING_TYPE_NONE(0),
+  T1_ENCODING_TYPE_ARRAY(1),
+  T1_ENCODING_TYPE_STANDARD(2),
+  T1_ENCODING_TYPE_ISOLATIN1(3),
+  T1_ENCODING_TYPE_EXPERT(4);
+
+  final int value;
+  const T1_EncodingType_(this.value);
+
+  static T1_EncodingType_ fromValue(int value) => switch (value) {
+        0 => T1_ENCODING_TYPE_NONE,
+        1 => T1_ENCODING_TYPE_ARRAY,
+        2 => T1_ENCODING_TYPE_STANDARD,
+        3 => T1_ENCODING_TYPE_ISOLATIN1,
+        4 => T1_ENCODING_TYPE_EXPERT,
+        _ => throw ArgumentError('Unknown value for T1_EncodingType_: $value'),
+      };
+}
+
+/// @enum:
+/// PS_Dict_Keys
+///
+/// @description:
+/// An enumeration used in calls to @FT_Get_PS_Font_Value to identify the
+/// Type~1 dictionary entry to retrieve.
+///
+/// @values:
+/// PS_DICT_FONT_TYPE ::
+/// PS_DICT_FONT_MATRIX ::
+/// PS_DICT_FONT_BBOX ::
+/// PS_DICT_PAINT_TYPE ::
+/// PS_DICT_FONT_NAME ::
+/// PS_DICT_UNIQUE_ID ::
+/// PS_DICT_NUM_CHAR_STRINGS ::
+/// PS_DICT_CHAR_STRING_KEY ::
+/// PS_DICT_CHAR_STRING ::
+/// PS_DICT_ENCODING_TYPE ::
+/// PS_DICT_ENCODING_ENTRY ::
+/// PS_DICT_NUM_SUBRS ::
+/// PS_DICT_SUBR ::
+/// PS_DICT_STD_HW ::
+/// PS_DICT_STD_VW ::
+/// PS_DICT_NUM_BLUE_VALUES ::
+/// PS_DICT_BLUE_VALUE ::
+/// PS_DICT_BLUE_FUZZ ::
+/// PS_DICT_NUM_OTHER_BLUES ::
+/// PS_DICT_OTHER_BLUE ::
+/// PS_DICT_NUM_FAMILY_BLUES ::
+/// PS_DICT_FAMILY_BLUE ::
+/// PS_DICT_NUM_FAMILY_OTHER_BLUES ::
+/// PS_DICT_FAMILY_OTHER_BLUE ::
+/// PS_DICT_BLUE_SCALE ::
+/// PS_DICT_BLUE_SHIFT ::
+/// PS_DICT_NUM_STEM_SNAP_H ::
+/// PS_DICT_STEM_SNAP_H ::
+/// PS_DICT_NUM_STEM_SNAP_V ::
+/// PS_DICT_STEM_SNAP_V ::
+/// PS_DICT_FORCE_BOLD ::
+/// PS_DICT_RND_STEM_UP ::
+/// PS_DICT_MIN_FEATURE ::
+/// PS_DICT_LEN_IV ::
+/// PS_DICT_PASSWORD ::
+/// PS_DICT_LANGUAGE_GROUP ::
+/// PS_DICT_VERSION ::
+/// PS_DICT_NOTICE ::
+/// PS_DICT_FULL_NAME ::
+/// PS_DICT_FAMILY_NAME ::
+/// PS_DICT_WEIGHT ::
+/// PS_DICT_IS_FIXED_PITCH ::
+/// PS_DICT_UNDERLINE_POSITION ::
+/// PS_DICT_UNDERLINE_THICKNESS ::
+/// PS_DICT_FS_TYPE ::
+/// PS_DICT_ITALIC_ANGLE ::
+///
+/// @since:
+/// 2.4.8
+enum PS_Dict_Keys_ {
+  PS_DICT_FONT_TYPE(0),
+  PS_DICT_FONT_MATRIX(1),
+  PS_DICT_FONT_BBOX(2),
+  PS_DICT_PAINT_TYPE(3),
+  PS_DICT_FONT_NAME(4),
+  PS_DICT_UNIQUE_ID(5),
+  PS_DICT_NUM_CHAR_STRINGS(6),
+  PS_DICT_CHAR_STRING_KEY(7),
+  PS_DICT_CHAR_STRING(8),
+  PS_DICT_ENCODING_TYPE(9),
+  PS_DICT_ENCODING_ENTRY(10),
+  PS_DICT_NUM_SUBRS(11),
+  PS_DICT_SUBR(12),
+  PS_DICT_STD_HW(13),
+  PS_DICT_STD_VW(14),
+  PS_DICT_NUM_BLUE_VALUES(15),
+  PS_DICT_BLUE_VALUE(16),
+  PS_DICT_BLUE_FUZZ(17),
+  PS_DICT_NUM_OTHER_BLUES(18),
+  PS_DICT_OTHER_BLUE(19),
+  PS_DICT_NUM_FAMILY_BLUES(20),
+  PS_DICT_FAMILY_BLUE(21),
+  PS_DICT_NUM_FAMILY_OTHER_BLUES(22),
+  PS_DICT_FAMILY_OTHER_BLUE(23),
+  PS_DICT_BLUE_SCALE(24),
+  PS_DICT_BLUE_SHIFT(25),
+  PS_DICT_NUM_STEM_SNAP_H(26),
+  PS_DICT_STEM_SNAP_H(27),
+  PS_DICT_NUM_STEM_SNAP_V(28),
+  PS_DICT_STEM_SNAP_V(29),
+  PS_DICT_FORCE_BOLD(30),
+  PS_DICT_RND_STEM_UP(31),
+  PS_DICT_MIN_FEATURE(32),
+  PS_DICT_LEN_IV(33),
+  PS_DICT_PASSWORD(34),
+  PS_DICT_LANGUAGE_GROUP(35),
+  PS_DICT_VERSION(36),
+  PS_DICT_NOTICE(37),
+  PS_DICT_FULL_NAME(38),
+  PS_DICT_FAMILY_NAME(39),
+  PS_DICT_WEIGHT(40),
+  PS_DICT_IS_FIXED_PITCH(41),
+  PS_DICT_UNDERLINE_POSITION(42),
+  PS_DICT_UNDERLINE_THICKNESS(43),
+  PS_DICT_FS_TYPE(44),
+  PS_DICT_ITALIC_ANGLE(45);
+
+  static const PS_DICT_MAX = PS_DICT_ITALIC_ANGLE;
+
+  final int value;
+  const PS_Dict_Keys_(this.value);
+
+  static PS_Dict_Keys_ fromValue(int value) => switch (value) {
+        0 => PS_DICT_FONT_TYPE,
+        1 => PS_DICT_FONT_MATRIX,
+        2 => PS_DICT_FONT_BBOX,
+        3 => PS_DICT_PAINT_TYPE,
+        4 => PS_DICT_FONT_NAME,
+        5 => PS_DICT_UNIQUE_ID,
+        6 => PS_DICT_NUM_CHAR_STRINGS,
+        7 => PS_DICT_CHAR_STRING_KEY,
+        8 => PS_DICT_CHAR_STRING,
+        9 => PS_DICT_ENCODING_TYPE,
+        10 => PS_DICT_ENCODING_ENTRY,
+        11 => PS_DICT_NUM_SUBRS,
+        12 => PS_DICT_SUBR,
+        13 => PS_DICT_STD_HW,
+        14 => PS_DICT_STD_VW,
+        15 => PS_DICT_NUM_BLUE_VALUES,
+        16 => PS_DICT_BLUE_VALUE,
+        17 => PS_DICT_BLUE_FUZZ,
+        18 => PS_DICT_NUM_OTHER_BLUES,
+        19 => PS_DICT_OTHER_BLUE,
+        20 => PS_DICT_NUM_FAMILY_BLUES,
+        21 => PS_DICT_FAMILY_BLUE,
+        22 => PS_DICT_NUM_FAMILY_OTHER_BLUES,
+        23 => PS_DICT_FAMILY_OTHER_BLUE,
+        24 => PS_DICT_BLUE_SCALE,
+        25 => PS_DICT_BLUE_SHIFT,
+        26 => PS_DICT_NUM_STEM_SNAP_H,
+        27 => PS_DICT_STEM_SNAP_H,
+        28 => PS_DICT_NUM_STEM_SNAP_V,
+        29 => PS_DICT_STEM_SNAP_V,
+        30 => PS_DICT_FORCE_BOLD,
+        31 => PS_DICT_RND_STEM_UP,
+        32 => PS_DICT_MIN_FEATURE,
+        33 => PS_DICT_LEN_IV,
+        34 => PS_DICT_PASSWORD,
+        35 => PS_DICT_LANGUAGE_GROUP,
+        36 => PS_DICT_VERSION,
+        37 => PS_DICT_NOTICE,
+        38 => PS_DICT_FULL_NAME,
+        39 => PS_DICT_FAMILY_NAME,
+        40 => PS_DICT_WEIGHT,
+        41 => PS_DICT_IS_FIXED_PITCH,
+        42 => PS_DICT_UNDERLINE_POSITION,
+        43 => PS_DICT_UNDERLINE_THICKNESS,
+        44 => PS_DICT_FS_TYPE,
+        45 => PS_DICT_ITALIC_ANGLE,
+        _ => throw ArgumentError('Unknown value for PS_Dict_Keys_: $value'),
+      };
+
+  @override
+  String toString() {
+    if (this == PS_DICT_ITALIC_ANGLE)
+      return "PS_Dict_Keys_.PS_DICT_ITALIC_ANGLE, PS_Dict_Keys_.PS_DICT_MAX";
+    return super.toString();
+  }
+}
+
 const int ft_encoding_none = 0;
 
 const int ft_encoding_unicode = 1970170211;
@@ -8405,3 +9265,39 @@ const int ft_sfnt_vhea = 4;
 const int ft_sfnt_post = 5;
 
 const int ft_sfnt_pclt = 6;
+
+const int t1_blend_underline_position = 0;
+
+const int t1_blend_underline_thickness = 1;
+
+const int t1_blend_italic_angle = 2;
+
+const int t1_blend_blue_values = 3;
+
+const int t1_blend_other_blues = 4;
+
+const int t1_blend_standard_widths = 5;
+
+const int t1_blend_standard_height = 6;
+
+const int t1_blend_stem_snap_widths = 7;
+
+const int t1_blend_stem_snap_heights = 8;
+
+const int t1_blend_blue_scale = 9;
+
+const int t1_blend_blue_shift = 10;
+
+const int t1_blend_family_blues = 11;
+
+const int t1_blend_family_other_blues = 12;
+
+const int t1_blend_force_bold = 13;
+
+const int t1_blend_max = 14;
+
+const int T1_MAX_MM_DESIGNS = 16;
+
+const int T1_MAX_MM_AXIS = 4;
+
+const int T1_MAX_MM_MAP_POINTS = 20;
