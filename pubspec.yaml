@@ -25,17 +25,10 @@ ffigen:
 
   headers:
     entry-points:
-      - 'freetype/include/ft2build.h'
-      - 'freetype/include/freetype/freetype.h'
-      - 'freetype/include/freetype/tttables.h'
+      - 'wrapper.h'
+
     include-directives:
-      - 'freetype/include/**'
       - 'freetype/include/freetype/**'
-      - 'freetype/include/ft2build.h'
-      - 'freetype/include/freetype/fterrdef.h'
-      - 'freetype/include/freetype/fterrors.h'
-      - 'freetype/include/freetype/ftimage.h'
-      - 'freetype/include/freetype/fttypes.h'
 
   compiler-opts:
-    - '-Ifreetype/include/'
+    - '-Ifreetype/include'

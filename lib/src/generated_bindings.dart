@@ -2346,6 +2346,582 @@ class FreetypeBinding {
       _FT_Face_SetUnpatentedHintingPtr.asFunction<int Function(FT_Face, int)>();
 
   /// @function:
+  /// FT_Outline_Decompose
+  ///
+  /// @description:
+  /// Walk over an outline's structure to decompose it into individual
+  /// segments and Bezier arcs.  This function also emits 'move to'
+  /// operations to indicate the start of new contours in the outline.
+  ///
+  /// @input:
+  /// outline ::
+  /// A pointer to the source target.
+  ///
+  /// func_interface ::
+  /// A table of 'emitters', i.e., function pointers called during
+  /// decomposition to indicate path operations.
+  ///
+  /// @inout:
+  /// user ::
+  /// A typeless pointer that is passed to each emitter during the
+  /// decomposition.  It can be used to store the state during the
+  /// decomposition.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// Degenerate contours, segments, and Bezier arcs may be reported.  In
+  /// most cases, it is best to filter these out before using the outline
+  /// for stroking or other path modification purposes (which may cause
+  /// degenerate segments to become non-degenrate and visible, like when
+  /// stroke caps are used or the path is otherwise outset).  Some glyph
+  /// outlines may contain deliberate degenerate single points for mark
+  /// attachement.
+  ///
+  /// Similarly, the function returns success for an empty outline also
+  /// (doing nothing, that is, not calling any emitter); if necessary, you
+  /// should filter this out, too.
+  int FT_Outline_Decompose(
+    ffi.Pointer<FT_Outline> outline,
+    ffi.Pointer<FT_Outline_Funcs> func_interface,
+    ffi.Pointer<ffi.Void> user,
+  ) {
+    return _FT_Outline_Decompose(
+      outline,
+      func_interface,
+      user,
+    );
+  }
+
+  late final _FT_Outline_DecomposePtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(
+              ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_Outline_Funcs>,
+              ffi.Pointer<ffi.Void>)>>('FT_Outline_Decompose');
+  late final _FT_Outline_Decompose = _FT_Outline_DecomposePtr.asFunction<
+      int Function(ffi.Pointer<FT_Outline>, ffi.Pointer<FT_Outline_Funcs>,
+          ffi.Pointer<ffi.Void>)>();
+
+  /// @function:
+  /// FT_Outline_New
+  ///
+  /// @description:
+  /// Create a new outline of a given size.
+  ///
+  /// @input:
+  /// library ::
+  /// A handle to the library object from where the outline is allocated.
+  /// Note however that the new outline will **not** necessarily be
+  /// **freed**, when destroying the library, by @FT_Done_FreeType.
+  ///
+  /// numPoints ::
+  /// The maximum number of points within the outline.  Must be smaller
+  /// than or equal to 0xFFFF (65535).
+  ///
+  /// numContours ::
+  /// The maximum number of contours within the outline.  This value must
+  /// be in the range 0 to `numPoints`.
+  ///
+  /// @output:
+  /// anoutline ::
+  /// A handle to the new outline.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// The reason why this function takes a `library` parameter is simply to
+  /// use the library's memory allocator.
+  int FT_Outline_New(
+    FT_Library library$,
+    int numPoints,
+    int numContours,
+    ffi.Pointer<FT_Outline> anoutline,
+  ) {
+    return _FT_Outline_New(
+      library$,
+      numPoints,
+      numContours,
+      anoutline,
+    );
+  }
+
+  late final _FT_Outline_NewPtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(FT_Library, FT_UInt, FT_Int,
+              ffi.Pointer<FT_Outline>)>>('FT_Outline_New');
+  late final _FT_Outline_New = _FT_Outline_NewPtr.asFunction<
+      int Function(FT_Library, int, int, ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
+  /// FT_Outline_Done
+  ///
+  /// @description:
+  /// Destroy an outline created with @FT_Outline_New.
+  ///
+  /// @input:
+  /// library ::
+  /// A handle of the library object used to allocate the outline.
+  ///
+  /// outline ::
+  /// A pointer to the outline object to be discarded.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// If the outline's 'owner' field is not set, only the outline descriptor
+  /// will be released.
+  int FT_Outline_Done(
+    FT_Library library$,
+    ffi.Pointer<FT_Outline> outline,
+  ) {
+    return _FT_Outline_Done(
+      library$,
+      outline,
+    );
+  }
+
+  late final _FT_Outline_DonePtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(
+              FT_Library, ffi.Pointer<FT_Outline>)>>('FT_Outline_Done');
+  late final _FT_Outline_Done = _FT_Outline_DonePtr.asFunction<
+      int Function(FT_Library, ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
+  /// FT_Outline_Check
+  ///
+  /// @description:
+  /// Check the contents of an outline descriptor.
+  ///
+  /// @input:
+  /// outline ::
+  /// A handle to a source outline.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// An empty outline, or an outline with a single point only is also
+  /// valid.
+  int FT_Outline_Check(
+    ffi.Pointer<FT_Outline> outline,
+  ) {
+    return _FT_Outline_Check(
+      outline,
+    );
+  }
+
+  late final _FT_Outline_CheckPtr =
+      _lookup<ffi.NativeFunction<FT_Error Function(ffi.Pointer<FT_Outline>)>>(
+          'FT_Outline_Check');
+  late final _FT_Outline_Check =
+      _FT_Outline_CheckPtr.asFunction<int Function(ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
+  /// FT_Outline_Get_CBox
+  ///
+  /// @description:
+  /// Return an outline's 'control box'.  The control box encloses all the
+  /// outline's points, including Bezier control points.  Though it
+  /// coincides with the exact bounding box for most glyphs, it can be
+  /// slightly larger in some situations (like when rotating an outline that
+  /// contains Bezier outside arcs).
+  ///
+  /// Computing the control box is very fast, while getting the bounding box
+  /// can take much more time as it needs to walk over all segments and arcs
+  /// in the outline.  To get the latter, you can use the 'ftbbox'
+  /// component, which is dedicated to this single task.
+  ///
+  /// @input:
+  /// outline ::
+  /// A pointer to the source outline descriptor.
+  ///
+  /// @output:
+  /// acbox ::
+  /// The outline's control box.
+  ///
+  /// @note:
+  /// See @FT_Glyph_Get_CBox for a discussion of tricky fonts.
+  void FT_Outline_Get_CBox(
+    ffi.Pointer<FT_Outline> outline,
+    ffi.Pointer<FT_BBox> acbox,
+  ) {
+    return _FT_Outline_Get_CBox(
+      outline,
+      acbox,
+    );
+  }
+
+  late final _FT_Outline_Get_CBoxPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_BBox>)>>('FT_Outline_Get_CBox');
+  late final _FT_Outline_Get_CBox = _FT_Outline_Get_CBoxPtr.asFunction<
+      void Function(ffi.Pointer<FT_Outline>, ffi.Pointer<FT_BBox>)>();
+
+  /// @function:
+  /// FT_Outline_Translate
+  ///
+  /// @description:
+  /// Apply a simple translation to the points of an outline.
+  ///
+  /// @inout:
+  /// outline ::
+  /// A pointer to the target outline descriptor.
+  ///
+  /// @input:
+  /// xOffset ::
+  /// The horizontal offset.
+  ///
+  /// yOffset ::
+  /// The vertical offset.
+  void FT_Outline_Translate(
+    ffi.Pointer<FT_Outline> outline,
+    int xOffset,
+    int yOffset,
+  ) {
+    return _FT_Outline_Translate(
+      outline,
+      xOffset,
+      yOffset,
+    );
+  }
+
+  late final _FT_Outline_TranslatePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<FT_Outline>, FT_Pos,
+              FT_Pos)>>('FT_Outline_Translate');
+  late final _FT_Outline_Translate = _FT_Outline_TranslatePtr.asFunction<
+      void Function(ffi.Pointer<FT_Outline>, int, int)>();
+
+  /// @function:
+  /// FT_Outline_Copy
+  ///
+  /// @description:
+  /// Copy an outline into another one.  Both objects must have the same
+  /// sizes (number of points & number of contours) when this function is
+  /// called.
+  ///
+  /// @input:
+  /// source ::
+  /// A handle to the source outline.
+  ///
+  /// @output:
+  /// target ::
+  /// A handle to the target outline.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  int FT_Outline_Copy(
+    ffi.Pointer<FT_Outline> source,
+    ffi.Pointer<FT_Outline> target,
+  ) {
+    return _FT_Outline_Copy(
+      source,
+      target,
+    );
+  }
+
+  late final _FT_Outline_CopyPtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_Outline>)>>('FT_Outline_Copy');
+  late final _FT_Outline_Copy = _FT_Outline_CopyPtr.asFunction<
+      int Function(ffi.Pointer<FT_Outline>, ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
+  /// FT_Outline_Transform
+  ///
+  /// @description:
+  /// Apply a simple 2x2 matrix to all of an outline's points.  Useful for
+  /// applying rotations, slanting, flipping, etc.
+  ///
+  /// @inout:
+  /// outline ::
+  /// A pointer to the target outline descriptor.
+  ///
+  /// @input:
+  /// matrix ::
+  /// A pointer to the transformation matrix.
+  ///
+  /// @note:
+  /// You can use @FT_Outline_Translate if you need to translate the
+  /// outline's points.
+  void FT_Outline_Transform(
+    ffi.Pointer<FT_Outline> outline,
+    ffi.Pointer<FT_Matrix> matrix,
+  ) {
+    return _FT_Outline_Transform(
+      outline,
+      matrix,
+    );
+  }
+
+  late final _FT_Outline_TransformPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_Matrix>)>>('FT_Outline_Transform');
+  late final _FT_Outline_Transform = _FT_Outline_TransformPtr.asFunction<
+      void Function(ffi.Pointer<FT_Outline>, ffi.Pointer<FT_Matrix>)>();
+
+  /// @function:
+  /// FT_Outline_Embolden
+  ///
+  /// @description:
+  /// Embolden an outline.  The new outline will be at most 4~times
+  /// `strength` pixels wider and higher.  You may think of the left and
+  /// bottom borders as unchanged.
+  ///
+  /// Negative `strength` values to reduce the outline thickness are
+  /// possible also.
+  ///
+  /// @inout:
+  /// outline ::
+  /// A handle to the target outline.
+  ///
+  /// @input:
+  /// strength ::
+  /// How strong the glyph is emboldened.  Expressed in 26.6 pixel format.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// The used algorithm to increase or decrease the thickness of the glyph
+  /// doesn't change the number of points; this means that certain
+  /// situations like acute angles or intersections are sometimes handled
+  /// incorrectly.
+  ///
+  /// If you need 'better' metrics values you should call
+  /// @FT_Outline_Get_CBox or @FT_Outline_Get_BBox.
+  ///
+  /// To get meaningful results, font scaling values must be set with
+  /// functions like @FT_Set_Char_Size before calling FT_Render_Glyph.
+  ///
+  /// @example:
+  /// ```
+  /// FT_Load_Glyph( face, index, FT_LOAD_DEFAULT );
+  ///
+  /// if ( face->glyph->format == FT_GLYPH_FORMAT_OUTLINE )
+  /// FT_Outline_Embolden( &face->glyph->outline, strength );
+  /// ```
+  int FT_Outline_Embolden(
+    ffi.Pointer<FT_Outline> outline,
+    int strength,
+  ) {
+    return _FT_Outline_Embolden(
+      outline,
+      strength,
+    );
+  }
+
+  late final _FT_Outline_EmboldenPtr = _lookup<
+          ffi
+          .NativeFunction<FT_Error Function(ffi.Pointer<FT_Outline>, FT_Pos)>>(
+      'FT_Outline_Embolden');
+  late final _FT_Outline_Embolden = _FT_Outline_EmboldenPtr.asFunction<
+      int Function(ffi.Pointer<FT_Outline>, int)>();
+
+  /// @function:
+  /// FT_Outline_EmboldenXY
+  ///
+  /// @description:
+  /// Embolden an outline.  The new outline will be `xstrength` pixels wider
+  /// and `ystrength` pixels higher.  Otherwise, it is similar to
+  /// @FT_Outline_Embolden, which uses the same strength in both directions.
+  ///
+  /// @since:
+  /// 2.4.10
+  int FT_Outline_EmboldenXY(
+    ffi.Pointer<FT_Outline> outline,
+    int xstrength,
+    int ystrength,
+  ) {
+    return _FT_Outline_EmboldenXY(
+      outline,
+      xstrength,
+      ystrength,
+    );
+  }
+
+  late final _FT_Outline_EmboldenXYPtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(ffi.Pointer<FT_Outline>, FT_Pos,
+              FT_Pos)>>('FT_Outline_EmboldenXY');
+  late final _FT_Outline_EmboldenXY = _FT_Outline_EmboldenXYPtr.asFunction<
+      int Function(ffi.Pointer<FT_Outline>, int, int)>();
+
+  /// @function:
+  /// FT_Outline_Reverse
+  ///
+  /// @description:
+  /// Reverse the drawing direction of an outline.  This is used to ensure
+  /// consistent fill conventions for mirrored glyphs.
+  ///
+  /// @inout:
+  /// outline ::
+  /// A pointer to the target outline descriptor.
+  ///
+  /// @note:
+  /// This function toggles the bit flag @FT_OUTLINE_REVERSE_FILL in the
+  /// outline's `flags` field.
+  ///
+  /// It shouldn't be used by a normal client application, unless it knows
+  /// what it is doing.
+  void FT_Outline_Reverse(
+    ffi.Pointer<FT_Outline> outline,
+  ) {
+    return _FT_Outline_Reverse(
+      outline,
+    );
+  }
+
+  late final _FT_Outline_ReversePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<FT_Outline>)>>(
+          'FT_Outline_Reverse');
+  late final _FT_Outline_Reverse = _FT_Outline_ReversePtr.asFunction<
+      void Function(ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
+  /// FT_Outline_Get_Bitmap
+  ///
+  /// @description:
+  /// Render an outline within a bitmap.  The outline's image is simply
+  /// OR-ed to the target bitmap.
+  ///
+  /// @input:
+  /// library ::
+  /// A handle to a FreeType library object.
+  ///
+  /// outline ::
+  /// A pointer to the source outline descriptor.
+  ///
+  /// @inout:
+  /// abitmap ::
+  /// A pointer to the target bitmap descriptor.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// This function does **not create** the bitmap, it only renders an
+  /// outline image within the one you pass to it!  Consequently, the
+  /// various fields in `abitmap` should be set accordingly.
+  ///
+  /// It will use the raster corresponding to the default glyph format.
+  ///
+  /// The value of the `num_grays` field in `abitmap` is ignored.  If you
+  /// select the gray-level rasterizer, and you want less than 256 gray
+  /// levels, you have to use @FT_Outline_Render directly.
+  int FT_Outline_Get_Bitmap(
+    FT_Library library$,
+    ffi.Pointer<FT_Outline> outline,
+    ffi.Pointer<FT_Bitmap> abitmap,
+  ) {
+    return _FT_Outline_Get_Bitmap(
+      library$,
+      outline,
+      abitmap,
+    );
+  }
+
+  late final _FT_Outline_Get_BitmapPtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(FT_Library, ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_Bitmap>)>>('FT_Outline_Get_Bitmap');
+  late final _FT_Outline_Get_Bitmap = _FT_Outline_Get_BitmapPtr.asFunction<
+      int Function(
+          FT_Library, ffi.Pointer<FT_Outline>, ffi.Pointer<FT_Bitmap>)>();
+
+  /// @function:
+  /// FT_Outline_Render
+  ///
+  /// @description:
+  /// Render an outline within a bitmap using the current scan-convert.
+  ///
+  /// @input:
+  /// library ::
+  /// A handle to a FreeType library object.
+  ///
+  /// outline ::
+  /// A pointer to the source outline descriptor.
+  ///
+  /// @inout:
+  /// params ::
+  /// A pointer to an @FT_Raster_Params structure used to describe the
+  /// rendering operation.
+  ///
+  /// @return:
+  /// FreeType error code.  0~means success.
+  ///
+  /// @note:
+  /// This advanced function uses @FT_Raster_Params as an argument.
+  /// The field `params.source` will be set to `outline` before the scan
+  /// converter is called, which means that the value you give to it is
+  /// actually ignored.  Either `params.target` must point to preallocated
+  /// bitmap, or @FT_RASTER_FLAG_DIRECT must be set in `params.flags`
+  /// allowing FreeType rasterizer to be used for direct composition,
+  /// translucency, etc.  See @FT_Raster_Params for more details.
+  int FT_Outline_Render(
+    FT_Library library$,
+    ffi.Pointer<FT_Outline> outline,
+    ffi.Pointer<FT_Raster_Params> params,
+  ) {
+    return _FT_Outline_Render(
+      library$,
+      outline,
+      params,
+    );
+  }
+
+  late final _FT_Outline_RenderPtr = _lookup<
+      ffi.NativeFunction<
+          FT_Error Function(FT_Library, ffi.Pointer<FT_Outline>,
+              ffi.Pointer<FT_Raster_Params>)>>('FT_Outline_Render');
+  late final _FT_Outline_Render = _FT_Outline_RenderPtr.asFunction<
+      int Function(FT_Library, ffi.Pointer<FT_Outline>,
+          ffi.Pointer<FT_Raster_Params>)>();
+
+  /// @function:
+  /// FT_Outline_Get_Orientation
+  ///
+  /// @description:
+  /// This function analyzes a glyph outline and tries to compute its fill
+  /// orientation (see @FT_Orientation).  This is done by integrating the
+  /// total area covered by the outline. The positive integral corresponds
+  /// to the clockwise orientation and @FT_ORIENTATION_POSTSCRIPT is
+  /// returned. The negative integral corresponds to the counter-clockwise
+  /// orientation and @FT_ORIENTATION_TRUETYPE is returned.
+  ///
+  /// Note that this will return @FT_ORIENTATION_TRUETYPE for empty
+  /// outlines.
+  ///
+  /// @input:
+  /// outline ::
+  /// A handle to the source outline.
+  ///
+  /// @return:
+  /// The orientation.
+  FT_Orientation_ FT_Outline_Get_Orientation(
+    ffi.Pointer<FT_Outline> outline,
+  ) {
+    return FT_Orientation_.fromValue(_FT_Outline_Get_Orientation(
+      outline,
+    ));
+  }
+
+  late final _FT_Outline_Get_OrientationPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.UnsignedInt Function(ffi.Pointer<FT_Outline>)>>(
+      'FT_Outline_Get_Orientation');
+  late final _FT_Outline_Get_Orientation = _FT_Outline_Get_OrientationPtr
+      .asFunction<int Function(ffi.Pointer<FT_Outline>)>();
+
+  /// @function:
   /// FT_Get_Sfnt_Table
   ///
   /// @description:
@@ -6063,6 +6639,536 @@ typedef DartFT_UInt32 = int;
 /// values 1 and~0 represent true and false, respectively.
 typedef FT_Bool = ffi.UnsignedChar;
 typedef DartFT_Bool = int;
+typedef FT_Outline_MoveToFuncFunction = ffi.Int Function(
+    ffi.Pointer<FT_Vector> to, ffi.Pointer<ffi.Void> user);
+typedef DartFT_Outline_MoveToFuncFunction = int Function(
+    ffi.Pointer<FT_Vector> to, ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Outline_MoveToFunc
+///
+/// @description:
+/// A function pointer type used to describe the signature of a 'move to'
+/// function during outline walking/decomposition.
+///
+/// A 'move to' is emitted to start a new contour in an outline.
+///
+/// @input:
+/// to ::
+/// A pointer to the target point of the 'move to'.
+///
+/// user ::
+/// A typeless pointer, which is passed from the caller of the
+/// decomposition function.
+///
+/// @return:
+/// Error code.  0~means success.
+typedef FT_Outline_MoveToFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Outline_MoveToFuncFunction>>;
+typedef FT_Outline_LineToFuncFunction = ffi.Int Function(
+    ffi.Pointer<FT_Vector> to, ffi.Pointer<ffi.Void> user);
+typedef DartFT_Outline_LineToFuncFunction = int Function(
+    ffi.Pointer<FT_Vector> to, ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Outline_LineToFunc
+///
+/// @description:
+/// A function pointer type used to describe the signature of a 'line to'
+/// function during outline walking/decomposition.
+///
+/// A 'line to' is emitted to indicate a segment in the outline.
+///
+/// @input:
+/// to ::
+/// A pointer to the target point of the 'line to'.
+///
+/// user ::
+/// A typeless pointer, which is passed from the caller of the
+/// decomposition function.
+///
+/// @return:
+/// Error code.  0~means success.
+typedef FT_Outline_LineToFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Outline_LineToFuncFunction>>;
+typedef FT_Outline_ConicToFuncFunction = ffi.Int Function(
+    ffi.Pointer<FT_Vector> control,
+    ffi.Pointer<FT_Vector> to,
+    ffi.Pointer<ffi.Void> user);
+typedef DartFT_Outline_ConicToFuncFunction = int Function(
+    ffi.Pointer<FT_Vector> control,
+    ffi.Pointer<FT_Vector> to,
+    ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Outline_ConicToFunc
+///
+/// @description:
+/// A function pointer type used to describe the signature of a 'conic to'
+/// function during outline walking or decomposition.
+///
+/// A 'conic to' is emitted to indicate a second-order Bezier arc in the
+/// outline.
+///
+/// @input:
+/// control ::
+/// An intermediate control point between the last position and the new
+/// target in `to`.
+///
+/// to ::
+/// A pointer to the target end point of the conic arc.
+///
+/// user ::
+/// A typeless pointer, which is passed from the caller of the
+/// decomposition function.
+///
+/// @return:
+/// Error code.  0~means success.
+typedef FT_Outline_ConicToFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Outline_ConicToFuncFunction>>;
+typedef FT_Outline_CubicToFuncFunction = ffi.Int Function(
+    ffi.Pointer<FT_Vector> control1,
+    ffi.Pointer<FT_Vector> control2,
+    ffi.Pointer<FT_Vector> to,
+    ffi.Pointer<ffi.Void> user);
+typedef DartFT_Outline_CubicToFuncFunction = int Function(
+    ffi.Pointer<FT_Vector> control1,
+    ffi.Pointer<FT_Vector> control2,
+    ffi.Pointer<FT_Vector> to,
+    ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Outline_CubicToFunc
+///
+/// @description:
+/// A function pointer type used to describe the signature of a 'cubic to'
+/// function during outline walking or decomposition.
+///
+/// A 'cubic to' is emitted to indicate a third-order Bezier arc.
+///
+/// @input:
+/// control1 ::
+/// A pointer to the first Bezier control point.
+///
+/// control2 ::
+/// A pointer to the second Bezier control point.
+///
+/// to ::
+/// A pointer to the target end point.
+///
+/// user ::
+/// A typeless pointer, which is passed from the caller of the
+/// decomposition function.
+///
+/// @return:
+/// Error code.  0~means success.
+typedef FT_Outline_CubicToFunc
+    = ffi.Pointer<ffi.NativeFunction<FT_Outline_CubicToFuncFunction>>;
+
+/// @struct:
+/// FT_Outline_Funcs
+///
+/// @description:
+/// A structure to hold various function pointers used during outline
+/// decomposition in order to emit segments, conic, and cubic Beziers.
+///
+/// @fields:
+/// move_to ::
+/// The 'move to' emitter.
+///
+/// line_to ::
+/// The segment emitter.
+///
+/// conic_to ::
+/// The second-order Bezier arc emitter.
+///
+/// cubic_to ::
+/// The third-order Bezier arc emitter.
+///
+/// shift ::
+/// The shift that is applied to coordinates before they are sent to the
+/// emitter.
+///
+/// delta ::
+/// The delta that is applied to coordinates before they are sent to the
+/// emitter, but after the shift.
+///
+/// @note:
+/// The point coordinates sent to the emitters are the transformed version
+/// of the original coordinates (this is important for high accuracy
+/// during scan-conversion).  The transformation is simple:
+///
+/// ```
+/// x' = (x << shift) - delta
+/// y' = (y << shift) - delta
+/// ```
+///
+/// Set the values of `shift` and `delta` to~0 to get the original point
+/// coordinates.
+final class FT_Outline_Funcs_ extends ffi.Struct {
+  external FT_Outline_MoveToFunc move_to;
+
+  external FT_Outline_LineToFunc line_to;
+
+  external FT_Outline_ConicToFunc conic_to;
+
+  external FT_Outline_CubicToFunc cubic_to;
+
+  @ffi.Int()
+  external int shift;
+
+  @FT_Pos()
+  external int delta;
+}
+
+/// @struct:
+/// FT_Outline_Funcs
+///
+/// @description:
+/// A structure to hold various function pointers used during outline
+/// decomposition in order to emit segments, conic, and cubic Beziers.
+///
+/// @fields:
+/// move_to ::
+/// The 'move to' emitter.
+///
+/// line_to ::
+/// The segment emitter.
+///
+/// conic_to ::
+/// The second-order Bezier arc emitter.
+///
+/// cubic_to ::
+/// The third-order Bezier arc emitter.
+///
+/// shift ::
+/// The shift that is applied to coordinates before they are sent to the
+/// emitter.
+///
+/// delta ::
+/// The delta that is applied to coordinates before they are sent to the
+/// emitter, but after the shift.
+///
+/// @note:
+/// The point coordinates sent to the emitters are the transformed version
+/// of the original coordinates (this is important for high accuracy
+/// during scan-conversion).  The transformation is simple:
+///
+/// ```
+/// x' = (x << shift) - delta
+/// y' = (y << shift) - delta
+/// ```
+///
+/// Set the values of `shift` and `delta` to~0 to get the original point
+/// coordinates.
+typedef FT_Outline_Funcs = FT_Outline_Funcs_;
+
+/// @struct:
+/// FT_Span
+///
+/// @description:
+/// A structure to model a single span of consecutive pixels when
+/// rendering an anti-aliased bitmap.
+///
+/// @fields:
+/// x ::
+/// The span's horizontal start position.
+///
+/// len ::
+/// The span's length in pixels.
+///
+/// coverage ::
+/// The span color/coverage, ranging from 0 (background) to 255
+/// (foreground).
+///
+/// @note:
+/// This structure is used by the span drawing callback type named
+/// @FT_SpanFunc that takes the y~coordinate of the span as a parameter.
+///
+/// The anti-aliased rasterizer produces coverage values from 0 to 255,
+/// that is, from completely transparent to completely opaque.
+final class FT_Span_ extends ffi.Struct {
+  @ffi.Short()
+  external int x;
+
+  @ffi.UnsignedShort()
+  external int len;
+
+  @ffi.UnsignedChar()
+  external int coverage;
+}
+
+/// @struct:
+/// FT_Span
+///
+/// @description:
+/// A structure to model a single span of consecutive pixels when
+/// rendering an anti-aliased bitmap.
+///
+/// @fields:
+/// x ::
+/// The span's horizontal start position.
+///
+/// len ::
+/// The span's length in pixels.
+///
+/// coverage ::
+/// The span color/coverage, ranging from 0 (background) to 255
+/// (foreground).
+///
+/// @note:
+/// This structure is used by the span drawing callback type named
+/// @FT_SpanFunc that takes the y~coordinate of the span as a parameter.
+///
+/// The anti-aliased rasterizer produces coverage values from 0 to 255,
+/// that is, from completely transparent to completely opaque.
+typedef FT_Span = FT_Span_;
+typedef FT_SpanFuncFunction = ffi.Void Function(ffi.Int y, ffi.Int count,
+    ffi.Pointer<FT_Span> spans, ffi.Pointer<ffi.Void> user);
+typedef DartFT_SpanFuncFunction = void Function(
+    int y, int count, ffi.Pointer<FT_Span> spans, ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_SpanFunc
+///
+/// @description:
+/// A function used as a call-back by the anti-aliased renderer in order
+/// to let client applications draw themselves the pixel spans on each
+/// scan line.
+///
+/// @input:
+/// y ::
+/// The scanline's upward y~coordinate.
+///
+/// count ::
+/// The number of spans to draw on this scanline.
+///
+/// spans ::
+/// A table of `count` spans to draw on the scanline.
+///
+/// user ::
+/// User-supplied data that is passed to the callback.
+///
+/// @note:
+/// This callback allows client applications to directly render the spans
+/// of the anti-aliased bitmap to any kind of surfaces.
+///
+/// This can be used to write anti-aliased outlines directly to a given
+/// background bitmap using alpha compositing.  It can also be used for
+/// oversampling and averaging.
+typedef FT_SpanFunc = ffi.Pointer<ffi.NativeFunction<FT_SpanFuncFunction>>;
+typedef FT_Raster_BitTest_FuncFunction = ffi.Int Function(
+    ffi.Int y, ffi.Int x, ffi.Pointer<ffi.Void> user);
+typedef DartFT_Raster_BitTest_FuncFunction = int Function(
+    int y, int x, ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Raster_BitTest_Func
+///
+/// @description:
+/// Deprecated, unimplemented.
+typedef FT_Raster_BitTest_Func
+    = ffi.Pointer<ffi.NativeFunction<FT_Raster_BitTest_FuncFunction>>;
+typedef FT_Raster_BitSet_FuncFunction = ffi.Void Function(
+    ffi.Int y, ffi.Int x, ffi.Pointer<ffi.Void> user);
+typedef DartFT_Raster_BitSet_FuncFunction = void Function(
+    int y, int x, ffi.Pointer<ffi.Void> user);
+
+/// @functype:
+/// FT_Raster_BitSet_Func
+///
+/// @description:
+/// Deprecated, unimplemented.
+typedef FT_Raster_BitSet_Func
+    = ffi.Pointer<ffi.NativeFunction<FT_Raster_BitSet_FuncFunction>>;
+
+/// @struct:
+/// FT_Raster_Params
+///
+/// @description:
+/// A structure to hold the parameters used by a raster's render function,
+/// passed as an argument to @FT_Outline_Render.
+///
+/// @fields:
+/// target ::
+/// The target bitmap.
+///
+/// source ::
+/// A pointer to the source glyph image (e.g., an @FT_Outline).
+///
+/// flags ::
+/// The rendering flags.
+///
+/// gray_spans ::
+/// The gray span drawing callback.
+///
+/// black_spans ::
+/// Unused.
+///
+/// bit_test ::
+/// Unused.
+///
+/// bit_set ::
+/// Unused.
+///
+/// user ::
+/// User-supplied data that is passed to each drawing callback.
+///
+/// clip_box ::
+/// An optional span clipping box expressed in _integer_ pixels
+/// (not in 26.6 fixed-point units).
+///
+/// @note:
+/// The @FT_RASTER_FLAG_AA bit flag must be set in the `flags` to
+/// generate an anti-aliased glyph bitmap, otherwise a monochrome bitmap
+/// is generated.  The `target` should have appropriate pixel mode and its
+/// dimensions define the clipping region.
+///
+/// If both @FT_RASTER_FLAG_AA and @FT_RASTER_FLAG_DIRECT bit flags
+/// are set in `flags`, the raster calls an @FT_SpanFunc callback
+/// `gray_spans` with `user` data as an argument ignoring `target`.  This
+/// allows direct composition over a pre-existing user surface to perform
+/// the span drawing and composition.  To optionally clip the spans, set
+/// the @FT_RASTER_FLAG_CLIP flag and `clip_box`.  The monochrome raster
+/// does not support the direct mode.
+///
+/// The gray-level rasterizer always uses 256 gray levels.  If you want
+/// fewer gray levels, you have to use @FT_RASTER_FLAG_DIRECT and reduce
+/// the levels in the callback function.
+final class FT_Raster_Params_ extends ffi.Struct {
+  external ffi.Pointer<FT_Bitmap> target;
+
+  external ffi.Pointer<ffi.Void> source;
+
+  @ffi.Int()
+  external int flags;
+
+  external FT_SpanFunc gray_spans;
+
+  external FT_SpanFunc black_spans;
+
+  external FT_Raster_BitTest_Func bit_test;
+
+  external FT_Raster_BitSet_Func bit_set;
+
+  external ffi.Pointer<ffi.Void> user;
+
+  external FT_BBox clip_box;
+}
+
+/// @struct:
+/// FT_Raster_Params
+///
+/// @description:
+/// A structure to hold the parameters used by a raster's render function,
+/// passed as an argument to @FT_Outline_Render.
+///
+/// @fields:
+/// target ::
+/// The target bitmap.
+///
+/// source ::
+/// A pointer to the source glyph image (e.g., an @FT_Outline).
+///
+/// flags ::
+/// The rendering flags.
+///
+/// gray_spans ::
+/// The gray span drawing callback.
+///
+/// black_spans ::
+/// Unused.
+///
+/// bit_test ::
+/// Unused.
+///
+/// bit_set ::
+/// Unused.
+///
+/// user ::
+/// User-supplied data that is passed to each drawing callback.
+///
+/// clip_box ::
+/// An optional span clipping box expressed in _integer_ pixels
+/// (not in 26.6 fixed-point units).
+///
+/// @note:
+/// The @FT_RASTER_FLAG_AA bit flag must be set in the `flags` to
+/// generate an anti-aliased glyph bitmap, otherwise a monochrome bitmap
+/// is generated.  The `target` should have appropriate pixel mode and its
+/// dimensions define the clipping region.
+///
+/// If both @FT_RASTER_FLAG_AA and @FT_RASTER_FLAG_DIRECT bit flags
+/// are set in `flags`, the raster calls an @FT_SpanFunc callback
+/// `gray_spans` with `user` data as an argument ignoring `target`.  This
+/// allows direct composition over a pre-existing user surface to perform
+/// the span drawing and composition.  To optionally clip the spans, set
+/// the @FT_RASTER_FLAG_CLIP flag and `clip_box`.  The monochrome raster
+/// does not support the direct mode.
+///
+/// The gray-level rasterizer always uses 256 gray levels.  If you want
+/// fewer gray levels, you have to use @FT_RASTER_FLAG_DIRECT and reduce
+/// the levels in the callback function.
+typedef FT_Raster_Params = FT_Raster_Params_;
+
+/// @enum:
+/// FT_Orientation
+///
+/// @description:
+/// A list of values used to describe an outline's contour orientation.
+///
+/// The TrueType and PostScript specifications use different conventions
+/// to determine whether outline contours should be filled or unfilled.
+///
+/// @values:
+/// FT_ORIENTATION_TRUETYPE ::
+/// According to the TrueType specification, clockwise contours must be
+/// filled, and counter-clockwise ones must be unfilled.
+///
+/// FT_ORIENTATION_POSTSCRIPT ::
+/// According to the PostScript specification, counter-clockwise
+/// contours must be filled, and clockwise ones must be unfilled.
+///
+/// FT_ORIENTATION_FILL_RIGHT ::
+/// This is identical to @FT_ORIENTATION_TRUETYPE, but is used to
+/// remember that in TrueType, everything that is to the right of the
+/// drawing direction of a contour must be filled.
+///
+/// FT_ORIENTATION_FILL_LEFT ::
+/// This is identical to @FT_ORIENTATION_POSTSCRIPT, but is used to
+/// remember that in PostScript, everything that is to the left of the
+/// drawing direction of a contour must be filled.
+///
+/// FT_ORIENTATION_NONE ::
+/// The orientation cannot be determined.  That is, different parts of
+/// the glyph have different orientation.
+enum FT_Orientation_ {
+  FT_ORIENTATION_TRUETYPE(0),
+  FT_ORIENTATION_POSTSCRIPT(1),
+  FT_ORIENTATION_NONE(2);
+
+  static const FT_ORIENTATION_FILL_RIGHT = FT_ORIENTATION_TRUETYPE;
+  static const FT_ORIENTATION_FILL_LEFT = FT_ORIENTATION_POSTSCRIPT;
+
+  final int value;
+  const FT_Orientation_(this.value);
+
+  static FT_Orientation_ fromValue(int value) => switch (value) {
+        0 => FT_ORIENTATION_TRUETYPE,
+        1 => FT_ORIENTATION_POSTSCRIPT,
+        2 => FT_ORIENTATION_NONE,
+        _ => throw ArgumentError('Unknown value for FT_Orientation_: $value'),
+      };
+
+  @override
+  String toString() {
+    if (this == FT_ORIENTATION_TRUETYPE)
+      return "FT_Orientation_.FT_ORIENTATION_TRUETYPE, FT_Orientation_.FT_ORIENTATION_FILL_RIGHT";
+    if (this == FT_ORIENTATION_POSTSCRIPT)
+      return "FT_Orientation_.FT_ORIENTATION_POSTSCRIPT, FT_Orientation_.FT_ORIENTATION_FILL_LEFT";
+    return super.toString();
+  }
+}
 
 /// @struct:
 /// TT_Header
